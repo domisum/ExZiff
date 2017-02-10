@@ -1,0 +1,38 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>de.domisum</groupId>
+	<artifactId>ExZiff</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<maven.compiler.source>1.8</maven.compiler.source>
+		<maven.compiler.target>1.8</maven.compiler.target>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<version>1.16.12</version>
+			<scope>provided</scope>
+		</dependency>
+	</dependencies>
+
+	<distributionManagement>
+		<repository>
+			<id>vps</id>
+			<name>vps.domisum.de-releases</name>
+			<url>http://vps.domisum.de:8081/nexus/content/repositories/releases-public/</url>
+		</repository>
+
+		<snapshotRepository>
+			<id>vps</id>
+			<name>vps.domisum.de-snapshots</name>
+			<url>http://vps.domisum.de:8081/nexus/content/repositories/snapshots-public/</url>
+		</snapshotRepository>
+	</distributionManagement>
+
+</project>
