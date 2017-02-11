@@ -13,10 +13,11 @@ public class RasterShapeTransformerNoiseOffsetter extends RasterShapeTransformer
 
 	private double magnifier;
 
+
 	// -------
 	// INIT
 	// -------
-	RasterShapeTransformerNoiseOffsetter(RasterShape input, LayeredOpenSimplexNoise noiseX, LayeredOpenSimplexNoise noiseY,
+	public RasterShapeTransformerNoiseOffsetter(RasterShape input, LayeredOpenSimplexNoise noiseX, LayeredOpenSimplexNoise noiseY,
 			double magnifier)
 	{
 		super(input);
@@ -44,13 +45,13 @@ public class RasterShapeTransformerNoiseOffsetter extends RasterShapeTransformer
 
 				double scale = this.input.getWidth();
 
-				double dX = this.noiseX.evaluate(x/scale, y/scale)*magnifier;
-				double dY = this.noiseY.evaluate(x/scale, y/scale)*magnifier;
+				double dX = this.noiseX.evaluate(x/scale, y/scale)*this.magnifier;
+				double dY = this.noiseY.evaluate(x/scale, y/scale)*this.magnifier;
 
 				int nX = x+(int) Math.round(dX);
 				int nY = y+(int) Math.round(dY);
 
-				if(nX < 0 || nY < 0 || nX > this.input.getWidth() || nY > this.input.getHeight())
+				if(nX < 0 || nY < 0 || nX >= this.input.getWidth() || nY >= this.input.getHeight())
 					continue;
 
 				pixels[nY][nX] = true;
