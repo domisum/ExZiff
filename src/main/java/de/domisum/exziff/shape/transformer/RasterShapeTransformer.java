@@ -7,7 +7,7 @@ public abstract class RasterShapeTransformer
 {
 
 	// INPUT
-	protected RasterShape input;
+	RasterShape input;
 
 	// OUTPUT
 	@Getter protected RasterShape output;
