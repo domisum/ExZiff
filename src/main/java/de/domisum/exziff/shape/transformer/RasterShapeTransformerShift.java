@@ -36,7 +36,7 @@ public class RasterShapeTransformerShift extends RasterShapeTransformer
 				int nX = x+this.dX;
 				int nY = y+this.dY;
 
-				if(nX < 0 || nY < 0 || nX > this.input.getWidth() || nY > this.input.getHeight())
+				if(nX < 0 || nY < 0 || nX >= this.input.getWidth() || nY >= this.input.getHeight())
 					continue;
 
 				pixels[nY][nX] = this.input.get(x, y);
