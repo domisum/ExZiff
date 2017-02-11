@@ -6,17 +6,17 @@ public class RasterShapeGeneratorCircle extends RasterShapeGenerator
 {
 
 	// SETTINGS
-	private double relativeRadius;
+	private double relativeDiameter;
 
 
 	// -------
 	// INITIALIZATION
 	// -------
-	public RasterShapeGeneratorCircle(int width, int height, double relativeRadius)
+	public RasterShapeGeneratorCircle(int width, int height, double relativeDiameter)
 	{
 		super(width, height);
 
-		this.relativeRadius = relativeRadius;
+		this.relativeDiameter = relativeDiameter;
 	}
 
 
@@ -33,7 +33,7 @@ public class RasterShapeGeneratorCircle extends RasterShapeGenerator
 				double relXFromCenter = (double) x/Math.min(this.width, this.height)-0.5;
 				double relYFromCenter = (double) y/Math.min(this.width, this.height)-0.5;
 
-				if(Math.sqrt(relXFromCenter*relXFromCenter+relYFromCenter*relYFromCenter) < this.relativeRadius)
+				if(Math.sqrt(relXFromCenter*relXFromCenter+relYFromCenter*relYFromCenter) < this.relativeDiameter/2)
 					pixels[y][x] = true;
 			}
 
