@@ -40,8 +40,8 @@ public class RasterShapeTransformerRecenter extends RasterShapeTransformer
 						maxY = y;
 				}
 
-		int centerX = (maxX-minX)/2;
-		int centerY = (maxY-minY)/2;
+		int centerX = (maxX+minX)/2;
+		int centerY = (maxY+minY)/2;
 
 		int centerXOffset = centerX-(this.input.getWidth()/2);
 		int centerYOffset = centerY-(this.input.getHeight()/2);
