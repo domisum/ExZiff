@@ -7,7 +7,7 @@ public abstract class RasterShapeTransformer
 {
 
 	// INPUT
-	RasterShape input;
+	protected RasterShape input;
 
 	// OUTPUT
 	@Getter protected RasterShape output;
@@ -16,7 +16,7 @@ public abstract class RasterShapeTransformer
 	// -------
 	// INITIALZATION
 	// -------
-	RasterShapeTransformer(RasterShape input)
+	protected RasterShapeTransformer(RasterShape input)
 	{
 		if(input == null)
 			throw new IllegalArgumentException("input RasterShape can't be null");
