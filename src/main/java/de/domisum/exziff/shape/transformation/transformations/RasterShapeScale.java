@@ -1,8 +1,8 @@
-package de.domisum.exziff.shape.transformer;
+package de.domisum.exziff.shape.transformation.transformations;
 
 import de.domisum.exziff.shape.RasterShape;
 
-public class RasterShapeTransformerScaleWithSize extends RasterShapeTransformer
+public class RasterShapeScale extends RasterShapeTransformation
 {
 
 	// SETTINGS
@@ -12,10 +12,8 @@ public class RasterShapeTransformerScaleWithSize extends RasterShapeTransformer
 	// -------
 	// INITIALIZATION
 	// -------
-	RasterShapeTransformerScaleWithSize(RasterShape input, double scalingFactor)
+	public RasterShapeScale(double scalingFactor)
 	{
-		super(input);
-
 		if(scalingFactor <= 0)
 			throw new IllegalArgumentException("The scaling factor has to be positive");
 
@@ -27,10 +25,10 @@ public class RasterShapeTransformerScaleWithSize extends RasterShapeTransformer
 	// TRANSFORMATION
 	// -------
 	@Override
-	public void transform()
+	public RasterShape transform(RasterShape input)
 	{
-		int nWidth = (int) Math.floor(this.input.getWidth()*this.scalingFactor);
-		int nHeight = (int) Math.floor(this.input.getHeight()*this.scalingFactor);
+		int nWidth = (int) Math.floor(input.getWidth()*this.scalingFactor);
+		int nHeight = (int) Math.floor(input.getHeight()*this.scalingFactor);
 
 		if(nWidth == 0 || nHeight == 0)
 			throw new IllegalArgumentException(
@@ -44,10 +42,10 @@ public class RasterShapeTransformerScaleWithSize extends RasterShapeTransformer
 				int inputX = (int) Math.floor(x/this.scalingFactor);
 				int inputY = (int) Math.floor(y/this.scalingFactor);
 
-				pixels[y][x] = this.input.get(inputX, inputY);
+				pixels[y][x] = input.get(inputX, inputY);
 			}
 
-		this.output = new RasterShape(pixels);
+		return new RasterShape(pixels);
 	}
 
 }
