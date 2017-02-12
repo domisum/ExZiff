@@ -1,7 +1,7 @@
-package de.domisum.exziff.shape.transformation.transformations.noise;
+package de.domisum.exziff.shape.transformation.noise;
 
 import de.domisum.exziff.shape.RasterShape;
-import de.domisum.exziff.shape.transformation.transformations.RasterShapeTransformation;
+import de.domisum.exziff.shape.transformation.RasterShapeTransformation;
 
 public class RasterShapeNoiseDeformer extends RasterShapeTransformation
 {

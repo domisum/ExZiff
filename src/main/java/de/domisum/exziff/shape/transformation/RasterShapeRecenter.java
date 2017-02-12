@@ -1,8 +1,8 @@
-package de.domisum.exziff.shape.transformation.transformations;
+package de.domisum.exziff.shape.transformation;
 
 import de.domisum.exziff.shape.RasterShape;
 
-public class RasterShapeRecenterer extends RasterShapeTransformation
+public class RasterShapeRecenter extends RasterShapeTransformation
 {
 
 	// -------

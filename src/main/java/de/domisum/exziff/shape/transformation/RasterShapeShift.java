@@ -1,4 +1,4 @@
-package de.domisum.exziff.shape.transformation.transformations;
+package de.domisum.exziff.shape.transformation;
 
 import de.domisum.exziff.shape.RasterShape;
 import lombok.AllArgsConstructor;
