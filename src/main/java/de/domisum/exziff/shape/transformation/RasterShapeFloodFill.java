@@ -33,7 +33,7 @@ public class RasterShapeFloodFill extends RasterShapeTransformation
 
 		while(unvisitedPixels.size() > 0)
 		{
-			PixelCoordinates coordinates = unvisitedPixels.iterator().next();
+			PixelCoordinates coordinates = unvisitedPixels.poll();
 			unvisitedPixels.remove(coordinates);
 
 			pixels[coordinates.y][coordinates.x] = true;
