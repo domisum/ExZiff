@@ -15,9 +15,13 @@ public class TestLauncher
 
 	public static void main(String[] args)
 	{
-		// settings
-		Random r = new Random();
+		islandTest();
+	}
 
+
+	private static void islandTest()
+	{
+		Random r = new Random();
 
 		for(int i = 0; i < 20; i++)
 			exportIsland(UUID.randomUUID().toString(), r.nextLong());
@@ -26,6 +30,8 @@ public class TestLauncher
 	private static void exportIsland(String fileName, long seed)
 	{
 		System.out.println("fileName: "+fileName+" seed: "+seed);
+
+		// settings
 		int size = 1000;
 
 		// generation
@@ -37,7 +43,6 @@ public class TestLauncher
 		RasterShapeImageExporter exporter = new RasterShapeImageExporter();
 		BufferedImage image = exporter.export(shape);
 
-		//System.out.println("b4 writing");
 		ImageUtil.writeImage(new File("C:\\Users\\domisum\\testChamber\\testIslands/"+fileName+".png"), image);
 	}
 
