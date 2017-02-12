@@ -20,8 +20,8 @@ public class RasterShapeFloodFill extends RasterShapeTransformation
 
 		// these pixels have yet to be processed
 		Queue<PixelCoordinates> unvisitedPixels = new LinkedList<>();
-		// the pixels marked with true should not be added to the unvisitedPixels queue again
-		boolean[][] blockedPixels = new boolean[input.getHeight()][input.getWidth()];
+		// the pixels marked with true have already been processend and can be ignored
+		boolean[][] processedPixels = new boolean[input.getHeight()][input.getWidth()];
 
 		// start floodfill from the outer edge
 		for(int y = 0; y < input.getHeight(); y++)
@@ -30,7 +30,7 @@ public class RasterShapeFloodFill extends RasterShapeTransformation
 					if(!input.get(x, y)) // and only if they are not blocked themselves
 					{
 						unvisitedPixels.add(new PixelCoordinates(x, y));
-						blockedPixels[y][x] = true;
+						processedPixels[y][x] = true;
 					}
 
 		while(unvisitedPixels.size() > 0)
@@ -38,29 +38,33 @@ public class RasterShapeFloodFill extends RasterShapeTransformation
 			PixelCoordinates coordinates = unvisitedPixels.poll();
 			pixels[coordinates.y][coordinates.x] = true;
 
-			tryAddNeighborPixel(input, coordinates, unvisitedPixels, blockedPixels, 1, 0);
-			tryAddNeighborPixel(input, coordinates, unvisitedPixels, blockedPixels, -1, 0);
-			tryAddNeighborPixel(input, coordinates, unvisitedPixels, blockedPixels, 0, 1);
-			tryAddNeighborPixel(input, coordinates, unvisitedPixels, blockedPixels, 0, -1);
+			// check all neighbors in 4 directions
+			tryAddNeighborPixel(input, coordinates, unvisitedPixels, processedPixels, 1, 0);
+			tryAddNeighborPixel(input, coordinates, unvisitedPixels, processedPixels, -1, 0);
+			tryAddNeighborPixel(input, coordinates, unvisitedPixels, processedPixels, 0, 1);
+			tryAddNeighborPixel(input, coordinates, unvisitedPixels, processedPixels, 0, -1);
 		}
 
 		return new RasterShape(pixels);
 	}
 
 	private void tryAddNeighborPixel(RasterShape input, PixelCoordinates base, Collection<PixelCoordinates> unvisitedPixels,
-			boolean[][] blockedPixels, int dX, int dY)
+			boolean[][] processedPixels, int dX, int dY)
 	{
 		int nX = base.x+dX;
 		int nY = base.y+dY;
 
-		if(nX < 0 || nY < 0 || nX >= input.getWidth() || nY >= input.getHeight())
+		if(nX < 0 || nY < 0 || nX >= input.getWidth() || nY >= input.getHeight()) // in bounds?
 			return;
 
-		if(blockedPixels[nY][nX])
+		if(processedPixels[nY][nX]) // don't add to the queue if they have already been marked as processed
 			return;
-		blockedPixels[nY][nX] = true;
 
-		if(input.get(nX, nY))
+		// mark this pixel as processed, no matter if it is going to be added to the queue or not,
+		// since it won't be of use in any iteration
+		processedPixels[nY][nX] = true;
+
+		if(input.get(nX, nY)) // don't add the pixel to the queue if the pixel is blocked
 			return;
 
 		unvisitedPixels.add(new PixelCoordinates(base.x+dX, base.y+dY));
