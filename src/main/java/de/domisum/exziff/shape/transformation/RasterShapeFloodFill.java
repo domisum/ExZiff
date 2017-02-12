@@ -24,7 +24,8 @@ public class RasterShapeFloodFill extends RasterShapeTransformation
 		for(int y = 0; y < input.getHeight(); y++)
 			for(int x = 0; x < input.getWidth(); x++)
 				if(x == 0 || y == 0 || x == input.getWidth()-1 || y == input.getHeight()-1)
-					unvisitedPixels.add(new PixelCoordinates(x, y));
+					if(!input.get(x, y))
+						unvisitedPixels.add(new PixelCoordinates(x, y));
 
 		while(unvisitedPixels.size() > 0)
 		{
@@ -32,27 +33,29 @@ public class RasterShapeFloodFill extends RasterShapeTransformation
 			unvisitedPixels.remove(coordinates);
 			visitedPixels.add(coordinates);
 
-			if(coordinates.x < 0 || coordinates.y < 0 || coordinates.x >= input.getWidth() || coordinates.y >= input.getHeight())
-				continue;
-
-			if(input.get(coordinates.x, coordinates.y))
-				continue;
-
 			pixels[coordinates.y][coordinates.x] = true;
 
-			tryAddNeighborPixel(coordinates, unvisitedPixels, visitedPixels, 1, 0);
-			tryAddNeighborPixel(coordinates, unvisitedPixels, visitedPixels, -1, 0);
-			tryAddNeighborPixel(coordinates, unvisitedPixels, visitedPixels, 0, 1);
-			tryAddNeighborPixel(coordinates, unvisitedPixels, visitedPixels, 0, -1);
+			tryAddNeighborPixel(input, coordinates, unvisitedPixels, visitedPixels, 1, 0);
+			tryAddNeighborPixel(input, coordinates, unvisitedPixels, visitedPixels, -1, 0);
+			tryAddNeighborPixel(input, coordinates, unvisitedPixels, visitedPixels, 0, 1);
+			tryAddNeighborPixel(input, coordinates, unvisitedPixels, visitedPixels, 0, -1);
 		}
 
 		return new RasterShape(pixels);
 	}
 
-	private void tryAddNeighborPixel(PixelCoordinates base, Set<PixelCoordinates> unvisitedPixels,
+	private void tryAddNeighborPixel(RasterShape input, PixelCoordinates base, Set<PixelCoordinates> unvisitedPixels,
 			Set<PixelCoordinates> visitedPixels, int dX, int dY)
 	{
 		PixelCoordinates newCoordinates = new PixelCoordinates(base.x+dX, base.y+dY);
+
+		if(newCoordinates.x < 0 || newCoordinates.y < 0 || newCoordinates.x >= input.getWidth() || newCoordinates.y >= input
+				.getHeight())
+			return;
+
+		if(input.get(newCoordinates.x, newCoordinates.y))
+			return;
+
 		if(visitedPixels.contains(newCoordinates))
 			return;
 
