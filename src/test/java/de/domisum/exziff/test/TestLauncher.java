@@ -1,15 +1,8 @@
 package de.domisum.exziff.test;
 
+import de.domisum.exziff.islandshape.IslandShapeGenerator;
 import de.domisum.exziff.shape.RasterShape;
 import de.domisum.exziff.shape.exporter.RasterShapeImageExporter;
-import de.domisum.exziff.shape.generator.RasterShapeCircleGenerator;
-import de.domisum.exziff.shape.generator.RasterShapeGenerator;
-import de.domisum.exziff.shape.transformation.RasterShapeFloodFill;
-import de.domisum.exziff.shape.transformation.RasterShapeInvert;
-import de.domisum.exziff.shape.transformation.RasterShapeRecenter;
-import de.domisum.exziff.shape.transformation.RasterShapeSmooth;
-import de.domisum.exziff.shape.transformation.noise.RasterShapeNoiseOffsetter;
-import de.domisum.layeredopensimplexnoise.OctavedOpenSimplexNoise;
 import de.domisum.lib.auxilium.util.ImageUtil;
 
 import java.awt.image.BufferedImage;
@@ -21,39 +14,20 @@ public class TestLauncher
 
 	public static void main(String[] args)
 	{
+		// settings
 		Random r = new Random();
 		long seed = 5330;
 		seed = r.nextLong();
 
 		int size = 1000;
 
-		RasterShapeGenerator generator = new RasterShapeCircleGenerator(size, size, 0.5);
-		RasterShape shape = generator.generate();
+
+		// generation
+		IslandShapeGenerator islandShapeGenerator = new IslandShapeGenerator(size, size, seed);
+		RasterShape shape = islandShapeGenerator.generate();
 
 
-		OctavedOpenSimplexNoise octavedOpenSimplexNoiseX = new OctavedOpenSimplexNoise(10, 0.1, 0.3, 1, 0.35, seed);
-		OctavedOpenSimplexNoise octavedOpenSimplexNoiseY = new OctavedOpenSimplexNoise(10, 0.1, 0.3, 1, 0.35, seed+34834);
-		RasterShapeNoiseOffsetter noiseOffsetter = new RasterShapeNoiseOffsetter(octavedOpenSimplexNoiseX,
-				octavedOpenSimplexNoiseY, size/10);
-		shape = noiseOffsetter.transform(shape);
-
-		RasterShapeRecenter recenter = new RasterShapeRecenter();
-		shape = recenter.transform(shape);
-
-		RasterShapeSmooth smooth = new RasterShapeSmooth(2, 0.25, 0.5);
-		for(int i = 0; i < 4; i++)
-			shape = smooth.transform(shape);
-
-		RasterShapeFloodFill floodfill = new RasterShapeFloodFill();
-		RasterShapeInvert invert = new RasterShapeInvert();
-
-		System.out.println("ff start");
-		shape = floodfill.transform(shape);
-		System.out.println("ff end");
-
-		shape = invert.transform(shape);
-
-
+		// exporting
 		RasterShapeImageExporter exporter = new RasterShapeImageExporter();
 		BufferedImage image = exporter.export(shape);
 

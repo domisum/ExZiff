@@ -7,22 +7,18 @@ import de.domisum.layeredopensimplexnoise.LayeredOpenSimplexNoise;
 public class RasterShapeNoiseOffsetter extends RasterShapeTransformation
 {
 
-	// SETTINS
+	// SETTINGS
 	private LayeredOpenSimplexNoise noiseX;
 	private LayeredOpenSimplexNoise noiseY;
-
-	private double magnifier;
 
 
 	// -------
 	// INIT
 	// -------
-	public RasterShapeNoiseOffsetter(LayeredOpenSimplexNoise noiseX, LayeredOpenSimplexNoise noiseY, double magnifier)
+	public RasterShapeNoiseOffsetter(LayeredOpenSimplexNoise noiseX, LayeredOpenSimplexNoise noiseY)
 	{
 		this.noiseX = noiseX;
 		this.noiseY = noiseY;
-
-		this.magnifier = magnifier;
 	}
 
 
@@ -42,8 +38,8 @@ public class RasterShapeNoiseOffsetter extends RasterShapeTransformation
 
 				double scale = input.getWidth();
 
-				double dX = this.noiseX.evaluate(x/scale, y/scale)*this.magnifier;
-				double dY = this.noiseY.evaluate(x/scale, y/scale)*this.magnifier;
+				double dX = this.noiseX.evaluate(x/scale, y/scale);
+				double dY = this.noiseY.evaluate(x/scale, y/scale);
 
 				int nX = x+(int) Math.round(dX);
 				int nY = y+(int) Math.round(dY);

@@ -28,9 +28,6 @@ public class RasterShapeFloodFill extends RasterShapeTransformation
 
 		while(unvisitedPixels.size() > 0)
 		{
-			if(Math.random() < 0.01)
-				System.out.println(unvisitedPixels.size());
-
 			PixelCoordinates coordinates = unvisitedPixels.iterator().next();
 			unvisitedPixels.remove(coordinates);
 			visitedPixels.add(coordinates);

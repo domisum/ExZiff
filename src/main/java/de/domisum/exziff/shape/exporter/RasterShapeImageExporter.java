@@ -14,17 +14,18 @@ public class RasterShapeImageExporter extends RasterShapeExporter<BufferedImage>
 
 
 	// -------
-	// CONVERSION
+	// EXPORT
 	// -------
 	@Override
 	public BufferedImage export(RasterShape input)
 	{
 		int[][] pixels = new int[input.getHeight()][input.getWidth()];
 
-		for(int x = 0; x < input.getWidth(); x++)
-			for(int y = 0; y < input.getHeight(); y++)
+		for(int y = 0; y < input.getHeight(); y++)
+			for(int x = 0; x < input.getWidth(); x++)
 			{
 				int color = input.get(x, y) ? COLOR_TRUE : COLOR_FALSE;
+
 				pixels[y][x] = color;
 			}
 

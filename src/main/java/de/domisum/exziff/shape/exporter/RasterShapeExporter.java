@@ -6,7 +6,7 @@ public abstract class RasterShapeExporter<T>
 {
 
 	// -------
-	// CONVERSTION
+	// EXPORT
 	// -------
 	public abstract T export(RasterShape input);
 
