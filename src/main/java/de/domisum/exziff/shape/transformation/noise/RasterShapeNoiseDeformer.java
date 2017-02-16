@@ -17,13 +17,14 @@ public class RasterShapeNoiseDeformer extends RasterShapeTransformation
 	private int smoothRadius;
 	private double removeThreshold;
 	private double addThreshold;
+	private int smoothIterations;
 
 
 	// -------
 	// INIT
 	// -------
 	public RasterShapeNoiseDeformer(LayeredOpenSimplexNoise noiseX, LayeredOpenSimplexNoise noiseY, int smoothRadius,
-			double removeThreshold, double addThreshold)
+			double removeThreshold, double addThreshold, int smoothIterations)
 	{
 		this.noiseX = noiseX;
 		this.noiseY = noiseY;
@@ -31,6 +32,7 @@ public class RasterShapeNoiseDeformer extends RasterShapeTransformation
 		this.smoothRadius = smoothRadius;
 		this.removeThreshold = removeThreshold;
 		this.addThreshold = addThreshold;
+		this.smoothIterations = smoothIterations;
 	}
 
 
@@ -46,12 +48,12 @@ public class RasterShapeNoiseDeformer extends RasterShapeTransformation
 		deformedShape = noiseOffsetter.transform(deformedShape);
 
 
-		RasterShapeSmooth smooth = new RasterShapeSmooth(this.smoothRadius, this.removeThreshold, this.addThreshold);
+		RasterShapeSmooth smooth = new RasterShapeSmooth(this.smoothRadius, this.removeThreshold, this.addThreshold,
+				this.smoothIterations);
 		deformedShape = smooth.transform(deformedShape);
 
 		RasterShapeFloodFill floodFill = new RasterShapeFloodFill();
 		deformedShape = floodFill.transform(deformedShape);
-
 
 		RasterShapeInvert invert = new RasterShapeInvert();
 		deformedShape = invert.transform(deformedShape);

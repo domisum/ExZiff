@@ -8,7 +8,6 @@ import de.domisum.lib.auxilium.util.ImageUtil;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.Random;
-import java.util.UUID;
 
 public class TestLauncher
 {
@@ -24,7 +23,10 @@ public class TestLauncher
 		Random r = new Random();
 
 		for(int i = 0; i < 20; i++)
-			exportIsland(UUID.randomUUID().toString(), r.nextLong());
+		{
+			long seed = r.nextLong();
+			exportIsland(seed+"", seed);
+		}
 	}
 
 	private static void exportIsland(String fileName, long seed)
@@ -43,7 +45,7 @@ public class TestLauncher
 		RasterShapeImageExporter exporter = new RasterShapeImageExporter();
 		BufferedImage image = exporter.export(shape);
 
-		ImageUtil.writeImage(new File("C:\\Users\\domisum\\testChamber\\testIslands/"+fileName+".png"), image);
+		ImageUtil.writeImage(new File("C:\\Users\\domisum\\testChamber\\testIslands7/"+fileName+".png"), image);
 	}
 
 }
