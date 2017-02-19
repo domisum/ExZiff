@@ -1,8 +1,8 @@
 package de.domisum.exziff.shape.transformation;
 
-import de.domisum.exziff.shape.RasterShape;
+import de.domisum.exziff.shape.ShapeMap;
 
-public class RasterShapeRecenter extends RasterShapeTransformation
+public class ShapeMapRecenter extends ShapeMapTransformation
 {
 
 	// -------
@@ -10,7 +10,7 @@ public class RasterShapeRecenter extends RasterShapeTransformation
 	// -------
 	@SuppressWarnings("ConstantConditions")
 	@Override
-	public RasterShape transform(RasterShape input)
+	public ShapeMap transform(ShapeMap input)
 	{
 		int minX = Integer.MAX_VALUE;
 		int maxX = Integer.MIN_VALUE;
@@ -36,7 +36,7 @@ public class RasterShapeRecenter extends RasterShapeTransformation
 
 		int centerXOffset = centerX-(input.getWidth()/2);
 		int centerYOffset = centerY-(input.getHeight()/2);
-		RasterShapeShift shifter = new RasterShapeShift(-centerXOffset, -centerYOffset);
+		ShapeMapShift shifter = new ShapeMapShift(-centerXOffset, -centerYOffset);
 
 		return shifter.transform(input);
 	}

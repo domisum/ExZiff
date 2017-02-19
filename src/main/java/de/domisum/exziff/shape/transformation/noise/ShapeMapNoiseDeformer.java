@@ -1,13 +1,13 @@
 package de.domisum.exziff.shape.transformation.noise;
 
-import de.domisum.exziff.shape.RasterShape;
-import de.domisum.exziff.shape.transformation.RasterShapeFloodFill;
-import de.domisum.exziff.shape.transformation.RasterShapeInvert;
-import de.domisum.exziff.shape.transformation.RasterShapeSmooth;
-import de.domisum.exziff.shape.transformation.RasterShapeTransformation;
+import de.domisum.exziff.shape.ShapeMap;
+import de.domisum.exziff.shape.transformation.ShapeMapMapFloodFill;
+import de.domisum.exziff.shape.transformation.ShapeMapMapInvert;
+import de.domisum.exziff.shape.transformation.ShapeMapSmooth;
+import de.domisum.exziff.shape.transformation.ShapeMapTransformation;
 import de.domisum.layeredopensimplexnoise.LayeredOpenSimplexNoise;
 
-public class RasterShapeNoiseDeformer extends RasterShapeTransformation
+public class ShapeMapNoiseDeformer extends ShapeMapTransformation
 {
 
 	// SETTINGS
@@ -23,7 +23,7 @@ public class RasterShapeNoiseDeformer extends RasterShapeTransformation
 	// -------
 	// INIT
 	// -------
-	public RasterShapeNoiseDeformer(LayeredOpenSimplexNoise noiseX, LayeredOpenSimplexNoise noiseY, int smoothRadius,
+	public ShapeMapNoiseDeformer(LayeredOpenSimplexNoise noiseX, LayeredOpenSimplexNoise noiseY, int smoothRadius,
 			double removeThreshold, double addThreshold, int smoothIterations)
 	{
 		this.noiseX = noiseX;
@@ -40,22 +40,22 @@ public class RasterShapeNoiseDeformer extends RasterShapeTransformation
 	// TRANSFORMATION
 	// -------
 	@Override
-	public RasterShape transform(RasterShape input)
+	public ShapeMap transform(ShapeMap input)
 	{
-		RasterShape deformedShape = input;
+		ShapeMap deformedShape = input;
 
-		RasterShapeNoiseOffsetter noiseOffsetter = new RasterShapeNoiseOffsetter(this.noiseX, this.noiseY);
+		ShapeMapNoiseOffsetter noiseOffsetter = new ShapeMapNoiseOffsetter(this.noiseX, this.noiseY);
 		deformedShape = noiseOffsetter.transform(deformedShape);
 
 
-		RasterShapeSmooth smooth = new RasterShapeSmooth(this.smoothRadius, this.removeThreshold, this.addThreshold,
+		ShapeMapSmooth smooth = new ShapeMapSmooth(this.smoothRadius, this.removeThreshold, this.addThreshold,
 				this.smoothIterations);
 		deformedShape = smooth.transform(deformedShape);
 
-		RasterShapeFloodFill floodFill = new RasterShapeFloodFill();
+		ShapeMapMapFloodFill floodFill = new ShapeMapMapFloodFill();
 		deformedShape = floodFill.transform(deformedShape);
 
-		RasterShapeInvert invert = new RasterShapeInvert();
+		ShapeMapMapInvert invert = new ShapeMapMapInvert();
 		deformedShape = invert.transform(deformedShape);
 
 		return deformedShape;

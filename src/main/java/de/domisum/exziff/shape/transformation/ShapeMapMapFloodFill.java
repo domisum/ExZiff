@@ -1,20 +1,20 @@
 package de.domisum.exziff.shape.transformation;
 
 import de.domisum.exziff.shape.PixelCoordinates;
-import de.domisum.exziff.shape.RasterShape;
+import de.domisum.exziff.shape.ShapeMap;
 
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.Queue;
 
-public class RasterShapeFloodFill extends RasterShapeTransformation
+public class ShapeMapMapFloodFill extends ShapeMapTransformation
 {
 
 	// -------
 	// TRANSFORMATION
 	// -------
 	@Override
-	public RasterShape transform(RasterShape input)
+	public ShapeMap transform(ShapeMap input)
 	{
 		boolean[][] pixels = new boolean[input.getHeight()][input.getWidth()];
 
@@ -45,10 +45,10 @@ public class RasterShapeFloodFill extends RasterShapeTransformation
 			tryAddNeighborPixel(input, coordinates, unvisitedPixels, processedPixels, 0, -1);
 		}
 
-		return new RasterShape(pixels);
+		return new ShapeMap(pixels);
 	}
 
-	private void tryAddNeighborPixel(RasterShape input, PixelCoordinates base, Collection<PixelCoordinates> unvisitedPixels,
+	private void tryAddNeighborPixel(ShapeMap input, PixelCoordinates base, Collection<PixelCoordinates> unvisitedPixels,
 			boolean[][] processedPixels, int dX, int dY)
 	{
 		int nX = base.x+dX;

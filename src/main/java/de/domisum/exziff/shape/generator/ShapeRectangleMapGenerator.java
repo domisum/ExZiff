@@ -1,8 +1,8 @@
 package de.domisum.exziff.shape.generator;
 
-import de.domisum.exziff.shape.RasterShape;
+import de.domisum.exziff.shape.ShapeMap;
 
-public class RasterShapeRectangleGenerator extends RasterShapeGenerator
+public class ShapeRectangleMapGenerator extends ShapeMapGenerator
 {
 
 	// SETTINGS
@@ -15,7 +15,7 @@ public class RasterShapeRectangleGenerator extends RasterShapeGenerator
 	// -------
 	// INITIALIZATION
 	// -------
-	public RasterShapeRectangleGenerator(int width, int height, double x1, double y1, double x2, double y2)
+	public ShapeRectangleMapGenerator(int width, int height, double x1, double y1, double x2, double y2)
 	{
 		super(width, height);
 
@@ -48,7 +48,7 @@ public class RasterShapeRectangleGenerator extends RasterShapeGenerator
 	// GENERATION
 	// -------
 	@Override
-	public RasterShape generate()
+	public ShapeMap generate()
 	{
 		boolean[][] pixels = new boolean[this.height][this.width];
 
@@ -62,7 +62,7 @@ public class RasterShapeRectangleGenerator extends RasterShapeGenerator
 					pixels[y][x] = true;
 			}
 
-		return new RasterShape(pixels);
+		return new ShapeMap(pixels);
 	}
 
 }

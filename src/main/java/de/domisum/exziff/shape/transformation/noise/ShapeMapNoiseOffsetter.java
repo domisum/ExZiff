@@ -1,10 +1,10 @@
 package de.domisum.exziff.shape.transformation.noise;
 
-import de.domisum.exziff.shape.RasterShape;
-import de.domisum.exziff.shape.transformation.RasterShapeTransformation;
+import de.domisum.exziff.shape.ShapeMap;
+import de.domisum.exziff.shape.transformation.ShapeMapTransformation;
 import de.domisum.layeredopensimplexnoise.LayeredOpenSimplexNoise;
 
-public class RasterShapeNoiseOffsetter extends RasterShapeTransformation
+public class ShapeMapNoiseOffsetter extends ShapeMapTransformation
 {
 
 	// SETTINGS
@@ -15,7 +15,7 @@ public class RasterShapeNoiseOffsetter extends RasterShapeTransformation
 	// -------
 	// INIT
 	// -------
-	public RasterShapeNoiseOffsetter(LayeredOpenSimplexNoise noiseX, LayeredOpenSimplexNoise noiseY)
+	public ShapeMapNoiseOffsetter(LayeredOpenSimplexNoise noiseX, LayeredOpenSimplexNoise noiseY)
 	{
 		this.noiseX = noiseX;
 		this.noiseY = noiseY;
@@ -26,7 +26,7 @@ public class RasterShapeNoiseOffsetter extends RasterShapeTransformation
 	// TRANSFORMATION
 	// -------
 	@Override
-	public RasterShape transform(RasterShape input)
+	public ShapeMap transform(ShapeMap input)
 	{
 		boolean[][] pixels = new boolean[input.getHeight()][input.getWidth()];
 
@@ -50,7 +50,7 @@ public class RasterShapeNoiseOffsetter extends RasterShapeTransformation
 				pixels[nY][nX] = true;
 			}
 
-		return new RasterShape(pixels);
+		return new ShapeMap(pixels);
 	}
 
 }

@@ -1,10 +1,10 @@
 package de.domisum.exziff.shape.transformation;
 
-import de.domisum.exziff.shape.RasterShape;
+import de.domisum.exziff.shape.ShapeMap;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
-public class RasterShapeShift extends RasterShapeTransformation
+public class ShapeMapShift extends ShapeMapTransformation
 {
 
 	// SETTINGS
@@ -16,7 +16,7 @@ public class RasterShapeShift extends RasterShapeTransformation
 	// TRANSFORMATION
 	// -------
 	@Override
-	public RasterShape transform(RasterShape input)
+	public ShapeMap transform(ShapeMap input)
 	{
 		boolean[][] pixels = new boolean[input.getHeight()][input.getWidth()];
 
@@ -32,7 +32,7 @@ public class RasterShapeShift extends RasterShapeTransformation
 				pixels[nY][nX] = input.get(x, y);
 			}
 
-		return new RasterShape(pixels);
+		return new ShapeMap(pixels);
 	}
 
 }

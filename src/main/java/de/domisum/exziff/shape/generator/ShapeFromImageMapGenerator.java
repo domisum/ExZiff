@@ -1,11 +1,11 @@
 package de.domisum.exziff.shape.generator;
 
-import de.domisum.exziff.shape.RasterShape;
+import de.domisum.exziff.shape.ShapeMap;
 import de.domisum.lib.auxilium.util.ImageUtil;
 
 import java.awt.image.BufferedImage;
 
-public class RasterShapeFromImageGenerator extends RasterShapeGenerator
+public class ShapeFromImageMapGenerator extends ShapeMapGenerator
 {
 
 	// INPUT
@@ -18,7 +18,7 @@ public class RasterShapeFromImageGenerator extends RasterShapeGenerator
 	// -------
 	// INITIALIZATION
 	// -------
-	public RasterShapeFromImageGenerator(BufferedImage image, double threshold)
+	public ShapeFromImageMapGenerator(BufferedImage image, double threshold)
 	{
 		super(image.getWidth(), image.getHeight());
 
@@ -34,7 +34,7 @@ public class RasterShapeFromImageGenerator extends RasterShapeGenerator
 	// GENERATION
 	// -------
 	@Override
-	public RasterShape generate()
+	public ShapeMap generate()
 	{
 		int[][] colorPixels = ImageUtil.getPixels(this.image);
 
@@ -54,7 +54,7 @@ public class RasterShapeFromImageGenerator extends RasterShapeGenerator
 					pixels[y][x] = true;
 			}
 
-		return new RasterShape(pixels);
+		return new ShapeMap(pixels);
 	}
 
 }

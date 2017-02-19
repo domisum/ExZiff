@@ -1,8 +1,8 @@
 package de.domisum.exziff.shape.transformation;
 
-import de.domisum.exziff.shape.RasterShape;
+import de.domisum.exziff.shape.ShapeMap;
 
-public class RasterShapeScale extends RasterShapeTransformation
+public class ShapeMapScale extends ShapeMapTransformation
 {
 
 	// SETTINGS
@@ -12,7 +12,7 @@ public class RasterShapeScale extends RasterShapeTransformation
 	// -------
 	// INITIALIZATION
 	// -------
-	public RasterShapeScale(double scalingFactor)
+	public ShapeMapScale(double scalingFactor)
 	{
 		if(scalingFactor <= 0)
 			throw new IllegalArgumentException("The scaling factor has to be positive");
@@ -25,7 +25,7 @@ public class RasterShapeScale extends RasterShapeTransformation
 	// TRANSFORMATION
 	// -------
 	@Override
-	public RasterShape transform(RasterShape input)
+	public ShapeMap transform(ShapeMap input)
 	{
 		int nWidth = (int) Math.floor(input.getWidth()*this.scalingFactor);
 		int nHeight = (int) Math.floor(input.getHeight()*this.scalingFactor);
@@ -45,7 +45,7 @@ public class RasterShapeScale extends RasterShapeTransformation
 				pixels[y][x] = input.get(inputX, inputY);
 			}
 
-		return new RasterShape(pixels);
+		return new ShapeMap(pixels);
 	}
 
 }

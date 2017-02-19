@@ -1,6 +1,6 @@
 package de.domisum.exziff.shape;
 
-public class RasterShape
+public class ShapeMap
 {
 
 	private final boolean[][] pixels;
@@ -9,7 +9,7 @@ public class RasterShape
 	// -------
 	// INITIALIZATION
 	// -------
-	public RasterShape(boolean[][] pixels)
+	public ShapeMap(boolean[][] pixels)
 	{
 		if(pixels.length < 1 || pixels[0].length < 1)
 			throw new IllegalArgumentException("The shape has to have a size of at least 1 in each direction");

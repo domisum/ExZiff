@@ -1,8 +1,8 @@
 package de.domisum.exziff.shape.generator;
 
-import de.domisum.exziff.shape.RasterShape;
+import de.domisum.exziff.shape.ShapeMap;
 
-public abstract class RasterShapeGenerator
+public abstract class ShapeMapGenerator
 {
 
 	// SETTINGS
@@ -13,7 +13,7 @@ public abstract class RasterShapeGenerator
 	// -------
 	// INITIALIZATION
 	// -------
-	protected RasterShapeGenerator(int width, int height)
+	protected ShapeMapGenerator(int width, int height)
 	{
 		if(width < 1 || height < 1)
 			throw new IllegalArgumentException("The width and height have to be at least 1");
@@ -26,6 +26,6 @@ public abstract class RasterShapeGenerator
 	// -------
 	// GENERATION
 	// -------
-	public abstract RasterShape generate();
+	public abstract ShapeMap generate();
 
 }

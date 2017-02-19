@@ -1,8 +1,8 @@
 package de.domisum.exziff.shape.transformation;
 
-import de.domisum.exziff.shape.RasterShape;
+import de.domisum.exziff.shape.ShapeMap;
 
-public class RasterShapeSmooth extends RasterShapeTransformation
+public class ShapeMapSmooth extends ShapeMapTransformation
 {
 
 	// SETTINGS
@@ -15,12 +15,12 @@ public class RasterShapeSmooth extends RasterShapeTransformation
 	// -------
 	// INIT
 	// -------
-	public RasterShapeSmooth(int radius, double removeThreshold, double addThreshold)
+	public ShapeMapSmooth(int radius, double removeThreshold, double addThreshold)
 	{
 		this(radius, removeThreshold, addThreshold, 1);
 	}
 
-	public RasterShapeSmooth(int radius, double removeThreshold, double addThreshold, int iterations)
+	public ShapeMapSmooth(int radius, double removeThreshold, double addThreshold, int iterations)
 	{
 		if(radius <= 0)
 			throw new IllegalArgumentException("The radius has to be at least 1");
@@ -48,16 +48,16 @@ public class RasterShapeSmooth extends RasterShapeTransformation
 	// TRANSFORMATION
 	// -------
 	@Override
-	public RasterShape transform(RasterShape input)
+	public ShapeMap transform(ShapeMap input)
 	{
-		RasterShape deformedShape = input;
+		ShapeMap deformedShape = input;
 		for(int i = 0; i < this.iterations; i++)
 			deformedShape = smooth(deformedShape);
 
 		return deformedShape;
 	}
 
-	private RasterShape smooth(RasterShape input)
+	private ShapeMap smooth(ShapeMap input)
 	{
 		boolean[][] pixels = new boolean[input.getHeight()][input.getWidth()];
 
@@ -95,7 +95,7 @@ public class RasterShapeSmooth extends RasterShapeTransformation
 				}
 			}
 
-		return new RasterShape(pixels);
+		return new ShapeMap(pixels);
 	}
 
 }

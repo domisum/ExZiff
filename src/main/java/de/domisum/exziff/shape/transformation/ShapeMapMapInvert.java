@@ -1,15 +1,15 @@
 package de.domisum.exziff.shape.transformation;
 
-import de.domisum.exziff.shape.RasterShape;
+import de.domisum.exziff.shape.ShapeMap;
 
-public class RasterShapeInvert extends RasterShapeTransformation
+public class ShapeMapMapInvert extends ShapeMapTransformation
 {
 
 	// -------
 	// TRANSFORMATION
 	// -------
 	@Override
-	public RasterShape transform(RasterShape input)
+	public ShapeMap transform(ShapeMap input)
 	{
 		boolean[][] pixels = new boolean[input.getHeight()][input.getWidth()];
 
@@ -17,7 +17,7 @@ public class RasterShapeInvert extends RasterShapeTransformation
 			for(int x = 0; x < input.getWidth(); x++)
 				pixels[y][x] = !input.get(x, y);
 
-		return new RasterShape(pixels);
+		return new ShapeMap(pixels);
 	}
 
 }

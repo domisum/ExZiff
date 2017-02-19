@@ -1,11 +1,11 @@
 package de.domisum.exziff.shape.exporter;
 
-import de.domisum.exziff.shape.RasterShape;
+import de.domisum.exziff.shape.ShapeMap;
 import de.domisum.lib.auxilium.util.ImageUtil;
 
 import java.awt.image.BufferedImage;
 
-public class RasterShapeImageExporter extends RasterShapeExporter<BufferedImage>
+public class ShapeImageMapExporter extends ShapeMapExporter<BufferedImage>
 {
 
 	// CONSTANTS
@@ -17,7 +17,7 @@ public class RasterShapeImageExporter extends RasterShapeExporter<BufferedImage>
 	// EXPORT
 	// -------
 	@Override
-	public BufferedImage export(RasterShape input)
+	public BufferedImage export(ShapeMap input)
 	{
 		int[][] pixels = new int[input.getHeight()][input.getWidth()];
 

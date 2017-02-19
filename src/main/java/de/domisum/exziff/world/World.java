@@ -94,7 +94,6 @@ public class World
 		return getInContainerXorZ(xOrZ, Chunk.WIDTH);
 	}
 
-
 	private static int getContainerXorZ(int elementXorZ, int containerWidth)
 	{
 		if(elementXorZ < 0)
