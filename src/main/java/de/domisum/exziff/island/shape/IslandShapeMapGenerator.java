@@ -1,4 +1,4 @@
-package de.domisum.exziff.islandshape;
+package de.domisum.exziff.island.shape;
 
 import de.domisum.exziff.map.ShapeMap;
 import de.domisum.exziff.map.generator.ShapeCircleMapGenerator;
