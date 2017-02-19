@@ -1,4 +1,4 @@
-package de.domisum.exziff.map;
+package de.domisum.exziff.heightmap;
 
 public class HeightMap
 {

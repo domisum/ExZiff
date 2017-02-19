@@ -1,7 +1,7 @@
 package de.domisum.exziff.island.heightmap;
 
-import de.domisum.exziff.map.HeightMap;
-import de.domisum.exziff.map.ShapeMap;
+import de.domisum.exziff.heightmap.HeightMap;
+import de.domisum.exziff.shape.ShapeMap;
 import de.domisum.layeredopensimplexnoise.LayeredOpenSimplexNoise;
 import de.domisum.layeredopensimplexnoise.OctavedOpenSimplexNoise;
 

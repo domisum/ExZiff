@@ -1,7 +1,7 @@
-package de.domisum.exziff.map.transformation.noise;
+package de.domisum.exziff.shape.transformation.noise;
 
-import de.domisum.exziff.map.ShapeMap;
-import de.domisum.exziff.map.transformation.ShapeMapTransformation;
+import de.domisum.exziff.shape.ShapeMap;
+import de.domisum.exziff.shape.transformation.ShapeMapTransformation;
 import de.domisum.layeredopensimplexnoise.LayeredOpenSimplexNoise;
 
 public class ShapeMapNoiseOffsetter extends ShapeMapTransformation

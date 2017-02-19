@@ -1,6 +1,6 @@
-package de.domisum.exziff.map.transformation;
+package de.domisum.exziff.shape.transformation;
 
-import de.domisum.exziff.map.ShapeMap;
+import de.domisum.exziff.shape.ShapeMap;
 
 public class ShapeMapScale extends ShapeMapTransformation
 {

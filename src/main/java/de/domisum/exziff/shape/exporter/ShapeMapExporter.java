@@ -1,6 +1,6 @@
-package de.domisum.exziff.map.exporter;
+package de.domisum.exziff.shape.exporter;
 
-import de.domisum.exziff.map.ShapeMap;
+import de.domisum.exziff.shape.ShapeMap;
 
 public abstract class ShapeMapExporter<T>
 {
