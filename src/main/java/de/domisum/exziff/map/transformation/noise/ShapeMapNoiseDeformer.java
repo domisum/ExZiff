@@ -1,10 +1,10 @@
-package de.domisum.exziff.shape.transformation.noise;
+package de.domisum.exziff.map.transformation.noise;
 
-import de.domisum.exziff.shape.ShapeMap;
-import de.domisum.exziff.shape.transformation.ShapeMapMapFloodFill;
-import de.domisum.exziff.shape.transformation.ShapeMapMapInvert;
-import de.domisum.exziff.shape.transformation.ShapeMapSmooth;
-import de.domisum.exziff.shape.transformation.ShapeMapTransformation;
+import de.domisum.exziff.map.ShapeMap;
+import de.domisum.exziff.map.transformation.ShapeMapMapFloodFill;
+import de.domisum.exziff.map.transformation.ShapeMapMapInvert;
+import de.domisum.exziff.map.transformation.ShapeMapSmooth;
+import de.domisum.exziff.map.transformation.ShapeMapTransformation;
 import de.domisum.layeredopensimplexnoise.LayeredOpenSimplexNoise;
 
 public class ShapeMapNoiseDeformer extends ShapeMapTransformation

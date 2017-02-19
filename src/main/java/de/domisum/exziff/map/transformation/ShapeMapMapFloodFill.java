@@ -1,7 +1,7 @@
-package de.domisum.exziff.shape.transformation;
+package de.domisum.exziff.map.transformation;
 
-import de.domisum.exziff.shape.PixelCoordinates;
-import de.domisum.exziff.shape.ShapeMap;
+import de.domisum.exziff.map.PixelCoordinates;
+import de.domisum.exziff.map.ShapeMap;
 
 import java.util.Collection;
 import java.util.LinkedList;

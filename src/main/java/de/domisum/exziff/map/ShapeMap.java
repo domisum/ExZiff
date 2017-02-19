@@ -1,4 +1,4 @@
-package de.domisum.exziff.shape;
+package de.domisum.exziff.map;
 
 public class ShapeMap
 {
@@ -12,7 +12,7 @@ public class ShapeMap
 	public ShapeMap(boolean[][] pixels)
 	{
 		if(pixels.length < 1 || pixels[0].length < 1)
-			throw new IllegalArgumentException("The shape has to have a size of at least 1 in each direction");
+			throw new IllegalArgumentException("The map has to have a size of at least 1 in each direction");
 
 		this.pixels = pixels;
 	}

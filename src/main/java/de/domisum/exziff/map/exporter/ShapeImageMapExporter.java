@@ -1,6 +1,6 @@
-package de.domisum.exziff.shape.exporter;
+package de.domisum.exziff.map.exporter;
 
-import de.domisum.exziff.shape.ShapeMap;
+import de.domisum.exziff.map.ShapeMap;
 import de.domisum.lib.auxilium.util.ImageUtil;
 
 import java.awt.image.BufferedImage;

@@ -1,11 +1,11 @@
 package de.domisum.exziff.islandshape;
 
-import de.domisum.exziff.shape.ShapeMap;
-import de.domisum.exziff.shape.generator.ShapeCircleMapGenerator;
-import de.domisum.exziff.shape.generator.ShapeMapGenerator;
-import de.domisum.exziff.shape.transformation.ShapeMapRecenter;
-import de.domisum.exziff.shape.transformation.ShapeMapSmooth;
-import de.domisum.exziff.shape.transformation.noise.ShapeMapNoiseDeformer;
+import de.domisum.exziff.map.ShapeMap;
+import de.domisum.exziff.map.generator.ShapeCircleMapGenerator;
+import de.domisum.exziff.map.generator.ShapeMapGenerator;
+import de.domisum.exziff.map.transformation.ShapeMapRecenter;
+import de.domisum.exziff.map.transformation.ShapeMapSmooth;
+import de.domisum.exziff.map.transformation.noise.ShapeMapNoiseDeformer;
 import de.domisum.layeredopensimplexnoise.OctavedOpenSimplexNoise;
 import de.domisum.lib.auxilium.util.math.RandomUtil;
 
@@ -34,7 +34,7 @@ public class IslandShapeMapGenerator extends ShapeMapGenerator
 	{
 		Random r = new Random(this.seed);
 
-		// base shape
+		// base map
 		ShapeCircleMapGenerator circleGenerator = new ShapeCircleMapGenerator(this.width, this.height,
 				RandomUtil.distribute(0.4, 0.15, r));
 		ShapeMap baseShape = circleGenerator.generate();
@@ -59,7 +59,7 @@ public class IslandShapeMapGenerator extends ShapeMapGenerator
 
 		double iterationMultiplier = 1/Math.pow(iteration, 0.7);
 
-		// actually deform the shape
+		// actually deform the map
 		OctavedOpenSimplexNoise noiseX = new OctavedOpenSimplexNoise(5, 0.1, 0.3, averageSize/7*iterationMultiplier, 0.35,
 				iterationSeed);
 		OctavedOpenSimplexNoise noiseY = new OctavedOpenSimplexNoise(5, 0.1, 0.3, averageSize/7*iterationMultiplier, 0.35,
@@ -68,7 +68,7 @@ public class IslandShapeMapGenerator extends ShapeMapGenerator
 		ShapeMapNoiseDeformer deformer = new ShapeMapNoiseDeformer(noiseX, noiseY, 2, 0.0, 0.1, 1);
 		ShapeMap deformed = deformer.transform(input);
 
-		// move the shape back into center
+		// move the map back into center
 		ShapeMapRecenter recenter = new ShapeMapRecenter();
 		deformed = recenter.transform(deformed);
 		return deformed;

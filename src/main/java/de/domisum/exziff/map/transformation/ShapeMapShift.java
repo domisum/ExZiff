@@ -1,6 +1,6 @@
-package de.domisum.exziff.shape.transformation;
+package de.domisum.exziff.map.transformation;
 
-import de.domisum.exziff.shape.ShapeMap;
+import de.domisum.exziff.map.ShapeMap;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor

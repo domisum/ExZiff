@@ -1,6 +1,6 @@
-package de.domisum.exziff.shape.generator;
+package de.domisum.exziff.map.generator;
 
-import de.domisum.exziff.shape.ShapeMap;
+import de.domisum.exziff.map.ShapeMap;
 
 public abstract class ShapeMapGenerator
 {
