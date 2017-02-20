@@ -53,6 +53,9 @@ public class IslandHeightMapGenerator
 			for(int x = 0; x < heights[0].length; x++)
 			{
 				double height = heights[y][x];
+				if(height == 0)
+					continue;
+
 				if(height < min)
 					min = height;
 				if(height > max)
@@ -65,6 +68,9 @@ public class IslandHeightMapGenerator
 			for(int x = 0; x < heights[0].length; x++)
 			{
 				double height = heights[y][x];
+				if(height == 0)
+					continue;
+
 				height -= min;
 				height /= distance;
 

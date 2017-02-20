@@ -11,7 +11,7 @@ import de.domisum.lib.auxilium.util.math.RandomUtil;
 
 import java.util.Random;
 
-public class IslandShapeMapGenerator extends ShapeMapGenerator
+public class IslandShapeGenerator extends ShapeMapGenerator
 {
 
 	// SETTINGS
@@ -21,7 +21,7 @@ public class IslandShapeMapGenerator extends ShapeMapGenerator
 	// -------
 	// INIT
 	// -------
-	public IslandShapeMapGenerator(int width, int height, long seed)
+	public IslandShapeGenerator(int width, int height, long seed)
 	{
 		super(width, height);
 

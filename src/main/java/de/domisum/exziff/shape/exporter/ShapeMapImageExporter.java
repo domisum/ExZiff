@@ -5,7 +5,7 @@ import de.domisum.lib.auxilium.util.ImageUtil;
 
 import java.awt.image.BufferedImage;
 
-public class ShapeImageMapExporter extends ShapeMapExporter<BufferedImage>
+public class ShapeMapImageExporter extends ShapeMapExporter<BufferedImage>
 {
 
 	// CONSTANTS
