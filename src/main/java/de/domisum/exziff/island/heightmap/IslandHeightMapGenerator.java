@@ -3,7 +3,10 @@ package de.domisum.exziff.island.heightmap;
 import de.domisum.exziff.heightmap.HeightMap;
 import de.domisum.exziff.shape.ShapeMap;
 import de.domisum.layeredopensimplexnoise.LayeredOpenSimplexNoise;
-import de.domisum.layeredopensimplexnoise.OctavedOpenSimplexNoise;
+import de.domisum.layeredopensimplexnoise.NoiseLayer;
+
+import java.util.Arrays;
+import java.util.Random;
 
 public class IslandHeightMapGenerator
 {
@@ -27,14 +30,21 @@ public class IslandHeightMapGenerator
 	{
 		double[][] heights = new double[this.islandShape.getHeight()][this.islandShape.getWidth()];
 
-		LayeredOpenSimplexNoise noise = new OctavedOpenSimplexNoise(5, 0.1, 0.3, 1, 0.35, this.seed);
+		double avgSize = (this.islandShape.getWidth()+this.islandShape.getHeight())/2;
+
+		LayeredOpenSimplexNoise noise = createNoise();
+
+
 		for(int y = 0; y < this.islandShape.getHeight(); y++)
 			for(int x = 0; x < this.islandShape.getWidth(); x++)
 			{
 				if(!this.islandShape.get(x, y))
 					continue;
 
-				heights[y][x] = noise.evaluate(x, y);
+				double rX = x/avgSize;
+				double rY = y/avgSize;
+
+				heights[y][x] = noise.evaluate(rX, rY);
 			}
 
 		normalize(heights);
@@ -42,6 +52,33 @@ public class IslandHeightMapGenerator
 		HeightMap islandHeightMap = new HeightMap(heights);
 		return islandHeightMap;
 	}
+
+	private LayeredOpenSimplexNoise createNoise()
+	{
+		Random r = new Random(this.seed);
+
+		NoiseLayer[] layers = new NoiseLayer[10];
+		layers[0] = new NoiseLayer(0.2, 0.5, r.nextLong());
+		layers[1] = new NoiseLayer(0.1, 0.7, r.nextLong());
+		layers[2] = new NoiseLayer(0.05, 0.1, r.nextLong());
+
+		removeNulls:
+		{
+			int fNull = 0;
+			while(layers[fNull] != null)
+			{
+				if(fNull+1 == layers.length)
+					break removeNulls;
+				fNull++;
+			}
+
+			layers = Arrays.copyOf(layers, fNull);
+		}
+
+		LayeredOpenSimplexNoise noise = new LayeredOpenSimplexNoise(layers);
+		return noise;
+	}
+
 
 	// TODO move this to own class
 	private static void normalize(double[][] heights)

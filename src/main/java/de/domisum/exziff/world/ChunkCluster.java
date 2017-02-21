@@ -1,6 +1,5 @@
 package de.domisum.exziff.world;
 
-import com.sun.istack.internal.NotNull;
 import lombok.Getter;
 import org.apache.commons.lang3.Validate;
 
@@ -33,7 +32,7 @@ public class ChunkCluster
 	// -------
 	// GETTERS
 	// -------
-	@NotNull public Chunk getChunk(int iclX, int iclZ)
+	public Chunk getChunk(int iclX, int iclZ)
 	{
 		int chunkInClusterIndex = getChunkInClusterIndex(iclX, iclZ);
 

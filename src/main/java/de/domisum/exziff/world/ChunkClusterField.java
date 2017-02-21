@@ -1,6 +1,5 @@
 package de.domisum.exziff.world;
 
-import com.sun.istack.internal.Nullable;
 import org.apache.commons.lang3.Validate;
 
 public class ChunkClusterField
@@ -28,7 +27,7 @@ public class ChunkClusterField
 	// -------
 	// GETTERS
 	// -------
-	@Nullable public ChunkCluster getChunkCluster(int clX, int clZ)
+	public ChunkCluster getChunkCluster(int clX, int clZ)
 	{
 		int arrClX = clX-this.radius;
 		int arrClZ = clZ-this.radius;

@@ -1,7 +1,5 @@
 package de.domisum.exziff.world;
 
-import com.sun.istack.internal.Nullable;
-
 public class World
 {
 
@@ -42,7 +40,7 @@ public class World
 		return chunk.getMaterialSubId(icX, y, icZ);
 	}
 
-	@Nullable public Chunk getChunkAt(int x, int z)
+	public Chunk getChunkAt(int x, int z)
 	{
 		int cX = getChunkXorZ(x);
 		int cZ = getChunkXorZ(z);
