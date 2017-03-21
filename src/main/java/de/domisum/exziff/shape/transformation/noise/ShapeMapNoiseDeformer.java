@@ -1,8 +1,8 @@
 package de.domisum.exziff.shape.transformation.noise;
 
 import de.domisum.exziff.shape.ShapeMap;
-import de.domisum.exziff.shape.transformation.ShapeMapMapFloodFill;
-import de.domisum.exziff.shape.transformation.ShapeMapMapInvert;
+import de.domisum.exziff.shape.transformation.ShapeMapFloodFill;
+import de.domisum.exziff.shape.transformation.ShapeMapInvert;
 import de.domisum.exziff.shape.transformation.ShapeMapSmooth;
 import de.domisum.exziff.shape.transformation.ShapeMapTransformation;
 import de.domisum.layeredopensimplexnoise.LayeredOpenSimplexNoise;
@@ -52,10 +52,10 @@ public class ShapeMapNoiseDeformer extends ShapeMapTransformation
 				this.smoothIterations);
 		deformedShape = smooth.transform(deformedShape);
 
-		ShapeMapMapFloodFill floodFill = new ShapeMapMapFloodFill();
+		ShapeMapFloodFill floodFill = new ShapeMapFloodFill();
 		deformedShape = floodFill.transform(deformedShape);
 
-		ShapeMapMapInvert invert = new ShapeMapMapInvert();
+		ShapeMapInvert invert = new ShapeMapInvert();
 		deformedShape = invert.transform(deformedShape);
 
 		return deformedShape;

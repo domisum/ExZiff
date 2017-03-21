@@ -2,7 +2,7 @@ package de.domisum.exziff.shape.transformation;
 
 import de.domisum.exziff.shape.ShapeMap;
 
-public class ShapeMapMapInvert extends ShapeMapTransformation
+public class ShapeMapInvert extends ShapeMapTransformation
 {
 
 	// -------

@@ -1,10 +1,9 @@
 package de.domisum.exziff.test;
 
-import de.domisum.exziff.heightmap.HeightMap;
-import de.domisum.exziff.heightmap.exporter.HeightMapImageExporter;
 import de.domisum.exziff.island.heightmap.IslandHeightMapGenerator;
 import de.domisum.exziff.island.shape.IslandShapeGenerator;
 import de.domisum.exziff.shape.ShapeMap;
+import de.domisum.exziff.shape.exporter.ShapeMapImageExporter;
 import de.domisum.lib.auxilium.util.ImageUtil;
 
 import java.awt.image.BufferedImage;
@@ -33,7 +32,7 @@ public class TestLauncher
 
 
 		Random r = new Random(5);
-		for(int i = 0; i < 5; i++)
+		for(int i = 0; i < 50; i++)
 		{
 			long seed = r.nextLong();
 			exportIsland(seed+"", seed);
@@ -52,13 +51,13 @@ public class TestLauncher
 		ShapeMap shape = islandShapeGenerator.generate();
 
 		IslandHeightMapGenerator heightMapGenerator = new IslandHeightMapGenerator(shape, seed+0x3094);
-		HeightMap heightMap = heightMapGenerator.generate();
+		//HeightMap heightMap = heightMapGenerator.generate();
 
 
 		// exporting
-		/*ShapeMapImageExporter exporter = new ShapeMapImageExporter();*/
-		HeightMapImageExporter exporter = new HeightMapImageExporter();
-		BufferedImage image = exporter.export(heightMap);
+		ShapeMapImageExporter exporter = new ShapeMapImageExporter();
+		//HeightMapImageExporter exporter = new HeightMapImageExporter();
+		BufferedImage image = exporter.export(shape);
 
 		ImageUtil.writeImage(new File("C:\\Users\\domisum\\testChamber\\testIslands/"+fileName+".png"), image);
 	}
