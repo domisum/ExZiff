@@ -1,4 +1,4 @@
-package de.domisum.exziff.test;
+package de.domisum.exziff;
 
 import de.domisum.exziff.island.heightmap.IslandHeightMapGenerator;
 import de.domisum.exziff.island.shape.IslandShapeGenerator;

@@ -1,8 +1,7 @@
-package de.domisum.exziff.test.world;
+package de.domisum.exziff.world.file;
 
 import de.domisum.exziff.world.Chunk;
 import de.domisum.exziff.world.ChunkSection;
-import de.domisum.exziff.world.file.ChunkSectionTranscoder;
 import org.junit.Assert;
 import org.junit.Test;
 
