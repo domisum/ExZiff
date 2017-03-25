@@ -43,6 +43,7 @@ public class IslandShapeGenerator extends ShapeMapGenerator
 				baseShapeExcentricity, baseShapeRotationAngle);
 		ShapeMap baseShape = ellipseGenerator.generate();
 
+
 		// deform
 		Random seedGenerator = new Random(this.seed);
 		int deformationIterations = 3;
@@ -50,6 +51,7 @@ public class IslandShapeGenerator extends ShapeMapGenerator
 		ShapeMap deformedShape = baseShape;
 		for(int iteration = 1; iteration <= deformationIterations; iteration++)
 			deformedShape = deform(deformedShape, iteration, seedGenerator.nextLong());
+
 
 		// cleanup
 		ShapeMapSmooth smooth = new ShapeMapSmooth(2, 0.3, 0.35);
@@ -60,6 +62,7 @@ public class IslandShapeGenerator extends ShapeMapGenerator
 
 		ShapeMapInvert invert = new ShapeMapInvert();
 		deformedShape = invert.transform(deformedShape);
+
 
 		return deformedShape;
 	}

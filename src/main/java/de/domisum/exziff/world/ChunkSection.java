@@ -1,5 +1,8 @@
 package de.domisum.exziff.world;
 
+import lombok.Getter;
+import org.apache.commons.lang3.Validate;
+
 /**
  * Represents a section of a chunk of blocks and the data associated with them.
  * <p>
@@ -11,31 +14,73 @@ public class ChunkSection
 
 	// CONSTANTS
 	public static final int HEIGHT = Chunk.HEIGHT/Chunk.NUMBER_OF_SECTIONS;
-	private static final int SECTION_SIZE = Chunk.WIDTH*Chunk.WIDTH*HEIGHT;
+	public static final int NUMBER_OF_BLOCKS = Chunk.WIDTH*Chunk.WIDTH*HEIGHT;
 
 	// DATA
-	private short[] blockData = new short[SECTION_SIZE];
+	@Getter private boolean homogenous;
+	private byte homogenousMaterialId;
+	private byte homogenousMaterialSubId;
+	@Getter private byte[] blockData;
 
 
-	// -------
-	// GETTERS
-	// -------
-	public short getBlockData(int sX, int sY, int sZ)
+	// INIT
+	public ChunkSection(byte homogenousMaterialId, byte homogenousMaterialSubId)
 	{
-		int blockInSectionIndex = getBlockInSectionIndex(sX, sY, sZ);
+		this.homogenous = true;
 
-		short blockData = this.blockData[blockInSectionIndex];
-		return blockData;
+		this.homogenousMaterialId = homogenousMaterialId;
+		this.homogenousMaterialSubId = homogenousMaterialSubId;
+	}
+
+	public ChunkSection(byte[] blockData)
+	{
+		Validate.isTrue(blockData.length == NUMBER_OF_BLOCKS*2, "The length of blockData has to be "+NUMBER_OF_BLOCKS);
+
+		this.homogenous = false;
+		this.blockData = blockData;
+	}
+
+	private void initBlockData()
+	{
+		this.homogenous = false;
+		this.blockData = new byte[NUMBER_OF_BLOCKS*2];
+
+		// check if the homogenousMaterial is 0, otherwise fill the array with the information
+		if(this.homogenousMaterialId != 0 || this.homogenousMaterialSubId != 0)
+			for(int i = 0; i < this.blockData.length; i++)
+				this.blockData[i] = i%2 == 0 ? this.homogenousMaterialId : this.homogenousMaterialSubId;
 	}
 
 
-	// -------
-	// SETTERS
-	// -------
-	public void setBlockData(int sX, int sY, int sZ, short blockData)
+	// GETTERS
+	public byte getMaterialId(int sX, int sY, int sZ)
 	{
-		int blockinSectionIndex = getBlockInSectionIndex(sX, sY, sZ);
-		this.blockData[blockinSectionIndex] = blockData;
+		if(isHomogenous())
+			return this.homogenousMaterialId;
+
+		int blockInSectionIndex = getBlockInSectionIndex(sX, sY, sZ);
+		return this.blockData[blockInSectionIndex*2];
+	}
+
+	public byte getMaterialSubId(int sX, int sY, int sZ)
+	{
+		if(isHomogenous())
+			return this.homogenousMaterialSubId;
+
+		int blockInSectionIndex = getBlockInSectionIndex(sX, sY, sZ);
+		return this.blockData[blockInSectionIndex*2+1];
+	}
+
+
+	// SETTERS
+	public void setMaterialIdAndSubId(int sX, int sY, int sZ, byte materialId, byte materialSubId)
+	{
+		if(isHomogenous() && (this.homogenousMaterialId != materialId || this.homogenousMaterialSubId != materialSubId))
+			initBlockData();
+
+		int blockInSectionIndex = getBlockInSectionIndex(sX, sY, sZ);
+		this.blockData[blockInSectionIndex*2] = materialId;
+		this.blockData[blockInSectionIndex*2+1] = materialSubId;
 	}
 
 

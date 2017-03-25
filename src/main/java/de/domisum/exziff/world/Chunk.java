@@ -10,12 +10,7 @@ import org.apache.commons.lang3.Validate;
  * which means they are relative to the base of the chunk.
  * <h1>Internal implementation:</h1>
  * <p>
- * The chunk is divided into 16 sections that are layered on top of each other.
- * If all blocks in a section have the default blockData (materialId = 0 and materialSubId = 0),
- * the section is represented by null.
- * <p>
- * The data for each block is saved in a single short,
- * the first 8 bytes determine the materialId, the last 8 bytes the materialSubId.
+ * The chunk is divided into 16 ChunkSections that are layered on top of each other.
  */
 public class Chunk
 {
@@ -28,26 +23,20 @@ public class Chunk
 	// section
 	public static final int NUMBER_OF_SECTIONS = 16;
 
-	// material id
-	private static final short MIN_MATERIAL_ID = 0;
-	private static final short MAX_MATERIAL_ID = 256-1;
-	private static final short MIN_MATERIAL_SUB_ID = 0;
-	private static final short MAX_MATERIAL_SUB_ID = 16-1;
-
 	// DATA
 	@Getter private final int cX;
 	@Getter private final int cZ;
 	private ChunkSection[] chunkSections = new ChunkSection[NUMBER_OF_SECTIONS];
 
 
-	// -------
 	// INIT
-	// -------
 	public Chunk(int cX, int cZ, ChunkSection[] chunkSections)
 	{
-		this(cX, cZ);
+		this.cX = cX;
+		this.cZ = cZ;
 
 		Validate.isTrue(chunkSections.length == NUMBER_OF_SECTIONS, "The number of chunk sections has to be "+NUMBER_OF_SECTIONS);
+		Validate.noNullElements(chunkSections, "chunkSections can't contain null elements");
 
 		this.chunkSections = chunkSections;
 	}
@@ -56,6 +45,9 @@ public class Chunk
 	{
 		this.cX = cX;
 		this.cZ = cZ;
+
+		for(int i = 0; i < NUMBER_OF_SECTIONS; i++)
+			this.chunkSections[i] = new ChunkSection((byte) 0, (byte) 0);
 	}
 
 
@@ -64,81 +56,40 @@ public class Chunk
 	// -------
 	public short getMaterialId(int icX, int icY, int icZ)
 	{
-		short blockData = getBlockData(icX, icY, icZ);
+		ChunkSection section = getSection(icY);
+		int inSectionY = icY%ChunkSection.HEIGHT;
 
-		// the materialId is saved to the left 8 bits of the blockData short
-		short materialId = (short) (blockData>>8);
-		return materialId;
+		return section.getMaterialId(icX, inSectionY, icZ);
 	}
 
 	public short getMaterialSubId(int icX, int icY, int icZ)
 	{
-		short blockData = getBlockData(icX, icY, icZ);
+		ChunkSection section = getSection(icY);
+		int inSectionY = icY%ChunkSection.HEIGHT;
 
-		// the sub id is saved in the right 8 bits of the blockData short
-		short materialSubId = (short) (blockData&0b11111111);
-		return materialSubId;
+		return section.getMaterialSubId(icX, inSectionY, icZ);
 	}
 
 
 	// -------
 	// SETTERS
 	// -------
-	public void setMaterialIdAndSubId(int icX, int icY, int icZ, short materialId, short materialSubId)
+	public void setMaterialIdAndSubId(int icX, int icY, int icZ, byte materialId, byte materialSubId)
 	{
-		Validate.inclusiveBetween(MIN_MATERIAL_ID, MAX_MATERIAL_ID, materialId);
-		Validate.inclusiveBetween(MIN_MATERIAL_SUB_ID, MAX_MATERIAL_SUB_ID, materialSubId);
-
-		createSectionIfNotExist(icY);
 		ChunkSection section = getSection(icY);
+		int inSectionY = icY%ChunkSection.HEIGHT;
 
-		int sectionY = icY%ChunkSection.HEIGHT;
-		short blockData = getBlockDataFromMaterialIdAndSubId(materialId, materialSubId);
-		section.setBlockData(icX, sectionY, icZ, blockData);
+		section.setMaterialIdAndSubId(icX, inSectionY, icZ, materialId, materialSubId);
 	}
 
 
 	// INTERNAL
-	private static int getSectionId(int icY)
+	public ChunkSection getSection(int icY)
 	{
 		int sectionId = icY/ChunkSection.HEIGHT;
-		return sectionId;
-	}
-
-	private ChunkSection getSection(int icY)
-	{
-		int sectionId = getSectionId(icY);
 
 		ChunkSection section = this.chunkSections[sectionId];
 		return section;
-	}
-
-	private short getBlockData(int icX, int icY, int icZ)
-	{
-		ChunkSection section = getSection(icY);
-		if(section == null)
-			return 0;
-
-		int sectionY = icY%ChunkSection.HEIGHT;
-		short blockData = section.getBlockData(icX, sectionY, icZ);
-		return blockData;
-	}
-
-
-	private static short getBlockDataFromMaterialIdAndSubId(short materialId, short materialSubId)
-	{
-		short blockData = (short) (materialId<<8|materialSubId);
-		return blockData;
-	}
-
-
-	private void createSectionIfNotExist(int icY)
-	{
-		int sectionId = getSectionId(icY);
-		if(this.chunkSections[sectionId] != null)
-			return;
-
-		this.chunkSections[sectionId] = new ChunkSection();
 	}
 
 }

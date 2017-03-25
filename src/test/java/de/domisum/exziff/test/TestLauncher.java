@@ -4,10 +4,12 @@ import de.domisum.exziff.island.heightmap.IslandHeightMapGenerator;
 import de.domisum.exziff.island.shape.IslandShapeGenerator;
 import de.domisum.exziff.shape.ShapeMap;
 import de.domisum.exziff.shape.exporter.ShapeMapImageExporter;
+import de.domisum.lib.auxilium.util.FileUtil;
 import de.domisum.lib.auxilium.util.ImageUtil;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 import java.util.Random;
 
 public class TestLauncher
@@ -21,15 +23,14 @@ public class TestLauncher
 
 	private static void islandTest()
 	{
-		/*try
+		try
 		{
 			FileUtil.deleteDirectoryContents(new File("C:\\Users\\domisum\\testChamber\\testIslands/"));
 		}
 		catch(IOException e)
 		{
 			e.printStackTrace();
-		}*/
-
+		}
 
 		Random r = new Random(5);
 		for(int i = 0; i < 50; i++)

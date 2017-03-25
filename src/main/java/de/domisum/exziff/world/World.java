@@ -40,7 +40,7 @@ public class World
 		return chunk.getMaterialSubId(icX, y, icZ);
 	}
 
-	public Chunk getChunkAt(int x, int z)
+	private Chunk getChunkAt(int x, int z)
 	{
 		int cX = getChunkXorZ(x);
 		int cZ = getChunkXorZ(z);
@@ -61,7 +61,7 @@ public class World
 	// -------
 	// SETTERS
 	// -------
-	public void setMaterialIdAndSubId(int x, int y, int z, short materialId, short materialSubId)
+	public void setMaterialIdAndSubId(int x, int y, int z, byte materialId, byte materialSubId)
 	{
 		Chunk chunk = getChunkAt(x, z);
 		int icX = getInChunkXOrZ(x);
