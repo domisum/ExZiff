@@ -17,9 +17,6 @@ public class ChunkSectionTranscoderTest
 		testEncodeDecodeEncodeSame(transcoder, new ChunkSection((byte) 0, (byte) 0));
 		testEncodeDecodeEncodeSame(transcoder, new ChunkSection((byte) 1, (byte) 1));
 		testEncodeDecodeEncodeSame(transcoder, new ChunkSection((byte) 255, (byte) 15));
-
-		byte[] blockData = new byte[ChunkSection.NUMBER_OF_BLOCKS*2];
-		testEncodeDecodeEncodeSame(transcoder, new ChunkSection(blockData));
 	}
 
 	@Test public void testEndcodeDecodePredefinedHeterogenous()
@@ -27,6 +24,9 @@ public class ChunkSectionTranscoderTest
 		ChunkSectionTranscoder transcoder = new ChunkSectionTranscoder();
 
 		byte[] blockData = new byte[ChunkSection.NUMBER_OF_BLOCKS*2];
+		testEncodeDecodeEncodeSame(transcoder, new ChunkSection(blockData));
+
+		blockData = new byte[ChunkSection.NUMBER_OF_BLOCKS*2];
 		for(int i = 0; i < blockData.length; i++)
 			blockData[i] = (byte) (i%17);
 		testEncodeDecodeEncodeSame(transcoder, new ChunkSection(blockData));
