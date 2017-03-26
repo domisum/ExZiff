@@ -91,4 +91,26 @@ public class ChunkSection
 		return blockInSectionIndex;
 	}
 
+	public void tryMakeHomogenous()
+	{
+		if(this.homogenous)
+			return;
+
+		// if this section is really homogenous, all the blocks have to have the same materialId and materialSubId as the first one
+		this.homogenousMaterialId = getMaterialId(0, 0, 0);
+		this.homogenousMaterialSubId = getMaterialSubId(0, 0, 0);
+
+		for(int blockIndex = 0; blockIndex < NUMBER_OF_BLOCKS; blockIndex++)
+		{
+			if(this.blockData[blockIndex*2] != this.homogenousMaterialId)
+				return;
+
+			if(this.blockData[blockIndex*2+1] != this.homogenousMaterialSubId)
+				return;
+		}
+
+		// if no block was different from the first, the chunk section is homogenous
+		this.homogenous = true;
+	}
+
 }

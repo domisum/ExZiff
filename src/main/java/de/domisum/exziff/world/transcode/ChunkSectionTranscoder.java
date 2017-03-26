@@ -26,6 +26,9 @@ public class ChunkSectionTranscoder implements Transcoder<ChunkSection>
 	// TRANSCODING
 	@Override public byte[] encode(ChunkSection chunkSection)
 	{
+		// transforming a chunkSection to homogenous saves memory
+		chunkSection.tryMakeHomogenous();
+
 		// homogenous
 		if(chunkSection.isHomogenous())
 			return new byte[] {TYPE_HOMOGENOUS, chunkSection.getMaterialId(0, 0, 0), chunkSection.getMaterialSubId(0, 0, 0)};

@@ -1,11 +1,11 @@
 package de.domisum.exziff.world;
 
 import de.domisum.exziff.world.transcode.ChunkClusterTranscoder;
+import de.domisum.lib.auxilium.util.CompressionUtil;
+import de.domisum.lib.auxilium.util.FileUtil;
 import lombok.Getter;
 
 import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
 
 public class ChunkClusterLoaderSaver
 {
@@ -26,8 +26,6 @@ public class ChunkClusterLoaderSaver
 
 		if(!chunkClusterDirectory.exists())
 			chunkClusterDirectory.mkdirs();
-
-		System.out.println(chunkClusterDirectory.getAbsolutePath());
 	}
 
 
@@ -40,16 +38,8 @@ public class ChunkClusterLoaderSaver
 			return null;
 
 		// read from file
-		byte[] chunkClusterData;
-		try
-		{
-			chunkClusterData = Files.readAllBytes(clusterFile.toPath());
-		}
-		catch(IOException e)
-		{
-			e.printStackTrace();
-			return null;
-		}
+		byte[] chunkClusterData = FileUtil.readFileToByteArray(clusterFile);
+		chunkClusterData = CompressionUtil.decompress(chunkClusterData);
 
 		ChunkCluster decodedChunkCluster = this.chunkClusterTranscoder.decode(chunkClusterData);
 		return decodedChunkCluster;
@@ -66,15 +56,9 @@ public class ChunkClusterLoaderSaver
 				getChunkClusterFileName(chunkCluster.getClX(), chunkCluster.getClZ()));
 
 		byte[] encodedChunkCluster = this.chunkClusterTranscoder.encode(chunkCluster);
+		encodedChunkCluster = CompressionUtil.compress(encodedChunkCluster, false);
 
-		try
-		{
-			Files.write(clusterFile.toPath(), encodedChunkCluster);
-		}
-		catch(IOException e)
-		{
-			e.printStackTrace();
-		}
+		FileUtil.writeByteArrayToFile(clusterFile, encodedChunkCluster);
 	}
 
 

@@ -73,11 +73,18 @@ public class TestLauncher
 				true);
 		World world = new World(loaderSaver);
 
-		for(int i = 0; i < 1500; i++)
-			//world.setMaterialIdAndSubId(i, 0, 0, (byte) 17, (byte) 0);
-			System.out.println(i+" "+world.getMaterialId(i, 0, 0));
+		long startMs = System.currentTimeMillis();
+
+		for(int i = 0; i < 15000; i++)
+			for(int j = 0; j < 15000; j++)
+				for(int y = 0; y <= 32; y += 16)
+					world.setMaterialIdAndSubId(i, y, j, (byte) 1, (byte) 0);
+
+		System.out.println("afterAction: "+(System.currentTimeMillis()-startMs));
 
 		world.save();
+
+		System.out.println("afterSave: "+(System.currentTimeMillis()-startMs));
 	}
 
 }
