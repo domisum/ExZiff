@@ -32,7 +32,7 @@ public class ChunkTranscoder implements Transcoder<Chunk>
 
 		for(int i = 0; i < Chunk.NUMBER_OF_SECTIONS; i++)
 		{
-			byte[] encodedChunkSection = this.chunkSectionTranscoder.encode(toEncode.getSection(i));
+			byte[] encodedChunkSection = this.chunkSectionTranscoder.encode(toEncode.getChunkSections()[i]);
 
 			encodedChunkSections[i] = encodedChunkSection;
 			encodedChunkSectionsCombinedLength += encodedChunkSection.length;
@@ -48,7 +48,7 @@ public class ChunkTranscoder implements Transcoder<Chunk>
 			byte[] encodedChunkSection = encodedChunkSections[i];
 
 			// write the length of the ChunkSection
-			encodeInt(encodedChunk, i*4, encodedChunkSection.length);
+			encodeInt(encodedChunk, (2+i)*4, encodedChunkSection.length);
 
 			// write chunk section
 			System.arraycopy(encodedChunkSection, 0, encodedChunk, currentWritingPosition, encodedChunkSection.length);

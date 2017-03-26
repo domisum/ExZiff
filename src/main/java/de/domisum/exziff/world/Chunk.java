@@ -26,7 +26,7 @@ public class Chunk
 	// DATA
 	@Getter private final int cX;
 	@Getter private final int cZ;
-	private ChunkSection[] chunkSections = new ChunkSection[NUMBER_OF_SECTIONS];
+	@Getter private ChunkSection[] chunkSections = new ChunkSection[NUMBER_OF_SECTIONS];
 
 
 	// INIT
@@ -84,7 +84,7 @@ public class Chunk
 
 
 	// INTERNAL
-	public ChunkSection getSection(int icY)
+	private ChunkSection getSection(int icY)
 	{
 		int sectionId = icY/ChunkSection.HEIGHT;
 

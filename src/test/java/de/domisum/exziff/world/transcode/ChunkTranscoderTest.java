@@ -1,0 +1,76 @@
+package de.domisum.exziff.world.transcode;
+
+import de.domisum.exziff.world.Chunk;
+import de.domisum.exziff.world.ChunkSection;
+import org.junit.Assert;
+import org.junit.Test;
+
+import java.util.Random;
+
+public class ChunkTranscoderTest
+{
+
+	@Test public void testEncodeDecodePredefinedHomogenous()
+	{
+		ChunkTranscoder transcoder = new ChunkTranscoder();
+
+		ChunkSection chunkSectionHomogenous1 = new ChunkSection((byte) 0, (byte) 0);
+		ChunkSection chunkSectionHomogenous2 = new ChunkSection((byte) 17, (byte) 0);
+
+
+		ChunkSection[] chunkSections = new ChunkSection[Chunk.NUMBER_OF_SECTIONS];
+		for(int i = 0; i < chunkSections.length; i++)
+			chunkSections[i] = chunkSectionHomogenous1;
+		testEncodeDecodeEncodeSame(transcoder, new Chunk(3, 8, chunkSections));
+
+		chunkSections = new ChunkSection[Chunk.NUMBER_OF_SECTIONS];
+		for(int i = 0; i < chunkSections.length; i++)
+			chunkSections[i] = i%2 == 0 ? chunkSectionHomogenous1 : chunkSectionHomogenous2;
+		testEncodeDecodeEncodeSame(transcoder, new Chunk(-7, 0, chunkSections));
+	}
+
+	@Test public void testEncodeDecodeRandomized()
+	{
+		ChunkTranscoder transcoder = new ChunkTranscoder();
+		Random random = new Random(0xdab);
+
+
+		for(int test = 0; test < 1000; test++)
+		{
+			ChunkSection[] chunkSections = new ChunkSection[Chunk.NUMBER_OF_SECTIONS];
+			for(int i = 0; i < Chunk.NUMBER_OF_SECTIONS; i++)
+				chunkSections[i] = ChunkSectionTranscoderTest.generateRandomChunkSection(random);
+
+			Chunk chunk = new Chunk(random.nextInt(), random.nextInt(), chunkSections);
+			testEncodeDecodeEncodeSame(transcoder, chunk);
+		}
+	}
+
+
+	private void testEncodeDecodeEncodeSame(ChunkTranscoder transcoder, Chunk chunk)
+	{
+		byte[] encoded = transcoder.encode(chunk);
+		Chunk decoded = transcoder.decode(encoded);
+		assertEqualsChunk(chunk, decoded);
+
+		byte[] encodedAgain = transcoder.encode(decoded);
+		Assert.assertArrayEquals("encodedAgain not equal to first encoded", encoded, encodedAgain);
+	}
+
+
+	// VALIDATORS
+	public static void assertEqualsChunk(Chunk chunk1, Chunk chunk2)
+	{
+		Assert.assertEquals("cX not equal", chunk1.getCX(), chunk2.getCX());
+		Assert.assertEquals("cZ not equal", chunk1.getCZ(), chunk2.getCZ());
+
+		for(int section = 0; section < Chunk.NUMBER_OF_SECTIONS; section++)
+		{
+			ChunkSection section1 = chunk1.getChunkSections()[section];
+			ChunkSection section2 = chunk2.getChunkSections()[section];
+
+			ChunkSectionTranscoderTest.assertEqualsChunkSection(section1, section2);
+		}
+	}
+
+}

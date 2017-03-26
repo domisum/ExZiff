@@ -10,6 +10,7 @@ import java.util.Random;
 public class ChunkSectionTranscoderTest
 {
 
+	// TESTS
 	@Test public void testEncodeDecodePredefinedHomogenous()
 	{
 		ChunkSectionTranscoder transcoder = new ChunkSectionTranscoder();
@@ -43,14 +44,8 @@ public class ChunkSectionTranscoderTest
 		Random random = new Random(0x7e57);
 
 		for(int test = 0; test < 1000; test++)
-		{
-			byte[] blockData = new byte[ChunkSection.NUMBER_OF_BLOCKS*2];
-			random.nextBytes(blockData);
-
-			testEncodeDecodeEncodeSame(transcoder, new ChunkSection(blockData));
-		}
+			testEncodeDecodeEncodeSame(transcoder, generateRandomChunkSection(random));
 	}
-
 
 	private void testEncodeDecodeEncodeSame(ChunkSectionTranscoder transcoder, ChunkSection chunkSection)
 	{
@@ -62,6 +57,8 @@ public class ChunkSectionTranscoderTest
 		Assert.assertArrayEquals(encoded, encodedAgain);
 	}
 
+
+	// TEST VALIDATORS
 	public static void assertEqualsChunkSection(ChunkSection chunkSection1, ChunkSection chunkSection2)
 	{
 		for(int icsY = 0; icsY < ChunkSection.HEIGHT; icsY++)
@@ -74,6 +71,16 @@ public class ChunkSectionTranscoderTest
 					Assert.assertEquals("Difference in chunk section materialSubId at x"+icsX+" y"+icsY+" z"+icsZ,
 							chunkSection1.getMaterialSubId(icsX, icsY, icsZ), chunkSection2.getMaterialSubId(icsX, icsY, icsZ));
 				}
+	}
+
+
+	// TESTCASE GENERATOR
+	public static ChunkSection generateRandomChunkSection(Random random)
+	{
+		byte[] blockData = new byte[ChunkSection.NUMBER_OF_BLOCKS*2];
+		random.nextBytes(blockData);
+
+		return new ChunkSection(blockData);
 	}
 
 }
