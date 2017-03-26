@@ -17,7 +17,6 @@ public class ChunkTranscoderTest
 		ChunkSection chunkSectionHomogenous1 = new ChunkSection((byte) 0, (byte) 0);
 		ChunkSection chunkSectionHomogenous2 = new ChunkSection((byte) 17, (byte) 0);
 
-
 		ChunkSection[] chunkSections = new ChunkSection[Chunk.NUMBER_OF_SECTIONS];
 		for(int i = 0; i < chunkSections.length; i++)
 			chunkSections[i] = chunkSectionHomogenous1;
@@ -35,7 +34,6 @@ public class ChunkTranscoderTest
 	{
 		ChunkTranscoder transcoder = new ChunkTranscoder();
 		Random random = new Random(0xdab);
-
 
 		for(int test = 0; test < 1000; test++)
 			testEncodeDecodeEquals(transcoder, generateRandomChunk(random));

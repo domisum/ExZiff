@@ -15,7 +15,6 @@ public class ChunkClusterTranscoderTest
 	{
 		ChunkClusterTranscoder transcoder = new ChunkClusterTranscoder();
 
-
 		ChunkSection chunkSectionHomogenous1 = new ChunkSection((byte) 0, (byte) 0);
 
 		ChunkSection[] chunkSections = new ChunkSection[Chunk.NUMBER_OF_SECTIONS];
