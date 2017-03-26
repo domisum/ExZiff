@@ -21,10 +21,10 @@ public interface Transcoder<T>
 	default int decodeInt(byte[] decodeFrom, int startingPosition)
 	{
 		int number = 0;
-		number += decodeFrom[startingPosition]<<24;
-		number += decodeFrom[startingPosition+1]<<16;
-		number += decodeFrom[startingPosition+2]<<8;
-		number += decodeFrom[startingPosition+3];
+		number |= (decodeFrom[startingPosition]&0xFF)<<24;
+		number |= (decodeFrom[startingPosition+1]&0xFF)<<16;
+		number |= (decodeFrom[startingPosition+2]&0xFF)<<8;
+		number |= (decodeFrom[startingPosition+3]&0xFF);
 
 		return number;
 	}
