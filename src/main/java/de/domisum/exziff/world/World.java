@@ -1,5 +1,8 @@
 package de.domisum.exziff.world;
 
+import lombok.Getter;
+import lombok.Setter;
+
 public class World
 {
 
@@ -9,19 +12,21 @@ public class World
 	// DATA
 	private ChunkClusterField clusterField = new ChunkClusterField(CHUNK_CLUSTER_RADIUS);
 
+	// REFERENCES
+	private ChunkClusterLoaderSaver chunkClusterLoaderSaver;
 
-	// -------
+	// SETTINGS
+	@Getter @Setter private int maximumLoadedChunkClusters = 128;
+
+
 	// INIT
-	// -------
-	public World()
+	public World(ChunkClusterLoaderSaver chunkClusterLoaderSaver)
 	{
-
+		this.chunkClusterLoaderSaver = chunkClusterLoaderSaver;
 	}
 
 
-	// -------
 	// GETTERS
-	// -------
 	public short getMaterialId(int x, int y, int z)
 	{
 		Chunk chunk = getChunkAt(x, z);
@@ -40,27 +45,8 @@ public class World
 		return chunk.getMaterialSubId(icX, y, icZ);
 	}
 
-	private Chunk getChunkAt(int x, int z)
-	{
-		int cX = getChunkXorZ(x);
-		int cZ = getChunkXorZ(z);
 
-		int clX = getChunkClusterXorZ(cX);
-		int clZ = getChunkClusterXorZ(cZ);
-		ChunkCluster chunkCluster = this.clusterField.getChunkCluster(clX, clZ);
-		if(chunkCluster == null)
-			return null;
-
-		int iclX = getInChunkClusterXorZ(cX);
-		int iclZ = getInChunkClusterXorZ(cZ);
-		Chunk chunk = chunkCluster.getChunk(iclX, iclZ);
-		return chunk;
-	}
-
-
-	// -------
 	// SETTERS
-	// -------
 	public void setMaterialIdAndSubId(int x, int y, int z, byte materialId, byte materialSubId)
 	{
 		Chunk chunk = getChunkAt(x, z);
@@ -71,7 +57,63 @@ public class World
 	}
 
 
-	// INTERNAL
+	// CHUNK
+	private Chunk getChunkAt(int x, int z)
+	{
+		int cX = getChunkXorZ(x);
+		int cZ = getChunkXorZ(z);
+
+		int clX = getChunkClusterXorZ(cX);
+		int clZ = getChunkClusterXorZ(cZ);
+		ChunkCluster chunkCluster = getChunkCluster(clX, clZ);
+
+		int iclX = getInChunkClusterXorZ(cX);
+		int iclZ = getInChunkClusterXorZ(cZ);
+		Chunk chunk = chunkCluster.getChunk(iclX, iclZ);
+		return chunk;
+	}
+
+
+	// CHUNK CLUSTER
+	private ChunkCluster getChunkCluster(int clX, int clZ)
+	{
+		ChunkCluster chunkCluster = this.clusterField.getCluster(clX, clZ, true);
+
+		// chunk cluster not loaded, loading it
+		if(chunkCluster == null)
+			chunkCluster = loadChunkCluster(clX, clZ);
+
+		return chunkCluster;
+	}
+
+	private ChunkCluster loadChunkCluster(int clX, int clZ)
+	{
+		// if number of currently loaded chunk clusters is too high, unload
+		if(this.clusterField.getNumberOfClusters() >= this.maximumLoadedChunkClusters)
+			unloadLongestUnusedChunkCluster();
+
+
+		ChunkCluster chunkCluster = this.chunkClusterLoaderSaver.loadChunkCluster(clX, clZ);
+
+		// chunk cluster not saved to disk, create new chunk cluster
+		if(chunkCluster == null)
+			chunkCluster = new ChunkCluster(clX, clZ);
+
+		return chunkCluster;
+	}
+
+	private void unloadLongestUnusedChunkCluster()
+	{
+		ChunkCluster longestUnusedChunkCluster = this.clusterField.getLongestUnusedChunkCluster();
+
+		this.chunkClusterLoaderSaver.saveChunkCluster(longestUnusedChunkCluster);
+		this.clusterField.removeCluster(longestUnusedChunkCluster);
+
+		System.gc();
+	}
+
+
+	// INTERNAL CALCULATIONS
 	private static int getChunkClusterXorZ(int cXorZ)
 	{
 		return getContainerXorZ(cXorZ, ChunkCluster.WIDTH);
