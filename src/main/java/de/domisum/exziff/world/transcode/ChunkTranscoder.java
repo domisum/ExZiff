@@ -1,4 +1,4 @@
-package de.domisum.exziff.world.file;
+package de.domisum.exziff.world.transcode;
 
 import de.domisum.exziff.world.Chunk;
 import de.domisum.exziff.world.ChunkSection;
