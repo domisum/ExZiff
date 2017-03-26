@@ -21,12 +21,14 @@ public class ChunkTranscoderTest
 		ChunkSection[] chunkSections = new ChunkSection[Chunk.NUMBER_OF_SECTIONS];
 		for(int i = 0; i < chunkSections.length; i++)
 			chunkSections[i] = chunkSectionHomogenous1;
-		testEncodeDecodeEncodeSame(transcoder, new Chunk(3, 8, chunkSections));
+		testEncodeDecodeEquals(transcoder, new Chunk(3, 8, chunkSections));
 
 		chunkSections = new ChunkSection[Chunk.NUMBER_OF_SECTIONS];
 		for(int i = 0; i < chunkSections.length; i++)
 			chunkSections[i] = i%2 == 0 ? chunkSectionHomogenous1 : chunkSectionHomogenous2;
-		testEncodeDecodeEncodeSame(transcoder, new Chunk(-7, 0, chunkSections));
+		testEncodeDecodeEquals(transcoder, new Chunk(-7, 0, chunkSections));
+
+		testEncodeDecodeEquals(transcoder, new Chunk(7, 7));
 	}
 
 	@Test public void testEncodeDecodeRandomized()
@@ -36,25 +38,15 @@ public class ChunkTranscoderTest
 
 
 		for(int test = 0; test < 1000; test++)
-		{
-			ChunkSection[] chunkSections = new ChunkSection[Chunk.NUMBER_OF_SECTIONS];
-			for(int i = 0; i < Chunk.NUMBER_OF_SECTIONS; i++)
-				chunkSections[i] = ChunkSectionTranscoderTest.generateRandomChunkSection(random);
-
-			Chunk chunk = new Chunk(random.nextInt(), random.nextInt(), chunkSections);
-			testEncodeDecodeEncodeSame(transcoder, chunk);
-		}
+			testEncodeDecodeEquals(transcoder, generateRandomChunk(random));
 	}
 
 
-	private void testEncodeDecodeEncodeSame(ChunkTranscoder transcoder, Chunk chunk)
+	private void testEncodeDecodeEquals(ChunkTranscoder transcoder, Chunk chunk)
 	{
 		byte[] encoded = transcoder.encode(chunk);
 		Chunk decoded = transcoder.decode(encoded);
 		assertEqualsChunk(chunk, decoded);
-
-		byte[] encodedAgain = transcoder.encode(decoded);
-		Assert.assertArrayEquals("encodedAgain not equal to first encoded", encoded, encodedAgain);
 	}
 
 
@@ -71,6 +63,16 @@ public class ChunkTranscoderTest
 
 			ChunkSectionTranscoderTest.assertEqualsChunkSection(section1, section2);
 		}
+	}
+
+	// TEST CASE GENERATOR
+	public static Chunk generateRandomChunk(Random random)
+	{
+		ChunkSection[] chunkSections = new ChunkSection[Chunk.NUMBER_OF_SECTIONS];
+		for(int i = 0; i < Chunk.NUMBER_OF_SECTIONS; i++)
+			chunkSections[i] = ChunkSectionTranscoderTest.generateRandomChunkSection(random);
+
+		return new Chunk(random.nextInt(), random.nextInt(), chunkSections);
 	}
 
 }

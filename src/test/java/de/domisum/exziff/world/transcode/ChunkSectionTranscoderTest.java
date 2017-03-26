@@ -15,9 +15,9 @@ public class ChunkSectionTranscoderTest
 	{
 		ChunkSectionTranscoder transcoder = new ChunkSectionTranscoder();
 
-		testEncodeDecodeEncodeSame(transcoder, new ChunkSection((byte) 0, (byte) 0));
-		testEncodeDecodeEncodeSame(transcoder, new ChunkSection((byte) 1, (byte) 1));
-		testEncodeDecodeEncodeSame(transcoder, new ChunkSection((byte) 255, (byte) 15));
+		testEncodeDecodeEquals(transcoder, new ChunkSection((byte) 0, (byte) 0));
+		testEncodeDecodeEquals(transcoder, new ChunkSection((byte) 1, (byte) 1));
+		testEncodeDecodeEquals(transcoder, new ChunkSection((byte) 255, (byte) 15));
 	}
 
 	@Test public void testEndcodeDecodePredefinedHeterogenous()
@@ -25,17 +25,17 @@ public class ChunkSectionTranscoderTest
 		ChunkSectionTranscoder transcoder = new ChunkSectionTranscoder();
 
 		byte[] blockData = new byte[ChunkSection.NUMBER_OF_BLOCKS*2];
-		testEncodeDecodeEncodeSame(transcoder, new ChunkSection(blockData));
+		testEncodeDecodeEquals(transcoder, new ChunkSection(blockData));
 
 		blockData = new byte[ChunkSection.NUMBER_OF_BLOCKS*2];
 		for(int i = 0; i < blockData.length; i++)
 			blockData[i] = (byte) (i%17);
-		testEncodeDecodeEncodeSame(transcoder, new ChunkSection(blockData));
+		testEncodeDecodeEquals(transcoder, new ChunkSection(blockData));
 
 		blockData = new byte[ChunkSection.NUMBER_OF_BLOCKS*2];
 		for(int i = 0; i < blockData.length; i++)
 			blockData[i] = (byte) (i*4359349%19237-34347789);
-		testEncodeDecodeEncodeSame(transcoder, new ChunkSection(blockData));
+		testEncodeDecodeEquals(transcoder, new ChunkSection(blockData));
 	}
 
 	@Test public void testEncodeDecodeRandomized()
@@ -44,17 +44,14 @@ public class ChunkSectionTranscoderTest
 		Random random = new Random(0x7e57);
 
 		for(int test = 0; test < 1000; test++)
-			testEncodeDecodeEncodeSame(transcoder, generateRandomChunkSection(random));
+			testEncodeDecodeEquals(transcoder, generateRandomChunkSection(random));
 	}
 
-	private void testEncodeDecodeEncodeSame(ChunkSectionTranscoder transcoder, ChunkSection chunkSection)
+	private void testEncodeDecodeEquals(ChunkSectionTranscoder transcoder, ChunkSection chunkSection)
 	{
 		byte[] encoded = transcoder.encode(chunkSection);
 		ChunkSection decoded = transcoder.decode(encoded);
 		assertEqualsChunkSection(chunkSection, decoded);
-
-		byte[] encodedAgain = transcoder.encode(decoded);
-		Assert.assertArrayEquals(encoded, encodedAgain);
 	}
 
 

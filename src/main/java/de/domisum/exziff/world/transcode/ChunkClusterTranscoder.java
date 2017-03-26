@@ -68,7 +68,7 @@ public class ChunkClusterTranscoder implements Transcoder<ChunkCluster>
 		Chunk[] chunks = new Chunk[ChunkCluster.NUMBER_OF_CHUNKS];
 
 		int currentReadingPosition = BYTES_BEFORE_CHUNK_DATA;
-		for(int i = 0; i < Chunk.NUMBER_OF_SECTIONS; i++)
+		for(int i = 0; i < chunks.length; i++)
 		{
 			int chunkLength = decodeInt(toDecode, (2+i)*4);
 
