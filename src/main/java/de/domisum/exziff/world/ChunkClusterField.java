@@ -14,7 +14,8 @@ public class ChunkClusterField
 
 	// DATA
 	private final ChunkCluster[][] clusterField;
-	@Getter private final List<ChunkCluster> clusterList = new ArrayList<>();
+	@SuppressWarnings("MismatchedQueryAndUpdateOfCollection") @Getter
+	private final List<ChunkCluster> clusterList = new ArrayList<>();
 	private final long[][] lastUsages;
 
 
@@ -30,20 +31,19 @@ public class ChunkClusterField
 
 
 	// GETTERS
-	public ChunkCluster getCluster(int clX, int clZ, boolean updateUsage)
+	public ChunkCluster getCluster(int clX, int clZ)
 	{
 		int arrClX = clX+this.radius;
 		int arrClZ = clZ+this.radius;
 
-		if(updateUsage)
-			this.lastUsages[arrClZ][arrClX] = System.currentTimeMillis();
+		this.lastUsages[arrClZ][arrClX] = System.currentTimeMillis();
 
 		return this.clusterField[arrClZ][arrClX];
 	}
 
 	public ChunkCluster getLongestUnusedChunkCluster()
 	{
-		long longestMsSinceLastUsage = Long.MAX_VALUE;
+		long longestMsSinceLastUsage = -1;
 		int longestUnusedArrX = -1;
 		int longestUnusedArrZ = -1;
 
@@ -52,11 +52,11 @@ public class ChunkClusterField
 			for(int arrX = 0; arrX < this.radius*2; arrX++)
 			{
 				long lastUsage = this.lastUsages[arrZ][arrX];
-				if(lastUsage == 0) // if last usage is null, the cluster is not loaded
+				if(lastUsage == 0) // if last usage is 0, the cluster is not loaded
 					continue;
 
 				long msSinceLastUsage = currentTimeMs-lastUsage;
-				if(msSinceLastUsage < longestMsSinceLastUsage)
+				if(msSinceLastUsage > longestMsSinceLastUsage)
 				{
 					longestMsSinceLastUsage = msSinceLastUsage;
 					longestUnusedArrX = arrX;
@@ -64,13 +64,9 @@ public class ChunkClusterField
 				}
 			}
 
-		int clX = longestUnusedArrX-this.radius;
-		int clZ = longestUnusedArrZ-this.radius;
-
-		ChunkCluster longestUnusedChunkCluster = getCluster(clX, clZ, false);
+		ChunkCluster longestUnusedChunkCluster = this.clusterField[longestUnusedArrZ][longestUnusedArrX];
 		return longestUnusedChunkCluster;
 	}
-
 
 	// CLUSTER
 	public void addCluster(ChunkCluster chunkCluster)
@@ -90,7 +86,7 @@ public class ChunkClusterField
 
 		this.clusterField[arrClZ][arrClX] = null;
 		this.clusterList.remove(chunkCluster);
-		this.lastUsages[arrClX][arrClX] = 0;
+		this.lastUsages[arrClZ][arrClX] = 0;
 	}
 
 }

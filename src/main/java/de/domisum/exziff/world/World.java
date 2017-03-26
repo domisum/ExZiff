@@ -7,7 +7,7 @@ public class World
 {
 
 	// CONSTANTS
-	private static final int CHUNK_CLUSTER_RADIUS = 32;
+	private static final int CHUNK_CLUSTER_RADIUS = 64+4;
 
 	// DATA
 	private ChunkClusterField clusterField = new ChunkClusterField(CHUNK_CLUSTER_RADIUS);
@@ -16,6 +16,13 @@ public class World
 	private ChunkClusterLoaderSaver chunkClusterLoaderSaver;
 
 	// SETTINGS
+	/**
+	 * A ChunkCluster takes up at most 32MiB of memory.
+	 * <p>
+	 * So:
+	 * 128 ChunkClusters ^= 4GiB
+	 * 256 ChunkClusters ^= 8GiB
+	 */
 	@Getter @Setter private int maximumLoadedChunkClusters = 128;
 
 
@@ -75,7 +82,7 @@ public class World
 
 	private ChunkCluster getChunkCluster(int clX, int clZ)
 	{
-		ChunkCluster chunkCluster = this.clusterField.getCluster(clX, clZ, true);
+		ChunkCluster chunkCluster = this.clusterField.getCluster(clX, clZ);
 
 		// chunk cluster not loaded, loading it
 		if(chunkCluster == null)
@@ -88,10 +95,8 @@ public class World
 	// LOADING/SAVING
 	private ChunkCluster loadChunkCluster(int clX, int clZ)
 	{
-		System.out.println("load chunk cluster: "+clX+" "+clZ);
-
 		// if number of currently loaded chunk clusters is too high, unload
-		if(this.clusterField.getClusterList().size() >= this.maximumLoadedChunkClusters)
+		while(this.clusterField.getClusterList().size() >= this.maximumLoadedChunkClusters)
 			unloadLongestUnusedChunkCluster();
 
 		ChunkCluster chunkCluster = this.chunkClusterLoaderSaver.loadChunkCluster(clX, clZ);
@@ -108,12 +113,8 @@ public class World
 	{
 		ChunkCluster longestUnusedChunkCluster = this.clusterField.getLongestUnusedChunkCluster();
 
-		System.out.println("unloacChunkCluster: "+longestUnusedChunkCluster);
-
 		this.chunkClusterLoaderSaver.saveChunkCluster(longestUnusedChunkCluster);
 		this.clusterField.removeCluster(longestUnusedChunkCluster);
-
-		System.gc();
 	}
 
 	public void save()
