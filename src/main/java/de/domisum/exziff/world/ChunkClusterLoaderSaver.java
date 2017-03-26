@@ -19,10 +19,15 @@ public class ChunkClusterLoaderSaver
 
 
 	// INIT
-	public ChunkClusterLoaderSaver(boolean saveClusters, File chunkClusterDirectory)
+	public ChunkClusterLoaderSaver(File chunkClusterDirectory, boolean saveClusters)
 	{
-		this.saveClusters = saveClusters;
 		this.chunkClusterDirectory = chunkClusterDirectory;
+		this.saveClusters = saveClusters;
+
+		if(!chunkClusterDirectory.exists())
+			chunkClusterDirectory.mkdirs();
+
+		System.out.println(chunkClusterDirectory.getAbsolutePath());
 	}
 
 

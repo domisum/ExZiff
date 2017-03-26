@@ -56,13 +56,13 @@ public class ChunkSectionTranscoderTest
 	{
 		byte[] encoded = transcoder.encode(chunkSection);
 		ChunkSection decoded = transcoder.decode(encoded);
-		assertSameChunkSection(chunkSection, decoded);
+		assertEqualsChunkSection(chunkSection, decoded);
 
 		byte[] encodedAgain = transcoder.encode(decoded);
 		Assert.assertArrayEquals(encoded, encodedAgain);
 	}
 
-	private void assertSameChunkSection(ChunkSection chunkSection1, ChunkSection chunkSection2)
+	public static void assertEqualsChunkSection(ChunkSection chunkSection1, ChunkSection chunkSection2)
 	{
 		for(int icsY = 0; icsY < ChunkSection.HEIGHT; icsY++)
 			for(int icsZ = 0; icsZ < Chunk.WIDTH; icsZ++)

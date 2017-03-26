@@ -3,6 +3,9 @@ package de.domisum.exziff.world;
 import lombok.Getter;
 import org.apache.commons.lang3.Validate;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class ChunkClusterField
 {
 
@@ -10,8 +13,8 @@ public class ChunkClusterField
 	private final int radius;
 
 	// DATA
-	private final ChunkCluster[][] clusters;
-	@Getter private int numberOfClusters = 0;
+	private final ChunkCluster[][] clusterField;
+	@Getter private final List<ChunkCluster> clusterList = new ArrayList<>();
 	private final long[][] lastUsages;
 
 
@@ -21,7 +24,7 @@ public class ChunkClusterField
 		Validate.isTrue(radius > 0, "The radius of the chunkClusterField has to be positive");
 		this.radius = radius;
 
-		this.clusters = new ChunkCluster[radius*2][radius*2];
+		this.clusterField = new ChunkCluster[radius*2][radius*2];
 		this.lastUsages = new long[radius*2][radius*2];
 	}
 
@@ -29,13 +32,13 @@ public class ChunkClusterField
 	// GETTERS
 	public ChunkCluster getCluster(int clX, int clZ, boolean updateUsage)
 	{
-		int arrClX = clX-this.radius;
-		int arrClZ = clZ-this.radius;
+		int arrClX = clX+this.radius;
+		int arrClZ = clZ+this.radius;
 
 		if(updateUsage)
 			this.lastUsages[arrClZ][arrClX] = System.currentTimeMillis();
 
-		return this.clusters[arrClZ][arrClX];
+		return this.clusterField[arrClZ][arrClX];
 	}
 
 	public ChunkCluster getLongestUnusedChunkCluster()
@@ -61,8 +64,8 @@ public class ChunkClusterField
 				}
 			}
 
-		int clX = longestUnusedArrX+this.radius;
-		int clZ = longestUnusedArrZ+this.radius;
+		int clX = longestUnusedArrX-this.radius;
+		int clZ = longestUnusedArrZ-this.radius;
 
 		ChunkCluster longestUnusedChunkCluster = getCluster(clX, clZ, false);
 		return longestUnusedChunkCluster;
@@ -72,19 +75,21 @@ public class ChunkClusterField
 	// CLUSTER
 	public void addCluster(ChunkCluster chunkCluster)
 	{
-		int arrClX = chunkCluster.getClX()-this.radius;
-		int arrClZ = chunkCluster.getClZ()-this.radius;
+		int arrClX = chunkCluster.getClX()+this.radius;
+		int arrClZ = chunkCluster.getClZ()+this.radius;
 
-		this.clusters[arrClZ][arrClX] = chunkCluster;
+		this.clusterField[arrClZ][arrClX] = chunkCluster;
+		this.clusterList.add(chunkCluster);
 		this.lastUsages[arrClZ][arrClX] = System.currentTimeMillis();
 	}
 
 	public void removeCluster(ChunkCluster chunkCluster)
 	{
-		int arrClX = chunkCluster.getClX()-this.radius;
-		int arrClZ = chunkCluster.getClZ()-this.radius;
+		int arrClX = chunkCluster.getClX()+this.radius;
+		int arrClZ = chunkCluster.getClZ()+this.radius;
 
-		this.clusters[arrClZ][arrClX] = null;
+		this.clusterField[arrClZ][arrClX] = null;
+		this.clusterList.remove(chunkCluster);
 		this.lastUsages[arrClX][arrClX] = 0;
 	}
 

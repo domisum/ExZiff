@@ -57,7 +57,7 @@ public class World
 	}
 
 
-	// CHUNK
+	// CHUNK AND CLUSTER
 	private Chunk getChunkAt(int x, int z)
 	{
 		int cX = getChunkXorZ(x);
@@ -73,8 +73,6 @@ public class World
 		return chunk;
 	}
 
-
-	// CHUNK CLUSTER
 	private ChunkCluster getChunkCluster(int clX, int clZ)
 	{
 		ChunkCluster chunkCluster = this.clusterField.getCluster(clX, clZ, true);
@@ -86,12 +84,15 @@ public class World
 		return chunkCluster;
 	}
 
+
+	// LOADING/SAVING
 	private ChunkCluster loadChunkCluster(int clX, int clZ)
 	{
-		// if number of currently loaded chunk clusters is too high, unload
-		if(this.clusterField.getNumberOfClusters() >= this.maximumLoadedChunkClusters)
-			unloadLongestUnusedChunkCluster();
+		System.out.println("load chunk cluster: "+clX+" "+clZ);
 
+		// if number of currently loaded chunk clusters is too high, unload
+		if(this.clusterField.getClusterList().size() >= this.maximumLoadedChunkClusters)
+			unloadLongestUnusedChunkCluster();
 
 		ChunkCluster chunkCluster = this.chunkClusterLoaderSaver.loadChunkCluster(clX, clZ);
 
@@ -99,6 +100,7 @@ public class World
 		if(chunkCluster == null)
 			chunkCluster = new ChunkCluster(clX, clZ);
 
+		this.clusterField.addCluster(chunkCluster);
 		return chunkCluster;
 	}
 
@@ -106,10 +108,18 @@ public class World
 	{
 		ChunkCluster longestUnusedChunkCluster = this.clusterField.getLongestUnusedChunkCluster();
 
+		System.out.println("unloacChunkCluster: "+longestUnusedChunkCluster);
+
 		this.chunkClusterLoaderSaver.saveChunkCluster(longestUnusedChunkCluster);
 		this.clusterField.removeCluster(longestUnusedChunkCluster);
 
 		System.gc();
+	}
+
+	public void save()
+	{
+		for(ChunkCluster cluster : this.clusterField.getClusterList())
+			this.chunkClusterLoaderSaver.saveChunkCluster(cluster);
 	}
 
 

@@ -4,6 +4,8 @@ import de.domisum.exziff.island.heightmap.IslandHeightMapGenerator;
 import de.domisum.exziff.island.shape.IslandShapeGenerator;
 import de.domisum.exziff.shape.ShapeMap;
 import de.domisum.exziff.shape.exporter.ShapeMapImageExporter;
+import de.domisum.exziff.world.ChunkClusterLoaderSaver;
+import de.domisum.exziff.world.World;
 import de.domisum.lib.auxilium.util.FileUtil;
 import de.domisum.lib.auxilium.util.ImageUtil;
 
@@ -17,7 +19,9 @@ public class TestLauncher
 
 	public static void main(String[] args)
 	{
-		islandTest();
+		//		islandTest();
+
+		worldTest();
 	}
 
 
@@ -61,6 +65,19 @@ public class TestLauncher
 		BufferedImage image = exporter.export(shape);
 
 		ImageUtil.writeImage(new File("C:\\Users\\domisum\\testChamber\\testIslands/"+fileName+".png"), image);
+	}
+
+	private static void worldTest()
+	{
+		ChunkClusterLoaderSaver loaderSaver = new ChunkClusterLoaderSaver(new File("C:/Users/domisum/testChamber/testWorld"),
+				true);
+		World world = new World(loaderSaver);
+
+		for(int i = 0; i < 1500; i++)
+			//world.setMaterialIdAndSubId(i, 0, 0, (byte) 17, (byte) 0);
+			System.out.println(i+" "+world.getMaterialId(i, 0, 0));
+
+		world.save();
 	}
 
 }

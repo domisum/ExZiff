@@ -16,9 +16,7 @@ public class ChunkCluster
 	@Getter private Chunk[] chunks;
 
 
-	// -------
 	// INIT
-	// -------
 	public ChunkCluster(int clX, int clZ, Chunk[] chunks)
 	{
 		this.clX = clX;
@@ -44,9 +42,14 @@ public class ChunkCluster
 	}
 
 
-	// -------
+	// OBJECT
+	@Override public String toString()
+	{
+		return "ChunkCluster{"+"clX="+clX+", clZ="+clZ+'}';
+	}
+
+
 	// GETTERS
-	// -------
 	public Chunk getChunk(int iclX, int iclZ)
 	{
 		int chunkInClusterIndex = getChunkInClusterIndex(iclX, iclZ);
