@@ -76,11 +76,12 @@ public class TestLauncher
 
 		long startMs = System.currentTimeMillis();
 
-		for(int i = 0; i < 100; i++)
-			for(int j = 0; j < 100; j++)
+		for(int i = 0; i < 1000; i++)
+			for(int j = 0; j < 1000; j++)
 			{
 				int dist = RandomUtil.getFromRange(1, 5);
-				for(int y = 0; y <= 50; y += dist)
+				int max = RandomUtil.getFromRange(50, 60);
+				for(int y = 0; y <= max; y += dist)
 					world.setMaterialIdAndSubId(i, y, j, (byte) 1, (byte) 0);
 			}
 
