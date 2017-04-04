@@ -36,6 +36,9 @@ public class World
 	// GETTERS
 	public int getMaterialId(int x, int y, int z)
 	{
+		if(y < 0 || y >= Chunk.HEIGHT)
+			return Material.AIR.id;
+
 		Chunk chunk = getChunkAt(x, z);
 		int icX = getInChunkXOrZ(x);
 		int icZ = getInChunkXOrZ(z);
@@ -45,6 +48,9 @@ public class World
 
 	public int getMaterialSubId(int x, int y, int z)
 	{
+		if(y < 0 || y >= Chunk.HEIGHT)
+			return 0;
+
 		Chunk chunk = getChunkAt(x, z);
 		int icX = getInChunkXOrZ(x);
 		int icZ = getInChunkXOrZ(z);

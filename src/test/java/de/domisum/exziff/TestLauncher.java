@@ -8,6 +8,7 @@ import de.domisum.exziff.world.ChunkClusterLoaderSaver;
 import de.domisum.exziff.world.World;
 import de.domisum.lib.auxilium.util.FileUtil;
 import de.domisum.lib.auxilium.util.ImageUtil;
+import de.domisum.lib.auxilium.util.math.RandomUtil;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -75,10 +76,13 @@ public class TestLauncher
 
 		long startMs = System.currentTimeMillis();
 
-		for(int i = 0; i < 15000; i++)
-			for(int j = 0; j < 15000; j++)
-				for(int y = 0; y <= 32; y += 16)
+		for(int i = 0; i < 100; i++)
+			for(int j = 0; j < 100; j++)
+			{
+				int dist = RandomUtil.getFromRange(1, 5);
+				for(int y = 0; y <= 50; y += dist)
 					world.setMaterialIdAndSubId(i, y, j, (byte) 1, (byte) 0);
+			}
 
 		System.out.println("afterAction: "+(System.currentTimeMillis()-startMs));
 
