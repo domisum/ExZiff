@@ -34,22 +34,27 @@ public class World
 
 
 	// GETTERS
-	public short getMaterialId(int x, int y, int z)
+	public int getMaterialId(int x, int y, int z)
 	{
 		Chunk chunk = getChunkAt(x, z);
 		int icX = getInChunkXOrZ(x);
 		int icZ = getInChunkXOrZ(z);
 
-		return chunk.getMaterialId(icX, y, icZ);
+		return getUnsignedByteValue(chunk.getMaterialId(icX, y, icZ));
 	}
 
-	public short getMaterialSubId(int x, int y, int z)
+	public int getMaterialSubId(int x, int y, int z)
 	{
 		Chunk chunk = getChunkAt(x, z);
 		int icX = getInChunkXOrZ(x);
 		int icZ = getInChunkXOrZ(z);
 
-		return chunk.getMaterialSubId(icX, y, icZ);
+		return getUnsignedByteValue(chunk.getMaterialSubId(icX, y, icZ));
+	}
+
+	private int getUnsignedByteValue(byte input)
+	{
+		return input&0xFF;
 	}
 
 
@@ -65,7 +70,7 @@ public class World
 
 
 	// CHUNK AND CLUSTER
-	private Chunk getChunkAt(int x, int z)
+	public Chunk getChunkAt(int x, int z)
 	{
 		int cX = getChunkXorZ(x);
 		int cZ = getChunkXorZ(z);

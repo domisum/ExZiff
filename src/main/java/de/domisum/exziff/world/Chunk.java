@@ -54,7 +54,7 @@ public class Chunk
 	// -------
 	// GETTERS
 	// -------
-	public short getMaterialId(int icX, int icY, int icZ)
+	public byte getMaterialId(int icX, int icY, int icZ)
 	{
 		ChunkSection section = getSection(icY);
 		int inSectionY = icY%ChunkSection.HEIGHT;
@@ -62,7 +62,7 @@ public class Chunk
 		return section.getMaterialId(icX, inSectionY, icZ);
 	}
 
-	public short getMaterialSubId(int icX, int icY, int icZ)
+	public byte getMaterialSubId(int icX, int icY, int icZ)
 	{
 		ChunkSection section = getSection(icY);
 		int inSectionY = icY%ChunkSection.HEIGHT;
