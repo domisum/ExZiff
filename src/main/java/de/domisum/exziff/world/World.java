@@ -87,6 +87,7 @@ public class World
 
 		int iclX = getInChunkClusterXorZ(cX);
 		int iclZ = getInChunkClusterXorZ(cZ);
+
 		Chunk chunk = chunkCluster.getChunk(iclX, iclZ);
 		return chunk;
 	}
@@ -167,7 +168,7 @@ public class World
 	private static int getInContainerXorZ(int elementXorZ, int containerWidth)
 	{
 		if(elementXorZ < 0)
-			return (elementXorZ%containerWidth)+containerWidth;
+			return ((elementXorZ%containerWidth)+containerWidth)%containerWidth;
 
 		return elementXorZ%containerWidth;
 	}
