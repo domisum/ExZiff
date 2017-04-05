@@ -5,10 +5,10 @@ import de.domisum.exziff.island.shape.IslandShapeGenerator;
 import de.domisum.exziff.shape.ShapeMap;
 import de.domisum.exziff.shape.exporter.ShapeMapImageExporter;
 import de.domisum.exziff.world.ChunkClusterLoaderSaver;
+import de.domisum.exziff.world.Material;
 import de.domisum.exziff.world.World;
 import de.domisum.lib.auxilium.util.FileUtil;
 import de.domisum.lib.auxilium.util.ImageUtil;
-import de.domisum.lib.auxilium.util.math.RandomUtil;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -70,19 +70,23 @@ public class TestLauncher
 
 	private static void worldTest()
 	{
+		ShapeMap shapeMap = generateIslandShape(5);
+
+
 		ChunkClusterLoaderSaver loaderSaver = new ChunkClusterLoaderSaver(new File("C:/Users/domisum/testChamber/testWorld"),
 				true);
 		World world = new World(loaderSaver);
 
 		long startMs = System.currentTimeMillis();
 
-		for(int i = 0; i < 1000; i++)
-			for(int j = 0; j < 1000; j++)
+		for(int z = 0; z < 1000; z++)
+			for(int x = 0; x < 1000; x++)
 			{
-				int dist = RandomUtil.getFromRange(1, 5);
-				int max = RandomUtil.getFromRange(50, 60);
-				for(int y = 0; y <= max; y += dist)
-					world.setMaterialIdAndSubId(i, y, j, (byte) 1, (byte) 0);
+				Material mat = shapeMap.get(x, z) ? Material.STONE : Material.WATER;
+				int height = shapeMap.get(x, z) ? 70 : 65;
+
+				for(int y = 0; y <= height; y++)
+					world.setMaterialIdAndSubId(x, y, z, (byte) mat.id, (byte) 0);
 			}
 
 		System.out.println("afterAction: "+(System.currentTimeMillis()-startMs));
@@ -90,6 +94,18 @@ public class TestLauncher
 		world.save();
 
 		System.out.println("afterSave: "+(System.currentTimeMillis()-startMs));
+	}
+
+	private static ShapeMap generateIslandShape(long seed)
+	{
+		// settings
+		int size = 1000;
+
+		// generation
+		IslandShapeGenerator islandShapeGenerator = new IslandShapeGenerator(size, size, seed);
+		ShapeMap shape = islandShapeGenerator.generate();
+
+		return shape;
 	}
 
 }
