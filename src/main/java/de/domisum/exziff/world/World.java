@@ -67,6 +67,9 @@ public class World
 	// SETTERS
 	public void setMaterialIdAndSubId(int x, int y, int z, byte materialId, byte materialSubId)
 	{
+		if(y < 0 || y >= Chunk.HEIGHT)
+			return;
+
 		Chunk chunk = getChunkAt(x, z);
 		int icX = getInChunkXOrZ(x);
 		int icZ = getInChunkXOrZ(z);
