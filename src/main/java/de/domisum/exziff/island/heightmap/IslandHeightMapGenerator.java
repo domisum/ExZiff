@@ -48,6 +48,8 @@ public class IslandHeightMapGenerator
 			}
 
 		normalize(heights);
+		heights = smoothEdges(heights, 15);
+		normalize(heights);
 
 		HeightMap islandHeightMap = new HeightMap(heights);
 		return islandHeightMap;
@@ -60,7 +62,8 @@ public class IslandHeightMapGenerator
 		NoiseLayer[] layers = new NoiseLayer[10];
 		layers[0] = new NoiseLayer(0.2, 0.5, r.nextLong());
 		layers[1] = new NoiseLayer(0.1, 0.7, r.nextLong());
-		layers[2] = new NoiseLayer(0.05, 0.1, r.nextLong());
+		layers[2] = new NoiseLayer(0.05, 0.3, r.nextLong());
+		layers[3] = new NoiseLayer(0.02, 0.2, r.nextLong());
 
 		removeNulls:
 		{
@@ -115,4 +118,42 @@ public class IslandHeightMapGenerator
 			}
 	}
 
+
+	private double[][] smoothEdges(double[][] heights, int radius)
+	{
+		double[][] heightsNew = new double[heights[0].length][heights.length];
+		int diameter = (2*radius+1);
+		int pixelsInSurrounding = diameter*diameter;
+
+		for(int y = 0; y < this.islandShape.getHeight(); y++)
+			for(int x = 0; x < this.islandShape.getWidth(); x++)
+			{
+				if(!this.islandShape.get(x, y))
+				{
+					heights[y][x] = 0;
+					continue;
+				}
+
+				double sum = 0;
+				for(int relY = -radius; relY <= radius; relY++)
+					for(int relX = -radius; relX <= radius; relX++)
+					{
+						int cX = x+relX;
+						int cY = y+relY;
+
+						if(cX < 0 || cY < 0 || cX >= this.islandShape.getWidth() || cY >= this.islandShape
+								.getHeight()) // in bounds?
+							continue;
+
+						if(!this.islandShape.get(cX, cY))
+							sum++;
+					}
+
+				double proportion = sum/(double) pixelsInSurrounding;
+				proportion = Math.pow(proportion, 0.5);
+				heightsNew[y][x] = heights[y][x]*(1-proportion);
+			}
+
+		return heightsNew;
+	}
 }
