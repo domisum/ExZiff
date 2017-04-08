@@ -107,7 +107,14 @@ public class TestLauncher
 					heightMapValue = terrace(heightMapValue, 0.06, 4);
 					heightMapValue += terraceOffsetNoiseValue*(16d/255)*(.5+heightMapValue*.5);
 
-					height = (int) MathUtil.remapLinear(0, 1, 0, range, heightMapValue)+waterHeight;
+					int terraceHeight = (int) MathUtil.remapLinear(0, 1, 0, range, heightMapValue)+waterHeight;
+					int otherHeight = 120;
+
+					double relMixingRadius = 0.1;
+					double relDistFromCenter = (x-500d)/1000d;
+					double proportionTwo = Math.min(Math.max(.5+(relDistFromCenter*0.5/relMixingRadius), 0), 1);
+
+					height = (int) (terraceHeight*(1-proportionTwo)+otherHeight*proportionTwo);
 				}
 
 				for(int y = 0; y <= height; y++)
