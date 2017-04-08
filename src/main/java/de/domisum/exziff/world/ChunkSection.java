@@ -75,8 +75,14 @@ public class ChunkSection
 	// SETTERS
 	public void setMaterialIdAndSubId(int sX, int sY, int sZ, byte materialId, byte materialSubId)
 	{
-		if(isHomogenous() && (this.homogenousMaterialId != materialId || this.homogenousMaterialSubId != materialSubId))
-			initBlockData();
+		if(isHomogenous())
+		{
+			if(this.homogenousMaterialId != materialId || this.homogenousMaterialSubId != materialSubId)
+				initBlockData();
+			else // the section is already homogenous with the material that should be set, so don't change anything
+				return;
+		}
+
 
 		int blockInSectionIndex = getBlockInSectionIndex(sX, sY, sZ);
 		this.blockData[blockInSectionIndex*2] = materialId;
@@ -111,6 +117,7 @@ public class ChunkSection
 
 		// if no block was different from the first, the chunk section is homogenous
 		this.homogenous = true;
+		this.blockData = null;
 	}
 
 }
