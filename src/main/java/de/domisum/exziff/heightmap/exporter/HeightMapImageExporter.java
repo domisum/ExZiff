@@ -8,14 +8,7 @@ import java.awt.image.BufferedImage;
 public class HeightMapImageExporter extends HeightMapExporter<BufferedImage>
 {
 
-	// CONSTANTS
-	private static final int COLOR_TRUE = 0xffffff;
-	private static final int COLOR_FALSE = 0x000000;
-
-
-	// -------
 	// EXPORT
-	// -------
 	@Override public BufferedImage export(HeightMap input)
 	{
 		int[][] pixels = new int[input.getHeight()][input.getWidth()];
