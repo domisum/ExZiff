@@ -25,9 +25,19 @@ public class TestLauncher
 
 	public static void main(String[] args)
 	{
-		//		islandTest();
+		//islandTest();
+		//worldTest();
 
-		worldTest();
+		worldGeneratorTest();
+	}
+
+	public static void worldGeneratorTest()
+	{
+		File worldFolder = new File("C:/Users/domisum/testChamber/testWorld");
+		FileUtil.deleteDirectory(worldFolder);
+
+		WorldGenerator worldGenerator = new WorldGenerator(1024, 42, worldFolder);
+		World world = worldGenerator.generate();
 	}
 
 
