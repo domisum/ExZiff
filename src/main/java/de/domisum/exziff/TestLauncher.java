@@ -6,7 +6,7 @@ import de.domisum.exziff.island.heightmap.IslandHeightMapGenerator;
 import de.domisum.exziff.island.shape.IslandShapeGenerator;
 import de.domisum.exziff.shape.ShapeMap;
 import de.domisum.exziff.shape.exporter.ShapeMapImageExporter;
-import de.domisum.exziff.world.ChunkClusterLoaderSaver;
+import de.domisum.exziff.world.loadersaver.ChunkClusterLoaderSaver;
 import de.domisum.exziff.world.Material;
 import de.domisum.exziff.world.World;
 import de.domisum.layeredopensimplexnoise.LayeredOpenSimplexNoise;
