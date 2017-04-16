@@ -1,5 +1,6 @@
 package de.domisum.exziff.world;
 
+import de.domisum.exziff.world.loadersaver.ChunkClusterLoaderSaver;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -13,7 +14,7 @@ public class World
 	private ChunkClusterField clusterField = new ChunkClusterField(CHUNK_CLUSTER_RADIUS);
 
 	// REFERENCES
-	private ChunkClusterLoaderSaver chunkClusterLoaderSaver;
+	@Setter private ChunkClusterLoaderSaver chunkClusterLoaderSaver;
 
 	// SETTINGS
 	/**
@@ -49,7 +50,7 @@ public class World
 	public int getMaterialSubId(int x, int y, int z)
 	{
 		if(y < 0 || y >= Chunk.HEIGHT)
-			return 0;
+			return Material.AIR.subId;
 
 		Chunk chunk = getChunkAt(x, z);
 		int icX = getInChunkXOrZ(x);
