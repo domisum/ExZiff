@@ -87,6 +87,10 @@ public class TestLauncher
 		LayeredOpenSimplexNoise terraceOffsetNoise = createNoise(6776);
 
 
+		IslandHeightMapGenerator islandHeightMapGenerator2 = new IslandHeightMapGenerator(shapeMap, 444444);
+		HeightMap heightMap2 = islandHeightMapGenerator2.generate();
+
+
 		int waterHeight = 40;
 		for(int z = 0; z < 1000; z++)
 			for(int x = 0; x < 1000; x++)
@@ -108,10 +112,10 @@ public class TestLauncher
 					heightMapValue += terraceOffsetNoiseValue*(16d/255)*(.5+heightMapValue*.5);
 
 					int terraceHeight = (int) MathUtil.remapLinear(0, 1, 0, range, heightMapValue)+waterHeight;
-					int otherHeight = 120;
+					int otherHeight = (int) MathUtil.remapLinear(0, 1, 0, range, heightMap2.get(x, z))+waterHeight;
 
 					double relMixingRadius = 0.1;
-					double relDistFromCenter = (x-500d)/1000d;
+					double relDistFromCenter = (z-500d)/1000d;
 					double proportionTwo = Math.min(Math.max(.5+(relDistFromCenter*0.5/relMixingRadius), 0), 1);
 
 					height = (int) (terraceHeight*(1-proportionTwo)+otherHeight*proportionTwo);
