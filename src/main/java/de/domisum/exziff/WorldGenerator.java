@@ -3,11 +3,14 @@ package de.domisum.exziff;
 import de.domisum.exziff.foundation.FoundationRegion;
 import de.domisum.exziff.foundation.FoundationRegionType;
 import de.domisum.exziff.island.shape.IslandShapeGenerator;
+import de.domisum.exziff.map.FloatMap;
+import de.domisum.exziff.map.MultiFloatMap;
 import de.domisum.exziff.map.ShortMap;
 import de.domisum.exziff.shape.ShapeMap;
 import de.domisum.exziff.shape.generator.ShapeMapGenerator;
 import de.domisum.exziff.world.World;
 import de.domisum.exziff.world.loadersaver.ChunkClusterLoaderSaver;
+import de.domisum.lib.auxilium.data.container.Duo;
 import de.domisum.lib.auxilium.util.ImageUtil;
 import de.domisum.lib.auxilium.util.math.RandomUtil;
 
@@ -16,9 +19,13 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
+import java.util.Set;
 
 public class WorldGenerator
 {
+
+	// SETTINGS
+	private static final int FOUNDATION_REGION_BLEND_DISTANCE = 10;
 
 	// INPUT
 	private int size;
@@ -26,13 +33,12 @@ public class WorldGenerator
 
 	private File worldDirectory;
 
-
 	// TEMP
 	private ShapeMap continentShape;
 
 	private Map<Integer, FoundationRegion> foundationRegions = new HashMap<>();
 	private ShortMap foundationRegionsMap;
-
+	private MultiFloatMap foundationRegionInfluenceMap = new MultiFloatMap();
 
 	// OUTPUT
 	private World world;
@@ -82,7 +88,7 @@ public class WorldGenerator
 	private void generateFoundationRegions()
 	{
 		// this is just test code
-		int divisions = 16;
+		int divisions = this.size/64;
 		int divisionSize = this.size/divisions;
 
 
@@ -117,12 +123,74 @@ public class WorldGenerator
 
 	private void blendFoundationRegions()
 	{
+		// create maps
+		for(Map.Entry<Integer, FoundationRegion> entry : this.foundationRegions.entrySet())
+		{
+			FloatMap influenceMap = new FloatMap(this.size, this.size); // TODO add reduced memory FloatMap
+			this.foundationRegionInfluenceMap.setMap(entry.getKey(), influenceMap);
+		}
 
+		// add influence to the MultiMap
+		for(int z = 0; z < this.size; z++)
+			for(int x = 0; x < this.size; x++)
+			{
+				if(!this.continentShape.get(x, z))
+					continue;
+
+				int regionId = this.foundationRegionsMap.get(x, z);
+
+				for(int rZ = -FOUNDATION_REGION_BLEND_DISTANCE; rZ <= FOUNDATION_REGION_BLEND_DISTANCE; rZ++)
+					for(int rX = -FOUNDATION_REGION_BLEND_DISTANCE; rX <= FOUNDATION_REGION_BLEND_DISTANCE; rX++)
+					{
+						int nX = x+rX;
+						int nZ = z+rZ;
+
+						if(!isInBounds(nX, nZ))
+							continue;
+
+						double distance = Math.sqrt(rX*rX+rZ*rZ);
+						if(distance >= FOUNDATION_REGION_BLEND_DISTANCE)
+							continue;
+
+						double regionInfluence = 1-(distance/FOUNDATION_REGION_BLEND_DISTANCE);
+
+						float currentRegionInfluence = this.foundationRegionInfluenceMap.get(nX, nZ, regionId);
+
+						// never reduce influence
+						if(regionInfluence <= currentRegionInfluence)
+							continue;
+
+						this.foundationRegionInfluenceMap.set(nX, nZ, regionId, (float) regionInfluence);
+					}
+			}
+
+		// normalize influence values
+		for(int z = 0; z < this.size; z++)
+			for(int x = 0; x < this.size; x++)
+			{
+				Set<Duo<Integer, Float>> influences = this.foundationRegionInfluenceMap.get(x, z);
+
+				float influenceSum = 0;
+				for(Duo<Integer, Float> influence : influences)
+					influenceSum += influence.b;
+
+				float normalizationFactor = 1/influenceSum;
+
+				for(Duo<Integer, Float> influence : influences)
+					this.foundationRegionInfluenceMap.set(x, z, influence.a, influence.b*normalizationFactor);
+			}
 	}
 
 	private void buildFoundation()
 	{
 
+	}
+
+
+	// helper
+	private boolean isInBounds(int x, int z)
+	{
+		return x >= 0 && z >= 0 && x < this.size && z < this.size;
 	}
 
 
@@ -156,5 +224,6 @@ public class WorldGenerator
 		BufferedImage image = ImageUtil.getImageFromPixels(pixels);
 		ImageUtil.writeImage(new File("C:/Users/domisum/testChamber/testWorld.png"), image);
 	}
+
 
 }
