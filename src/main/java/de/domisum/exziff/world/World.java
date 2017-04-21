@@ -78,6 +78,11 @@ public class World
 		chunk.setMaterialIdAndSubId(icX, y, icZ, materialId, materialSubId);
 	}
 
+	public void setMaterial(int x, int y, int z, Material material)
+	{
+		setMaterialIdAndSubId(x, y, z, (byte) material.id, (byte) material.subId);
+	}
+
 
 	// CHUNK AND CLUSTER
 	public Chunk getChunkAt(int x, int z)

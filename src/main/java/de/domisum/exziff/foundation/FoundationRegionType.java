@@ -4,18 +4,21 @@ public enum FoundationRegionType
 {
 
 	// @formatter:off
+	OCEAN_FLOOR,
 	PLATEAU_HILLS,
 	FLATLANDS
 	;
 	// @formatter:on
 
 
-	public FoundationRegion getInstance(int id)
+	public FoundationRegion getInstance(int id, long seed)
 	{
-		if(this == PLATEAU_HILLS)
-			return new FoundationRegionPlateauHills(id);
+		if(this == OCEAN_FLOOR)
+			return new FoundationRegionOceanFloor(id, seed);
+		else if(this == PLATEAU_HILLS)
+			return new FoundationRegionPlateauHills(id, seed);
 		else if(this == FLATLANDS)
-			return new FoundationRegionFlatlands(id);
+			return new FoundationRegionFlatlands(id, seed);
 		else
 			throw new UnsupportedOperationException("The instance creation of '"+this.name()+"' is not yet implemented");
 	}
