@@ -18,7 +18,7 @@ public class FoundationRegionOceanFloor extends FoundationRegion
 
 	@Override public int getHeightAt(int x, int z)
 	{
-		return 50;
+		return 40;
 	}
 
 }

@@ -5,6 +5,7 @@ public enum FoundationRegionType
 
 	// @formatter:off
 	OCEAN_FLOOR,
+	BEACH,
 	PLATEAU_HILLS,
 	FLATLANDS
 	;
@@ -15,6 +16,8 @@ public enum FoundationRegionType
 	{
 		if(this == OCEAN_FLOOR)
 			return new FoundationRegionOceanFloor(id, seed);
+		else if(this == BEACH)
+			return new FoundationRegionBeach(id, seed);
 		else if(this == PLATEAU_HILLS)
 			return new FoundationRegionPlateauHills(id, seed);
 		else if(this == FLATLANDS)

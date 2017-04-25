@@ -36,7 +36,7 @@ public class TestLauncher
 		File worldFolder = new File("C:/Users/domisum/testChamber/testWorld");
 		FileUtil.deleteDirectory(worldFolder);
 
-		WorldGenerator worldGenerator = new WorldGenerator(1024, 42, worldFolder);
+		WorldGenerator worldGenerator = new WorldGenerator(1024*2, 8798989&1823305, worldFolder);
 		World world = worldGenerator.generate();
 	}
 

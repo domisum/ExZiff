@@ -18,7 +18,7 @@ public class FoundationRegionPlateauHills extends FoundationRegion
 
 	@Override public int getHeightAt(int x, int z)
 	{
-		return 90;
+		return 75;
 	}
 
 }
