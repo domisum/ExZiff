@@ -268,8 +268,10 @@ public class WorldGenerator
 				for(int y = 0; y <= combinedHeight; y++)
 					this.world.setMaterial(x, y, z, Material.STONE);
 
+				FoundationRegion foundationRegion = this.foundationRegions.get((int) this.foundationRegionsMap.get(x, z));
+
 				// water
-				if(!this.continentShape.get(x, z))// && (x%8 == 0 && z%8 == 0))
+				if(!this.continentShape.get(x, z) || foundationRegion.getType() == FoundationRegionType.BEACH)
 					for(int y = combinedHeight+1; y <= WATER_HEIGHT; y++)
 						this.world.setMaterial(x, y, z, Material.WATER);
 			}
