@@ -16,6 +16,7 @@ import de.domisum.layeredopensimplexnoise.LayeredOpenSimplexNoise;
 import de.domisum.layeredopensimplexnoise.NoiseLayer;
 import de.domisum.lib.auxilium.data.container.Duo;
 import de.domisum.lib.auxilium.data.container.IntBounds2D;
+import de.domisum.lib.auxilium.data.container.dir.Direction2D;
 import de.domisum.lib.auxilium.util.ImageUtil;
 import de.domisum.lib.auxilium.util.math.RandomUtil;
 
@@ -30,7 +31,7 @@ public class WorldGenerator
 {
 
 	// SETTINGS
-	private static final int FOUNDATION_REGION_BLEND_DISTANCE = 10;
+	private static final int FOUNDATION_REGION_BLEND_DISTANCE = 15;
 	private static final int WATER_HEIGHT = 50;
 
 	// INPUT
@@ -68,14 +69,18 @@ public class WorldGenerator
 
 
 		// shape
+		System.out.println("generateShape "+(System.currentTimeMillis()%100000));
 		generateContinentShape();
 
 		// foundation
+		System.out.println("foundationRegion "+(System.currentTimeMillis()%100000));
 		generateFoundationRegions();
+		System.out.println("blendFoundationRegion "+(System.currentTimeMillis()%100000));
 		blendFoundationRegions();
-		System.out.println("before world build");
+		System.out.println("foundationBuild "+(System.currentTimeMillis()%100000));
 		buildFoundation();
 
+		System.out.println("done "+(System.currentTimeMillis()%100000));
 		this.world.save();
 		return this.world;
 	}
@@ -96,10 +101,7 @@ public class WorldGenerator
 		// this is just test code
 		this.foundationRegionsMap = new ShortMap(this.size, this.size);
 
-		determineBeachRegions();
-
-
-		int divisions = this.size/64;
+		int divisions = this.size/128;
 		int divisionSize = this.size/divisions;
 
 
@@ -130,6 +132,9 @@ public class WorldGenerator
 				this.foundationRegionsMap.set(x, z, (short) regionId);
 			}
 
+		determineBeachRegions();
+
+		// remove unneeded regions
 		this.foundationRegions.put(0, FoundationRegionType.OCEAN_FLOOR.getInstance(0, this.seed*1734913+47893948));
 		for(int i = 1; i <= divisions*divisions; i++)
 		{
@@ -161,12 +166,14 @@ public class WorldGenerator
 			for(int x = 0; x < this.size; x++)
 			{
 				if(!this.continentShape.get(x, z)) // ocean
-				{
-					//this.foundationRegionInfluenceMap.set(x, z, 0, 0.01f);
 					continue;
-				}
 
 				int regionId = this.foundationRegionsMap.get(x, z);
+				this.foundationRegionInfluenceMap.set(x, z, regionId, 1f);
+
+				// the influence spreading is only needed if this pixel is at the border to another FoundationRegion
+				if(!hasDifferentFoundationRegionNeighbors(x, z))
+					continue;
 
 				for(int rZ = -FOUNDATION_REGION_BLEND_DISTANCE; rZ <= FOUNDATION_REGION_BLEND_DISTANCE; rZ++)
 					for(int rX = -FOUNDATION_REGION_BLEND_DISTANCE; rX <= FOUNDATION_REGION_BLEND_DISTANCE; rX++)
@@ -284,6 +291,25 @@ public class WorldGenerator
 		return x >= 0 && z >= 0 && x < this.size && z < this.size;
 	}
 
+	private boolean hasDifferentFoundationRegionNeighbors(int x, int z)
+	{
+		int foundationRegionId = this.foundationRegionsMap.get(x, z);
+
+		for(Direction2D dir : Direction2D.values())
+		{
+			int nX = x+dir.dX;
+			int nZ = z+dir.dZ;
+
+			if(!isInBounds(nX, nZ))
+				continue;
+
+			if(this.foundationRegionsMap.get(nX, nZ) != foundationRegionId)
+				return true;
+		}
+
+		return false;
+	}
+
 	@SuppressWarnings("ConstantConditions") private IntBounds2D determineFloatMapBounds(FloatMap floatMap)
 	{
 		int minX = Integer.MAX_VALUE;
@@ -324,7 +350,9 @@ public class WorldGenerator
 		int beachRegionId = Short.MAX_VALUE-29;
 		this.foundationRegions.put(beachRegionId, new FoundationRegionBeach(beachRegionId, this.seed+394939439L));
 
-		int beachRadius = 15;
+		int beachRadiusBase = 15;
+		LayeredOpenSimplexNoise beachRadiusNoise = new LayeredOpenSimplexNoise(new NoiseLayer(30, 10, this.seed*29392493L));
+
 
 		for(int z = 0; z < this.size; z++)
 			for(int x = 0; x < this.size; x++)
@@ -332,8 +360,13 @@ public class WorldGenerator
 				if(this.continentShape.get(x, z))
 					continue;
 
-				for(int rZ = -beachRadius; rZ <= beachRadius; rZ++)
-					for(int rX = -beachRadius; rX <= beachRadius; rX++)
+				if(!hasDifferentFoundationRegionNeighbors(x, z))
+					continue;
+
+				int localBeachRadius = (int) Math.round(beachRadiusBase+beachRadiusNoise.evaluate(x, z));
+
+				for(int rZ = -localBeachRadius; rZ <= localBeachRadius; rZ++)
+					for(int rX = -localBeachRadius; rX <= localBeachRadius; rX++)
 					{
 						int oX = x+rX;
 						int oZ = z+rZ;
@@ -345,7 +378,7 @@ public class WorldGenerator
 							continue;
 
 						double distance = Math.sqrt(rX*rX+rZ*rZ);
-						if(distance > beachRadius)
+						if(distance > localBeachRadius)
 							continue;
 
 						this.foundationRegionsMap.set(oX, oZ, (short) beachRegionId);
@@ -368,8 +401,6 @@ public class WorldGenerator
 
 	private void exportFoundationRegions()
 	{
-		System.out.println("export");
-
 		int minBrightness = 50;
 
 		int[][] pixels = new int[this.size][this.size];
