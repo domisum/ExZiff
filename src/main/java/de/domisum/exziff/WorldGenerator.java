@@ -273,7 +273,15 @@ public class WorldGenerator
 
 				// land
 				for(int y = 0; y <= combinedHeight; y++)
-					this.world.setMaterial(x, y, z, Material.STONE);
+				{
+					Material material = Material.STONE;
+					if(y+3 > combinedHeight)
+						material = Material.DIRT;
+					if(y == combinedHeight)
+						material = Material.GRASS;
+
+					this.world.setMaterial(x, y, z, material);
+				}
 
 				FoundationRegion foundationRegion = this.foundationRegions.get((int) this.foundationRegionsMap.get(x, z));
 
