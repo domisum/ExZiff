@@ -1,19 +1,13 @@
 package de.domisum.exziff;
 
-import de.domisum.exziff.heightmap.HeightMap;
-import de.domisum.exziff.heightmap.exporter.HeightMapImageExporter;
-import de.domisum.exziff.island.heightmap.IslandHeightMapGenerator;
 import de.domisum.exziff.island.shape.IslandShapeGenerator;
 import de.domisum.exziff.map.BooleanMap;
 import de.domisum.exziff.shape.exporter.ShapeMapImageExporter;
-import de.domisum.exziff.world.loadersaver.ChunkClusterLoaderSaver;
-import de.domisum.exziff.world.Material;
 import de.domisum.exziff.world.World;
 import de.domisum.layeredopensimplexnoise.LayeredOpenSimplexNoise;
 import de.domisum.layeredopensimplexnoise.NoiseLayer;
 import de.domisum.lib.auxilium.util.FileUtil;
 import de.domisum.lib.auxilium.util.ImageUtil;
-import de.domisum.lib.auxilium.util.math.MathUtil;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -64,9 +58,6 @@ public class TestLauncher
 		IslandShapeGenerator islandShapeGenerator = new IslandShapeGenerator(size, size, seed);
 		BooleanMap shape = islandShapeGenerator.generate();
 
-		IslandHeightMapGenerator heightMapGenerator = new IslandHeightMapGenerator(shape, seed+0x3094);
-		//HeightMap heightMap = heightMapGenerator.generate();
-
 
 		// exporting
 		ShapeMapImageExporter exporter = new ShapeMapImageExporter();
@@ -74,76 +65,6 @@ public class TestLauncher
 		BufferedImage image = exporter.export(shape);
 
 		ImageUtil.writeImage(new File("C:\\Users\\domisum\\testChamber\\testIslands/"+fileName+".png"), image);
-	}
-
-	private static void worldTest()
-	{
-		File worldFolder = new File("C:/Users/domisum/testChamber/testWorld");
-		FileUtil.deleteDirectory(worldFolder);
-
-		BooleanMap booleanMap = generateIslandShape(5);
-		IslandHeightMapGenerator islandHeightMapGenerator = new IslandHeightMapGenerator(booleanMap, 7);
-		HeightMap heightMap = islandHeightMapGenerator.generate();
-
-		HeightMapImageExporter exporter = new HeightMapImageExporter();
-		BufferedImage image = exporter.export(heightMap);
-
-		ImageUtil.writeImage(new File("C:\\Users\\domisum\\testChamber\\testIslands/test.png"), image);
-
-
-		ChunkClusterLoaderSaver loaderSaver = new ChunkClusterLoaderSaver(worldFolder, true);
-		World world = new World(loaderSaver);
-
-		LayeredOpenSimplexNoise terraceOffsetNoise = createNoise(6776);
-
-
-		IslandHeightMapGenerator islandHeightMapGenerator2 = new IslandHeightMapGenerator(booleanMap, 444444);
-		HeightMap heightMap2 = islandHeightMapGenerator2.generate();
-
-
-		int waterHeight = 40;
-		for(int z = 0; z < 1000; z++)
-			for(int x = 0; x < 1000; x++)
-			{
-				Material mat = booleanMap.get(x, z) ? Material.STONE : Material.WATER;
-
-				double range = (256-waterHeight)/1.8d;
-				int height = waterHeight;
-
-				if(booleanMap.get(x, z))
-				{
-					double rX = x/1000d;
-					double rZ = z/1000d;
-					double terraceOffsetNoiseValue = terraceOffsetNoise.evaluate(rX, rZ);
-
-					double heightMapValue = heightMap.get(x, z);
-					heightMapValue = Math.pow(heightMapValue, 3);
-					heightMapValue = terrace(heightMapValue, 0.06, 4);
-					heightMapValue += terraceOffsetNoiseValue*(16d/255)*(.5+heightMapValue*.5);
-
-					int terraceHeight = (int) MathUtil.remapLinear(0, 1, 0, range, heightMapValue)+waterHeight;
-					int otherHeight = (int) MathUtil.remapLinear(0, 1, 0, range, heightMap2.get(x, z))+waterHeight;
-
-					double relMixingRadius = 0.1;
-					double relDistFromCenter = (z-500d)/1000d;
-					double proportionTwo = Math.min(Math.max(.5+(relDistFromCenter*0.5/relMixingRadius), 0), 1);
-
-					height = (int) (terraceHeight*(1-proportionTwo)+otherHeight*proportionTwo);
-				}
-
-				for(int y = 0; y <= height; y++)
-				{
-					if(y == height-2 && mat != Material.WATER)
-						mat = Material.DIRT;
-
-					if(y == height && mat != Material.WATER)
-						mat = Material.GRASS;
-
-					world.setMaterialIdAndSubId(x, y, z, (byte) mat.id, (byte) 0);
-				}
-			}
-
-		world.save();
 	}
 
 	private static BooleanMap generateIslandShape(long seed)
