@@ -1,6 +1,6 @@
 package de.domisum.exziff.shape.generator;
 
-import de.domisum.exziff.shape.ShapeMap;
+import de.domisum.exziff.map.BooleanMap;
 
 public class ShapeRectangleMapGenerator extends ShapeMapGenerator
 {
@@ -48,7 +48,7 @@ public class ShapeRectangleMapGenerator extends ShapeMapGenerator
 	// GENERATION
 	// -------
 	@Override
-	public ShapeMap generate()
+	public BooleanMap generate()
 	{
 		boolean[][] pixels = new boolean[this.height][this.width];
 
@@ -62,7 +62,7 @@ public class ShapeRectangleMapGenerator extends ShapeMapGenerator
 					pixels[y][x] = true;
 			}
 
-		return new ShapeMap(pixels);
+		return new BooleanMap(pixels);
 	}
 
 }

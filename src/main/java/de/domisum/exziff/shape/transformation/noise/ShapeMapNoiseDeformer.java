@@ -1,6 +1,6 @@
 package de.domisum.exziff.shape.transformation.noise;
 
-import de.domisum.exziff.shape.ShapeMap;
+import de.domisum.exziff.map.BooleanMap;
 import de.domisum.exziff.shape.transformation.ShapeMapFloodFill;
 import de.domisum.exziff.shape.transformation.ShapeMapInvert;
 import de.domisum.exziff.shape.transformation.ShapeMapSmooth;
@@ -40,9 +40,9 @@ public class ShapeMapNoiseDeformer extends ShapeMapTransformation
 	// TRANSFORMATION
 	// -------
 	@Override
-	public ShapeMap transform(ShapeMap input)
+	public BooleanMap transform(BooleanMap input)
 	{
-		ShapeMap deformedShape = input;
+		BooleanMap deformedShape = input;
 
 		ShapeMapNoiseOffsetter noiseOffsetter = new ShapeMapNoiseOffsetter(this.noiseX, this.noiseY);
 		deformedShape = noiseOffsetter.transform(deformedShape);

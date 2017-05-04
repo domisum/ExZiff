@@ -7,7 +7,7 @@ import de.domisum.exziff.island.shape.IslandShapeGenerator;
 import de.domisum.exziff.map.FloatMap;
 import de.domisum.exziff.map.MultiFloatMap;
 import de.domisum.exziff.map.ShortMap;
-import de.domisum.exziff.shape.ShapeMap;
+import de.domisum.exziff.map.BooleanMap;
 import de.domisum.exziff.shape.generator.ShapeMapGenerator;
 import de.domisum.exziff.world.Material;
 import de.domisum.exziff.world.World;
@@ -41,7 +41,7 @@ public class WorldGenerator
 	private File worldDirectory;
 
 	// TEMP
-	private ShapeMap continentShape;
+	private BooleanMap continentShape;
 
 	private Map<Integer, FoundationRegion> foundationRegions = new HashMap<>();
 	private ShortMap foundationRegionsMap;

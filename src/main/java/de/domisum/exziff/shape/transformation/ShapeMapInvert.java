@@ -1,6 +1,6 @@
 package de.domisum.exziff.shape.transformation;
 
-import de.domisum.exziff.shape.ShapeMap;
+import de.domisum.exziff.map.BooleanMap;
 
 public class ShapeMapInvert extends ShapeMapTransformation
 {
@@ -9,7 +9,7 @@ public class ShapeMapInvert extends ShapeMapTransformation
 	// TRANSFORMATION
 	// -------
 	@Override
-	public ShapeMap transform(ShapeMap input)
+	public BooleanMap transform(BooleanMap input)
 	{
 		boolean[][] pixels = new boolean[input.getHeight()][input.getWidth()];
 
@@ -17,7 +17,7 @@ public class ShapeMapInvert extends ShapeMapTransformation
 			for(int x = 0; x < input.getWidth(); x++)
 				pixels[y][x] = !input.get(x, y);
 
-		return new ShapeMap(pixels);
+		return new BooleanMap(pixels);
 	}
 
 }

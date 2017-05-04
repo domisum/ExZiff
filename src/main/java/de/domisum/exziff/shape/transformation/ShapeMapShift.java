@@ -1,6 +1,6 @@
 package de.domisum.exziff.shape.transformation;
 
-import de.domisum.exziff.shape.ShapeMap;
+import de.domisum.exziff.map.BooleanMap;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
@@ -16,7 +16,7 @@ public class ShapeMapShift extends ShapeMapTransformation
 	// TRANSFORMATION
 	// -------
 	@Override
-	public ShapeMap transform(ShapeMap input)
+	public BooleanMap transform(BooleanMap input)
 	{
 		boolean[][] pixels = new boolean[input.getHeight()][input.getWidth()];
 
@@ -32,7 +32,7 @@ public class ShapeMapShift extends ShapeMapTransformation
 				pixels[nY][nX] = input.get(x, y);
 			}
 
-		return new ShapeMap(pixels);
+		return new BooleanMap(pixels);
 	}
 
 }

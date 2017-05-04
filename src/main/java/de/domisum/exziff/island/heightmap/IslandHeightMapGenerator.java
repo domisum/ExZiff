@@ -1,7 +1,7 @@
 package de.domisum.exziff.island.heightmap;
 
 import de.domisum.exziff.heightmap.HeightMap;
-import de.domisum.exziff.shape.ShapeMap;
+import de.domisum.exziff.map.BooleanMap;
 import de.domisum.layeredopensimplexnoise.LayeredOpenSimplexNoise;
 import de.domisum.layeredopensimplexnoise.NoiseLayer;
 
@@ -12,14 +12,14 @@ public class IslandHeightMapGenerator
 {
 
 	// SETTINGS
-	private final ShapeMap islandShape;
+	private final BooleanMap islandShape;
 	private final long seed;
 
 
 	// -------
 	// INIT
 	// -------
-	public IslandHeightMapGenerator(ShapeMap islandShape, long seed)
+	public IslandHeightMapGenerator(BooleanMap islandShape, long seed)
 	{
 		this.islandShape = islandShape;
 		this.seed = seed;

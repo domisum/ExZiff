@@ -1,6 +1,6 @@
 package de.domisum.exziff.shape.generator;
 
-import de.domisum.exziff.shape.ShapeMap;
+import de.domisum.exziff.map.BooleanMap;
 
 public abstract class ShapeMapGenerator
 {
@@ -26,6 +26,6 @@ public abstract class ShapeMapGenerator
 	// -------
 	// GENERATION
 	// -------
-	public abstract ShapeMap generate();
+	public abstract BooleanMap generate();
 
 }

@@ -1,6 +1,6 @@
 package de.domisum.exziff.shape.transformation;
 
-import de.domisum.exziff.shape.ShapeMap;
+import de.domisum.exziff.map.BooleanMap;
 
 public class ShapeMapSmooth extends ShapeMapTransformation
 {
@@ -48,16 +48,16 @@ public class ShapeMapSmooth extends ShapeMapTransformation
 	// TRANSFORMATION
 	// -------
 	@Override
-	public ShapeMap transform(ShapeMap input)
+	public BooleanMap transform(BooleanMap input)
 	{
-		ShapeMap deformedShape = input;
+		BooleanMap deformedShape = input;
 		for(int i = 0; i < this.iterations; i++)
 			deformedShape = smooth(deformedShape);
 
 		return deformedShape;
 	}
 
-	private ShapeMap smooth(ShapeMap input)
+	private BooleanMap smooth(BooleanMap input)
 	{
 		boolean[][] pixels = new boolean[input.getHeight()][input.getWidth()];
 
@@ -95,7 +95,7 @@ public class ShapeMapSmooth extends ShapeMapTransformation
 				}
 			}
 
-		return new ShapeMap(pixels);
+		return new BooleanMap(pixels);
 	}
 
 }

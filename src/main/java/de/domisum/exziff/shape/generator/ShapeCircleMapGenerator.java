@@ -1,6 +1,6 @@
 package de.domisum.exziff.shape.generator;
 
-import de.domisum.exziff.shape.ShapeMap;
+import de.domisum.exziff.map.BooleanMap;
 
 public class ShapeCircleMapGenerator extends ShapeMapGenerator
 {
@@ -24,7 +24,7 @@ public class ShapeCircleMapGenerator extends ShapeMapGenerator
 	// GENERATION
 	// -------
 	@Override
-	public ShapeMap generate()
+	public BooleanMap generate()
 	{
 		boolean[][] pixels = new boolean[this.height][this.width];
 		for(int x = 0; x < this.width; x++)
@@ -37,7 +37,7 @@ public class ShapeCircleMapGenerator extends ShapeMapGenerator
 					pixels[y][x] = true;
 			}
 
-		return new ShapeMap(pixels);
+		return new BooleanMap(pixels);
 	}
 
 }

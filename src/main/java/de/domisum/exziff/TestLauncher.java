@@ -4,7 +4,7 @@ import de.domisum.exziff.heightmap.HeightMap;
 import de.domisum.exziff.heightmap.exporter.HeightMapImageExporter;
 import de.domisum.exziff.island.heightmap.IslandHeightMapGenerator;
 import de.domisum.exziff.island.shape.IslandShapeGenerator;
-import de.domisum.exziff.shape.ShapeMap;
+import de.domisum.exziff.map.BooleanMap;
 import de.domisum.exziff.shape.exporter.ShapeMapImageExporter;
 import de.domisum.exziff.world.loadersaver.ChunkClusterLoaderSaver;
 import de.domisum.exziff.world.Material;
@@ -58,11 +58,11 @@ public class TestLauncher
 		System.out.println("fileName: "+fileName+" seed: "+seed);
 
 		// settings
-		int size = 1000;
+		int size = 2000;
 
 		// generation
 		IslandShapeGenerator islandShapeGenerator = new IslandShapeGenerator(size, size, seed);
-		ShapeMap shape = islandShapeGenerator.generate();
+		BooleanMap shape = islandShapeGenerator.generate();
 
 		IslandHeightMapGenerator heightMapGenerator = new IslandHeightMapGenerator(shape, seed+0x3094);
 		//HeightMap heightMap = heightMapGenerator.generate();
@@ -81,8 +81,8 @@ public class TestLauncher
 		File worldFolder = new File("C:/Users/domisum/testChamber/testWorld");
 		FileUtil.deleteDirectory(worldFolder);
 
-		ShapeMap shapeMap = generateIslandShape(5);
-		IslandHeightMapGenerator islandHeightMapGenerator = new IslandHeightMapGenerator(shapeMap, 7);
+		BooleanMap booleanMap = generateIslandShape(5);
+		IslandHeightMapGenerator islandHeightMapGenerator = new IslandHeightMapGenerator(booleanMap, 7);
 		HeightMap heightMap = islandHeightMapGenerator.generate();
 
 		HeightMapImageExporter exporter = new HeightMapImageExporter();
@@ -97,7 +97,7 @@ public class TestLauncher
 		LayeredOpenSimplexNoise terraceOffsetNoise = createNoise(6776);
 
 
-		IslandHeightMapGenerator islandHeightMapGenerator2 = new IslandHeightMapGenerator(shapeMap, 444444);
+		IslandHeightMapGenerator islandHeightMapGenerator2 = new IslandHeightMapGenerator(booleanMap, 444444);
 		HeightMap heightMap2 = islandHeightMapGenerator2.generate();
 
 
@@ -105,12 +105,12 @@ public class TestLauncher
 		for(int z = 0; z < 1000; z++)
 			for(int x = 0; x < 1000; x++)
 			{
-				Material mat = shapeMap.get(x, z) ? Material.STONE : Material.WATER;
+				Material mat = booleanMap.get(x, z) ? Material.STONE : Material.WATER;
 
 				double range = (256-waterHeight)/1.8d;
 				int height = waterHeight;
 
-				if(shapeMap.get(x, z))
+				if(booleanMap.get(x, z))
 				{
 					double rX = x/1000d;
 					double rZ = z/1000d;
@@ -146,14 +146,14 @@ public class TestLauncher
 		world.save();
 	}
 
-	private static ShapeMap generateIslandShape(long seed)
+	private static BooleanMap generateIslandShape(long seed)
 	{
 		// settings
 		int size = 1000;
 
 		// generation
 		IslandShapeGenerator islandShapeGenerator = new IslandShapeGenerator(size, size, seed);
-		ShapeMap shape = islandShapeGenerator.generate();
+		BooleanMap shape = islandShapeGenerator.generate();
 
 		return shape;
 	}

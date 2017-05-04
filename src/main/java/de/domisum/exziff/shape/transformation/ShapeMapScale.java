@@ -1,6 +1,6 @@
 package de.domisum.exziff.shape.transformation;
 
-import de.domisum.exziff.shape.ShapeMap;
+import de.domisum.exziff.map.BooleanMap;
 
 public class ShapeMapScale extends ShapeMapTransformation
 {
@@ -25,7 +25,7 @@ public class ShapeMapScale extends ShapeMapTransformation
 	// TRANSFORMATION
 	// -------
 	@Override
-	public ShapeMap transform(ShapeMap input)
+	public BooleanMap transform(BooleanMap input)
 	{
 		int nWidth = (int) Math.floor(input.getWidth()*this.scalingFactor);
 		int nHeight = (int) Math.floor(input.getHeight()*this.scalingFactor);
@@ -45,7 +45,7 @@ public class ShapeMapScale extends ShapeMapTransformation
 				pixels[y][x] = input.get(inputX, inputY);
 			}
 
-		return new ShapeMap(pixels);
+		return new BooleanMap(pixels);
 	}
 
 }

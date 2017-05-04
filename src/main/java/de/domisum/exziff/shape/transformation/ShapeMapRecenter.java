@@ -1,6 +1,6 @@
 package de.domisum.exziff.shape.transformation;
 
-import de.domisum.exziff.shape.ShapeMap;
+import de.domisum.exziff.map.BooleanMap;
 
 public class ShapeMapRecenter extends ShapeMapTransformation
 {
@@ -10,7 +10,7 @@ public class ShapeMapRecenter extends ShapeMapTransformation
 	// -------
 	@SuppressWarnings("ConstantConditions")
 	@Override
-	public ShapeMap transform(ShapeMap input)
+	public BooleanMap transform(BooleanMap input)
 	{
 		int minX = Integer.MAX_VALUE;
 		int maxX = Integer.MIN_VALUE;

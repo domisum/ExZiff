@@ -1,6 +1,6 @@
 package de.domisum.exziff.shape.transformation.noise;
 
-import de.domisum.exziff.shape.ShapeMap;
+import de.domisum.exziff.map.BooleanMap;
 import de.domisum.exziff.shape.transformation.ShapeMapTransformation;
 import de.domisum.layeredopensimplexnoise.LayeredOpenSimplexNoise;
 
@@ -26,7 +26,7 @@ public class ShapeMapNoiseOffsetter extends ShapeMapTransformation
 	// TRANSFORMATION
 	// -------
 	@Override
-	public ShapeMap transform(ShapeMap input)
+	public BooleanMap transform(BooleanMap input)
 	{
 		boolean[][] pixels = new boolean[input.getHeight()][input.getWidth()];
 
@@ -50,7 +50,7 @@ public class ShapeMapNoiseOffsetter extends ShapeMapTransformation
 				pixels[nY][nX] = true;
 			}
 
-		return new ShapeMap(pixels);
+		return new BooleanMap(pixels);
 	}
 
 }

@@ -1,7 +1,7 @@
 package de.domisum.exziff.shape.transformation;
 
 import de.domisum.exziff.shape.PixelCoordinates;
-import de.domisum.exziff.shape.ShapeMap;
+import de.domisum.exziff.map.BooleanMap;
 
 import java.util.Collection;
 import java.util.LinkedList;
@@ -14,7 +14,7 @@ public class ShapeMapFloodFill extends ShapeMapTransformation
 	// TRANSFORMATION
 	// -------
 	@Override
-	public ShapeMap transform(ShapeMap input)
+	public BooleanMap transform(BooleanMap input)
 	{
 		boolean[][] pixels = new boolean[input.getHeight()][input.getWidth()];
 
@@ -45,10 +45,10 @@ public class ShapeMapFloodFill extends ShapeMapTransformation
 			tryAddNeighborPixel(input, coordinates, unvisitedPixels, processedPixels, 0, -1);
 		}
 
-		return new ShapeMap(pixels);
+		return new BooleanMap(pixels);
 	}
 
-	private void tryAddNeighborPixel(ShapeMap input, PixelCoordinates base, Collection<PixelCoordinates> unvisitedPixels,
+	private void tryAddNeighborPixel(BooleanMap input, PixelCoordinates base, Collection<PixelCoordinates> unvisitedPixels,
 			boolean[][] processedPixels, int dX, int dY)
 	{
 		int nX = base.x+dX;

@@ -1,6 +1,6 @@
 package de.domisum.exziff.island.shape;
 
-import de.domisum.exziff.shape.ShapeMap;
+import de.domisum.exziff.map.BooleanMap;
 import de.domisum.exziff.shape.generator.EllipseShapeMapGenerator;
 import de.domisum.exziff.shape.generator.ShapeMapGenerator;
 import de.domisum.exziff.shape.transformation.ShapeMapFloodFill;
@@ -31,7 +31,7 @@ public class IslandShapeGenerator extends ShapeMapGenerator
 	}
 
 
-	@Override public ShapeMap generate()
+	@Override public BooleanMap generate()
 	{
 		Random r = new Random(this.seed);
 
@@ -41,14 +41,14 @@ public class IslandShapeGenerator extends ShapeMapGenerator
 		double baseShapeRotationAngle = RandomUtil.getFromRange(0, Math.PI*2, r);
 		EllipseShapeMapGenerator ellipseGenerator = new EllipseShapeMapGenerator(this.width, this.height, baseShapeDiameter,
 				baseShapeExcentricity, baseShapeRotationAngle);
-		ShapeMap baseShape = ellipseGenerator.generate();
+		BooleanMap baseShape = ellipseGenerator.generate();
 
 
 		// deform
 		Random seedGenerator = new Random(this.seed);
 		int deformationIterations = 3;
 
-		ShapeMap deformedShape = baseShape;
+		BooleanMap deformedShape = baseShape;
 		for(int iteration = 1; iteration <= deformationIterations; iteration++)
 			deformedShape = deform(deformedShape, iteration, seedGenerator.nextLong());
 
@@ -67,7 +67,7 @@ public class IslandShapeGenerator extends ShapeMapGenerator
 		return deformedShape;
 	}
 
-	private ShapeMap deform(ShapeMap input, int iteration, long iterationSeed)
+	private BooleanMap deform(BooleanMap input, int iteration, long iterationSeed)
 	{
 		double averageSize = (this.width+this.height)/2d;
 		double iterationMultiplier = 1/Math.pow(iteration, 0.7);
@@ -80,7 +80,7 @@ public class IslandShapeGenerator extends ShapeMapGenerator
 				averageSize*baseAmplitudeMultiplier*iterationMultiplier, 0.35, iterationSeed+0xacab88);
 
 		ShapeMapNoiseDeformer deformer = new ShapeMapNoiseDeformer(noiseX, noiseY, 2, 0.0, 0.1, 1);
-		ShapeMap deformed = deformer.transform(input);
+		BooleanMap deformed = deformer.transform(input);
 
 		// move the shape back into center
 		ShapeMapRecenter recenter = new ShapeMapRecenter();

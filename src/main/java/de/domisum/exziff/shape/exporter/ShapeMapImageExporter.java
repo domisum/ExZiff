@@ -1,6 +1,6 @@
 package de.domisum.exziff.shape.exporter;
 
-import de.domisum.exziff.shape.ShapeMap;
+import de.domisum.exziff.map.BooleanMap;
 import de.domisum.lib.auxilium.util.ImageUtil;
 
 import java.awt.image.BufferedImage;
@@ -17,7 +17,7 @@ public class ShapeMapImageExporter extends ShapeMapExporter<BufferedImage>
 	// EXPORT
 	// -------
 	@Override
-	public BufferedImage export(ShapeMap input)
+	public BufferedImage export(BooleanMap input)
 	{
 		int[][] pixels = new int[input.getHeight()][input.getWidth()];
 
