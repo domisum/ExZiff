@@ -15,7 +15,7 @@ import de.domisum.exziff.world.loadersaver.ChunkClusterLoaderSaver;
 import de.domisum.layeredopensimplexnoise.LayeredOpenSimplexNoise;
 import de.domisum.layeredopensimplexnoise.NoiseLayer;
 import de.domisum.lib.auxilium.data.container.Duo;
-import de.domisum.lib.auxilium.data.container.IntBounds2D;
+import de.domisum.lib.auxilium.data.container.bound.IntBounds2D;
 import de.domisum.lib.auxilium.data.container.dir.Direction2D;
 import de.domisum.lib.auxilium.util.ImageUtil;
 import de.domisum.lib.auxilium.util.math.RandomUtil;
