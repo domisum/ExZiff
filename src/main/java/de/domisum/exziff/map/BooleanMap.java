@@ -6,9 +6,7 @@ public class BooleanMap
 	private final boolean[][] pixels;
 
 
-	// -------
 	// INITIALIZATION
-	// -------
 	public BooleanMap(boolean[][] pixels)
 	{
 		if(pixels.length < 1 || pixels[0].length < 1)
@@ -17,10 +15,13 @@ public class BooleanMap
 		this.pixels = pixels;
 	}
 
+	public BooleanMap(int width, int height)
+	{
+		this.pixels = new boolean[height][width];
+	}
 
-	// -------
+
 	// GETTERS
-	// -------
 	public int getWidth()
 	{
 		return this.pixels[0].length;
@@ -34,6 +35,13 @@ public class BooleanMap
 	public boolean get(int x, int y)
 	{
 		return this.pixels[y][x];
+	}
+
+
+	// SETTERS
+	public void set(int x, int y, boolean value)
+	{
+		this.pixels[y][x] = value;
 	}
 
 }
