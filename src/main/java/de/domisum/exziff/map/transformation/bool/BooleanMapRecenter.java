@@ -1,8 +1,8 @@
-package de.domisum.exziff.shape.transformation;
+package de.domisum.exziff.map.transformation.bool;
 
 import de.domisum.exziff.map.BooleanMap;
 
-public class ShapeMapRecenter extends ShapeMapTransformation
+public class BooleanMapRecenter extends BooleanMapTransformation
 {
 
 	// -------
@@ -36,7 +36,7 @@ public class ShapeMapRecenter extends ShapeMapTransformation
 
 		int centerXOffset = centerX-(input.getWidth()/2);
 		int centerYOffset = centerY-(input.getHeight()/2);
-		ShapeMapShift shifter = new ShapeMapShift(-centerXOffset, -centerYOffset);
+		BooleanMapShift shifter = new BooleanMapShift(-centerXOffset, -centerYOffset);
 
 		return shifter.transform(input);
 	}

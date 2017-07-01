@@ -1,8 +1,8 @@
-package de.domisum.exziff.shape.transformation;
+package de.domisum.exziff.map.transformation.bool;
 
 import de.domisum.exziff.map.BooleanMap;
 
-public class ShapeMapScale extends ShapeMapTransformation
+public class BooleanMapScale extends BooleanMapTransformation
 {
 
 	// SETTINGS
@@ -12,7 +12,7 @@ public class ShapeMapScale extends ShapeMapTransformation
 	// -------
 	// INITIALIZATION
 	// -------
-	public ShapeMapScale(double scalingFactor)
+	public BooleanMapScale(double scalingFactor)
 	{
 		if(scalingFactor <= 0)
 			throw new IllegalArgumentException("The scaling factor has to be positive");

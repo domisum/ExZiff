@@ -1,10 +1,10 @@
-package de.domisum.exziff.shape.transformation.noise;
+package de.domisum.exziff.map.transformation.bool.noise;
 
 import de.domisum.exziff.map.BooleanMap;
-import de.domisum.exziff.shape.transformation.ShapeMapTransformation;
+import de.domisum.exziff.map.transformation.bool.BooleanMapTransformation;
 import de.domisum.layeredopensimplexnoise.LayeredOpenSimplexNoise;
 
-public class ShapeMapNoiseOffsetter extends ShapeMapTransformation
+public class BooleanMapNoiseOffsetter extends BooleanMapTransformation
 {
 
 	// SETTINGS
@@ -15,7 +15,7 @@ public class ShapeMapNoiseOffsetter extends ShapeMapTransformation
 	// -------
 	// INIT
 	// -------
-	public ShapeMapNoiseOffsetter(LayeredOpenSimplexNoise noiseX, LayeredOpenSimplexNoise noiseY)
+	public BooleanMapNoiseOffsetter(LayeredOpenSimplexNoise noiseX, LayeredOpenSimplexNoise noiseY)
 	{
 		this.noiseX = noiseX;
 		this.noiseY = noiseY;

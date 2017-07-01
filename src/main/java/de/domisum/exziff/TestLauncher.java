@@ -1,7 +1,7 @@
 package de.domisum.exziff;
 
 import de.domisum.exziff.map.BooleanMap;
-import de.domisum.exziff.shape.exporter.ShapeMapImageExporter;
+import de.domisum.exziff.map.exporter.bool.BooleanMapImageExporter;
 import de.domisum.lib.auxilium.data.container.math.LineSegment2D;
 import de.domisum.lib.auxilium.data.container.math.Polygon2D;
 import de.domisum.lib.auxilium.data.container.math.Vector2D;
@@ -149,7 +149,7 @@ public class TestLauncher
 		BooleanMap map = new BooleanMap(renderRes, renderRes);
 		renderPolygon(map, polygon2D);
 
-		ShapeMapImageExporter exporter = new ShapeMapImageExporter();
+		BooleanMapImageExporter exporter = new BooleanMapImageExporter();
 		BufferedImage image = exporter.export(map);
 		ImageUtil.writeImage(file, image);
 	}

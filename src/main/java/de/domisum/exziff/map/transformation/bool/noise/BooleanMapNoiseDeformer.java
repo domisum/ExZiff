@@ -1,13 +1,13 @@
-package de.domisum.exziff.shape.transformation.noise;
+package de.domisum.exziff.map.transformation.bool.noise;
 
 import de.domisum.exziff.map.BooleanMap;
-import de.domisum.exziff.shape.transformation.ShapeMapFloodFill;
-import de.domisum.exziff.shape.transformation.ShapeMapInvert;
-import de.domisum.exziff.shape.transformation.ShapeMapSmooth;
-import de.domisum.exziff.shape.transformation.ShapeMapTransformation;
+import de.domisum.exziff.map.transformation.bool.BooleanMapFloodFill;
+import de.domisum.exziff.map.transformation.bool.BooleanMapInvert;
+import de.domisum.exziff.map.transformation.bool.BooleanMapSmooth;
+import de.domisum.exziff.map.transformation.bool.BooleanMapTransformation;
 import de.domisum.layeredopensimplexnoise.LayeredOpenSimplexNoise;
 
-public class ShapeMapNoiseDeformer extends ShapeMapTransformation
+public class BooleanMapNoiseDeformer extends BooleanMapTransformation
 {
 
 	// SETTINGS
@@ -23,7 +23,7 @@ public class ShapeMapNoiseDeformer extends ShapeMapTransformation
 	// -------
 	// INIT
 	// -------
-	public ShapeMapNoiseDeformer(LayeredOpenSimplexNoise noiseX, LayeredOpenSimplexNoise noiseY, int smoothRadius,
+	public BooleanMapNoiseDeformer(LayeredOpenSimplexNoise noiseX, LayeredOpenSimplexNoise noiseY, int smoothRadius,
 			double removeThreshold, double addThreshold, int smoothIterations)
 	{
 		this.noiseX = noiseX;
@@ -44,18 +44,18 @@ public class ShapeMapNoiseDeformer extends ShapeMapTransformation
 	{
 		BooleanMap deformedShape = input;
 
-		ShapeMapNoiseOffsetter noiseOffsetter = new ShapeMapNoiseOffsetter(this.noiseX, this.noiseY);
+		BooleanMapNoiseOffsetter noiseOffsetter = new BooleanMapNoiseOffsetter(this.noiseX, this.noiseY);
 		deformedShape = noiseOffsetter.transform(deformedShape);
 
 
-		ShapeMapSmooth smooth = new ShapeMapSmooth(this.smoothRadius, this.removeThreshold, this.addThreshold,
+		BooleanMapSmooth smooth = new BooleanMapSmooth(this.smoothRadius, this.removeThreshold, this.addThreshold,
 				this.smoothIterations);
 		deformedShape = smooth.transform(deformedShape);
 
-		ShapeMapFloodFill floodFill = new ShapeMapFloodFill();
+		BooleanMapFloodFill floodFill = new BooleanMapFloodFill();
 		deformedShape = floodFill.transform(deformedShape);
 
-		ShapeMapInvert invert = new ShapeMapInvert();
+		BooleanMapInvert invert = new BooleanMapInvert();
 		deformedShape = invert.transform(deformedShape);
 
 		return deformedShape;

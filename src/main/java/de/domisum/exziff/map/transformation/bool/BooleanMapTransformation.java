@@ -1,8 +1,8 @@
-package de.domisum.exziff.shape.transformation;
+package de.domisum.exziff.map.transformation.bool;
 
 import de.domisum.exziff.map.BooleanMap;
 
-public abstract class ShapeMapTransformation
+public abstract class BooleanMapTransformation
 {
 
 	// -------

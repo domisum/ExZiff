@@ -1,4 +1,4 @@
-package de.domisum.exziff.shape.transformation;
+package de.domisum.exziff.map.transformation.bool;
 
 import de.domisum.exziff.shape.PixelCoordinates;
 import de.domisum.exziff.map.BooleanMap;
@@ -7,7 +7,7 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.Queue;
 
-public class ShapeMapFloodFill extends ShapeMapTransformation
+public class BooleanMapFloodFill extends BooleanMapTransformation
 {
 
 	// -------

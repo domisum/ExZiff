@@ -1,11 +1,11 @@
-package de.domisum.exziff.shape.exporter;
+package de.domisum.exziff.map.exporter.bool;
 
 import de.domisum.exziff.map.BooleanMap;
 import de.domisum.lib.auxilium.util.ImageUtil;
 
 import java.awt.image.BufferedImage;
 
-public class ShapeMapImageExporter extends ShapeMapExporter<BufferedImage>
+public class BooleanMapImageExporter extends BooleanMapExporter<BufferedImage>
 {
 
 	// CONSTANTS

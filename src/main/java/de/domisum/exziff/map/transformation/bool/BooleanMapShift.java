@@ -1,10 +1,10 @@
-package de.domisum.exziff.shape.transformation;
+package de.domisum.exziff.map.transformation.bool;
 
 import de.domisum.exziff.map.BooleanMap;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
-public class ShapeMapShift extends ShapeMapTransformation
+public class BooleanMapShift extends BooleanMapTransformation
 {
 
 	// SETTINGS

@@ -1,8 +1,8 @@
-package de.domisum.exziff.shape.exporter;
+package de.domisum.exziff.map.exporter.bool;
 
 import de.domisum.exziff.map.BooleanMap;
 
-public abstract class ShapeMapExporter<T>
+public abstract class BooleanMapExporter<T>
 {
 
 	// -------

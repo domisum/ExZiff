@@ -3,11 +3,11 @@ package de.domisum.exziff.island.shape;
 import de.domisum.exziff.map.BooleanMap;
 import de.domisum.exziff.shape.generator.EllipseShapeMapGenerator;
 import de.domisum.exziff.shape.generator.ShapeMapGenerator;
-import de.domisum.exziff.shape.transformation.ShapeMapFloodFill;
-import de.domisum.exziff.shape.transformation.ShapeMapInvert;
-import de.domisum.exziff.shape.transformation.ShapeMapRecenter;
-import de.domisum.exziff.shape.transformation.ShapeMapSmooth;
-import de.domisum.exziff.shape.transformation.noise.ShapeMapNoiseDeformer;
+import de.domisum.exziff.map.transformation.bool.BooleanMapFloodFill;
+import de.domisum.exziff.map.transformation.bool.BooleanMapInvert;
+import de.domisum.exziff.map.transformation.bool.BooleanMapRecenter;
+import de.domisum.exziff.map.transformation.bool.BooleanMapSmooth;
+import de.domisum.exziff.map.transformation.bool.noise.BooleanMapNoiseDeformer;
 import de.domisum.layeredopensimplexnoise.OctavedOpenSimplexNoise;
 import de.domisum.lib.auxilium.util.math.RandomUtil;
 
@@ -54,13 +54,13 @@ public class IslandShapeGenerator extends ShapeMapGenerator
 
 
 		// cleanup
-		ShapeMapSmooth smooth = new ShapeMapSmooth(2, 0.3, 0.35);
+		BooleanMapSmooth smooth = new BooleanMapSmooth(2, 0.3, 0.35);
 		deformedShape = smooth.transform(deformedShape);
 
-		ShapeMapFloodFill floodFill = new ShapeMapFloodFill();
+		BooleanMapFloodFill floodFill = new BooleanMapFloodFill();
 		deformedShape = floodFill.transform(deformedShape);
 
-		ShapeMapInvert invert = new ShapeMapInvert();
+		BooleanMapInvert invert = new BooleanMapInvert();
 		deformedShape = invert.transform(deformedShape);
 
 
@@ -79,11 +79,11 @@ public class IslandShapeGenerator extends ShapeMapGenerator
 		OctavedOpenSimplexNoise noiseY = new OctavedOpenSimplexNoise(5, 0.1, 0.3,
 				averageSize*baseAmplitudeMultiplier*iterationMultiplier, 0.35, iterationSeed+0xacab88);
 
-		ShapeMapNoiseDeformer deformer = new ShapeMapNoiseDeformer(noiseX, noiseY, 2, 0.0, 0.1, 1);
+		BooleanMapNoiseDeformer deformer = new BooleanMapNoiseDeformer(noiseX, noiseY, 2, 0.0, 0.1, 1);
 		BooleanMap deformed = deformer.transform(input);
 
 		// move the shape back into center
-		ShapeMapRecenter recenter = new ShapeMapRecenter();
+		BooleanMapRecenter recenter = new BooleanMapRecenter();
 		deformed = recenter.transform(deformed);
 		return deformed;
 	}

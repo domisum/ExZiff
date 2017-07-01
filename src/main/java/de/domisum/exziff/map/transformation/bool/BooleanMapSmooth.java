@@ -1,8 +1,8 @@
-package de.domisum.exziff.shape.transformation;
+package de.domisum.exziff.map.transformation.bool;
 
 import de.domisum.exziff.map.BooleanMap;
 
-public class ShapeMapSmooth extends ShapeMapTransformation
+public class BooleanMapSmooth extends BooleanMapTransformation
 {
 
 	// SETTINGS
@@ -15,12 +15,12 @@ public class ShapeMapSmooth extends ShapeMapTransformation
 	// -------
 	// INIT
 	// -------
-	public ShapeMapSmooth(int radius, double removeThreshold, double addThreshold)
+	public BooleanMapSmooth(int radius, double removeThreshold, double addThreshold)
 	{
 		this(radius, removeThreshold, addThreshold, 1);
 	}
 
-	public ShapeMapSmooth(int radius, double removeThreshold, double addThreshold, int iterations)
+	public BooleanMapSmooth(int radius, double removeThreshold, double addThreshold, int iterations)
 	{
 		if(radius <= 0)
 			throw new IllegalArgumentException("The radius has to be at least 1");
