@@ -89,7 +89,7 @@ public class WorldGenerator
 	// SHAPE
 	private void generateContinentShape()
 	{
-		BooleanMapGenerator generator = new BooleanMapIslandGenerator(this.size, this.size, this.seed*1337L);
+		BooleanMapGenerator generator = new BooleanMapIslandGenerator(this.size, this.seed*1337L);
 
 		this.continentShape = generator.generate();
 	}
