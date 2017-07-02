@@ -1,11 +1,11 @@
-package de.domisum.exziff.shape.generator;
+package de.domisum.exziff.map.generator.bool;
 
 import de.domisum.exziff.map.BooleanMap;
 import de.domisum.lib.auxilium.util.ImageUtil;
 
 import java.awt.image.BufferedImage;
 
-public class ShapeFromImageMapGenerator extends ShapeMapGenerator
+public class BooleanMapFromImageGenerator extends BooleanMapGenerator
 {
 
 	// INPUT
@@ -18,7 +18,7 @@ public class ShapeFromImageMapGenerator extends ShapeMapGenerator
 	// -------
 	// INITIALIZATION
 	// -------
-	public ShapeFromImageMapGenerator(BufferedImage image, double threshold)
+	public BooleanMapFromImageGenerator(BufferedImage image, double threshold)
 	{
 		super(image.getWidth(), image.getHeight());
 

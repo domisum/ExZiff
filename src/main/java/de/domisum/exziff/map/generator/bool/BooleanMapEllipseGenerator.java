@@ -1,8 +1,8 @@
-package de.domisum.exziff.shape.generator;
+package de.domisum.exziff.map.generator.bool;
 
 import de.domisum.exziff.map.BooleanMap;
 
-public class EllipseShapeMapGenerator extends ShapeMapGenerator
+public class BooleanMapEllipseGenerator extends BooleanMapGenerator
 {
 
 	// SETTINGS
@@ -14,7 +14,7 @@ public class EllipseShapeMapGenerator extends ShapeMapGenerator
 	// -------
 	// INITIALIZATION
 	// -------
-	public EllipseShapeMapGenerator(int width, int height, double relativeDiameter, double excentricity, double rotationAngle)
+	public BooleanMapEllipseGenerator(int width, int height, double relativeDiameter, double excentricity, double rotationAngle)
 	{
 		super(width, height);
 

@@ -1,4 +1,4 @@
-package de.domisum.exziff.shape;
+package de.domisum.exziff;
 
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;

@@ -1,6 +1,6 @@
 package de.domisum.exziff.map.transformation.bool;
 
-import de.domisum.exziff.shape.PixelCoordinates;
+import de.domisum.exziff.PixelCoordinates;
 import de.domisum.exziff.map.BooleanMap;
 
 import java.util.Collection;

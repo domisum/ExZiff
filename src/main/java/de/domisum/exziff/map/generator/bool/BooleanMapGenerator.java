@@ -1,8 +1,8 @@
-package de.domisum.exziff.shape.generator;
+package de.domisum.exziff.map.generator.bool;
 
 import de.domisum.exziff.map.BooleanMap;
 
-public abstract class ShapeMapGenerator
+public abstract class BooleanMapGenerator
 {
 
 	// SETTINGS
@@ -13,7 +13,7 @@ public abstract class ShapeMapGenerator
 	// -------
 	// INITIALIZATION
 	// -------
-	protected ShapeMapGenerator(int width, int height)
+	protected BooleanMapGenerator(int width, int height)
 	{
 		if(width < 1 || height < 1)
 			throw new IllegalArgumentException("The width and height have to be at least 1");

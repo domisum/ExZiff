@@ -1,8 +1,8 @@
-package de.domisum.exziff.shape.generator;
+package de.domisum.exziff.map.generator.bool;
 
 import de.domisum.exziff.map.BooleanMap;
 
-public class ShapeRectangleMapGenerator extends ShapeMapGenerator
+public class BooleanMapRectangleGenerator extends BooleanMapGenerator
 {
 
 	// SETTINGS
@@ -15,7 +15,7 @@ public class ShapeRectangleMapGenerator extends ShapeMapGenerator
 	// -------
 	// INITIALIZATION
 	// -------
-	public ShapeRectangleMapGenerator(int width, int height, double x1, double y1, double x2, double y2)
+	public BooleanMapRectangleGenerator(int width, int height, double x1, double y1, double x2, double y2)
 	{
 		super(width, height);
 

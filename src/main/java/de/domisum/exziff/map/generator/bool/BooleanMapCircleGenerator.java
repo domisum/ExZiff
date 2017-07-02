@@ -1,8 +1,8 @@
-package de.domisum.exziff.shape.generator;
+package de.domisum.exziff.map.generator.bool;
 
 import de.domisum.exziff.map.BooleanMap;
 
-public class ShapeCircleMapGenerator extends ShapeMapGenerator
+public class BooleanMapCircleGenerator extends BooleanMapGenerator
 {
 
 	// SETTINGS
@@ -12,7 +12,7 @@ public class ShapeCircleMapGenerator extends ShapeMapGenerator
 	// -------
 	// INITIALIZATION
 	// -------
-	public ShapeCircleMapGenerator(int width, int height, double relativeDiameter)
+	public BooleanMapCircleGenerator(int width, int height, double relativeDiameter)
 	{
 		super(width, height);
 
