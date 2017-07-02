@@ -29,7 +29,7 @@ public class BooleanMapContinentsGenerator extends BooleanMapGenerator
 
 
 	// INIT
-	protected BooleanMapContinentsGenerator(int size, long seed)
+	public BooleanMapContinentsGenerator(int size, long seed)
 	{
 		this.size = size;
 		this.seed = seed;
@@ -49,7 +49,8 @@ public class BooleanMapContinentsGenerator extends BooleanMapGenerator
 
 	private void generatePolygons()
 	{
-
+		this.polygons.add(new Polygon2D(new Vector2D(0.25, 0.25), new Vector2D(0.75, 0.25), new Vector2D(.75, .75)));
+		this.polygons.add(new Polygon2D(new Vector2D(0.1, 0.9), new Vector2D(.1, .4), new Vector2D(0.5, 0.9)));
 	}
 
 
