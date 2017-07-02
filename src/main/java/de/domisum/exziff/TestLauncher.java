@@ -17,11 +17,14 @@ import java.util.Random;
 public class TestLauncher
 {
 
+	private static Polygon2D polygon1;
+	private static Polygon2D polygon2;
+
 	public static void main(String[] args)
 	{
 		Random random = new Random(3003);
 
-		for(int i = 0; i < 20; i++)
+		for(int i = 0; i < 1; i++)
 		{
 			long seed = random.nextInt();
 			continentGenerationTest(seed+"", seed);
@@ -31,41 +34,47 @@ public class TestLauncher
 	private static void continentGenerationTest(String fileName, long seed)
 	{
 		System.out.println(fileName);
+		Random random = new Random(seed);
 
-		Polygon2D polygon = new Polygon2D(new Vector2D(0.25, 0.25), new Vector2D(0.75, 0.25), new Vector2D(.75, .75));
+		polygon1 = new Polygon2D(new Vector2D(0.25, 0.25), new Vector2D(0.75, 0.25), new Vector2D(.75, .75));
+		polygon2 = new Polygon2D(new Vector2D(0.1, 0.9), new Vector2D(.1, .4), new Vector2D(0.5, 0.9));
 
-		polygon = randomizePolygon(polygon, seed);
+		System.out.println(polygon1.getDistanceTo(polygon2));
 
-		exportPolygon(polygon, new File("C:\\Users\\domisum\\testChamber/continents/"+fileName+".png"));
+		for(int i = 0; i < 100; i++)
+		{
+			polygon1 = randomizePolygon(polygon1, random.nextLong());
+			polygon2 = randomizePolygon(polygon2, random.nextLong());
+			System.out.println("----\n");
+		}
+
+		int renderRes = 1000;
+		BooleanMap map = new BooleanMap(renderRes, renderRes);
+		renderPolygon(map, polygon1);
+		renderPolygon(map, polygon2);
+
+		BooleanMapImageExporter exporter = new BooleanMapImageExporter();
+		BufferedImage image = exporter.export(map);
+		ImageUtil.writeImage(new File("C:\\Users\\domisum\\testChamber/continents/"+fileName+".png"), image);
 	}
 
 	private static Polygon2D randomizePolygon(Polygon2D polygon, long seed)
 	{
-		Random random = new Random(seed);
+		Polygon2D changedPolygon = randomizeSide(polygon, seed);
+		if(changedPolygon != null)
+			polygon = changedPolygon;
 
-		for(int i = 0; i < 50; i++)
-		{
-			Polygon2D changedPolygon = randomizeSide(polygon, random.nextLong());
-			if(changedPolygon != null)
-				polygon = changedPolygon;
-			else
-			{
-				//System.out.println(polygon);
-				//exportPolygon(polygon, new File("C:\\Users\\domisum\\testChamber/error.png"));
-				//System.exit(0);
-				i--;
-			}
-		}
+		if(changedPolygon == null && polygon == polygon2)
+			System.out.println("null");
 
 		return polygon;
 	}
 
 	private static Polygon2D randomizeSide(Polygon2D polygon, long seed)
 	{
-
 		Random random = new Random(seed);
 
-		int side = pickSide(polygon);
+		int side = pickSide(polygon, random);
 		//System.out.println(side);
 
 		Vector2D a = polygon.points.get(side);
@@ -78,9 +87,22 @@ public class TestLauncher
 		Vector2D perpendicular = new Vector2D(perpendicular3D.x, perpendicular3D.y).normalize();
 
 		Vector2D possibleOffset = perpendicular.multiply(aToB.length()*0.35);
-		Vector2D randomizedOffset = possibleOffset.multiply(RandomUtil.getFromRange(-0.7d, 1, random));
+		Vector2D randomizedOffset = possibleOffset.multiply(RandomUtil.getFromRange(-0.8d, 1, random));
 
 		Vector2D c = center.add(randomizedOffset);
+
+		if(polygon == polygon2)
+		{
+			System.out.println("polygon2");
+			System.out.println("side "+side);
+		}
+
+		if(c.x < 0 || c.x > 1 || c.y < 0 || c.y > 1)
+			return null;
+
+		if(polygon == polygon2)
+			System.out.println("bounds check");
+
 
 		Vector2D[] points = new Vector2D[polygon.points.size()+1];
 		int s = 0;
@@ -97,6 +119,7 @@ public class TestLauncher
 
 		Polygon2D newPolygon = new Polygon2D(points);
 
+
 		//  validate polygon, if illegal return null
 		for(LineSegment2D lineSegment : newPolygon.getLines())
 		{
@@ -110,22 +133,48 @@ public class TestLauncher
 				return null;
 		}
 
+		if(polygon == polygon2)
+			System.out.println("no self illegal");
+
 		// check if new point is close to other lines
 		List<LineSegment2D> lineSegments = polygon.getLines();
 		lineSegments.remove(side);
 		for(LineSegment2D lineSegment : lineSegments)
 		{
-			if(lineSegment.getDistanceTo(c) < 0.01)
+			if(lineSegment.getDistanceTo(c) < aToB.length()/2-0.0001)
 			{
 				return null;
 			}
 		}
 
+		if(polygon == polygon2)
+			System.out.println("no point too close");
+
+		// check collisions with other polygon
+		Polygon2D other;
+		if(polygon == polygon1)
+			other = polygon2;
+		else
+			other = polygon1;
+
+		if(newPolygon.getDistanceTo(other) < 0.05)
+		{
+			exportPolygon(new File("C:\\Users\\domisum\\testChamber/error.png"), newPolygon, other);
+			System.exit(0);
+			return null;
+		}
+
+		if(polygon == polygon2)
+			System.out.println("no coll");
+
 		return newPolygon;
 	}
 
-	private static int pickSide(Polygon2D polygon2D)
+	private static int pickSide(Polygon2D polygon2D, Random random)
 	{
+		if(RandomUtil.nextDouble(random) < 0.2)
+			return RandomUtil.getFromRange(0, polygon2D.points.size()-1, random);
+
 		int longestIndex = -1;
 		double longestLineLength = 0;
 
@@ -143,11 +192,13 @@ public class TestLauncher
 		return longestIndex;
 	}
 
-	private static void exportPolygon(Polygon2D polygon2D, File file)
+	private static void exportPolygon(File file, Polygon2D... polygons)
 	{
 		int renderRes = 1000;
 		BooleanMap map = new BooleanMap(renderRes, renderRes);
-		renderPolygon(map, polygon2D);
+
+		for(Polygon2D p : polygons)
+			renderPolygon(map, p);
 
 		BooleanMapImageExporter exporter = new BooleanMapImageExporter();
 		BufferedImage image = exporter.export(map);
