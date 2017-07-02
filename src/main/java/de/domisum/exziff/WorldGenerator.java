@@ -3,7 +3,7 @@ package de.domisum.exziff;
 import de.domisum.exziff.foundation.FoundationRegion;
 import de.domisum.exziff.foundation.FoundationRegionBeach;
 import de.domisum.exziff.foundation.FoundationRegionType;
-import de.domisum.exziff.shape.IslandBooleanGenerator;
+import de.domisum.exziff.shape.BooleanMapIslandGenerator;
 import de.domisum.exziff.map.FloatMap;
 import de.domisum.exziff.map.MultiFloatMap;
 import de.domisum.exziff.map.ShortMap;
@@ -89,7 +89,7 @@ public class WorldGenerator
 	// SHAPE
 	private void generateContinentShape()
 	{
-		BooleanMapGenerator generator = new IslandBooleanGenerator(this.size, this.size, this.seed*1337L);
+		BooleanMapGenerator generator = new BooleanMapIslandGenerator(this.size, this.size, this.seed*1337L);
 
 		this.continentShape = generator.generate();
 	}

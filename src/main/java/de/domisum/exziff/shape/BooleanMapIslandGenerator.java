@@ -13,7 +13,7 @@ import de.domisum.lib.auxilium.util.math.RandomUtil;
 
 import java.util.Random;
 
-public class IslandBooleanGenerator extends BooleanMapGenerator
+public class BooleanMapIslandGenerator extends BooleanMapGenerator
 {
 
 	// SETTINGS
@@ -23,7 +23,7 @@ public class IslandBooleanGenerator extends BooleanMapGenerator
 	// -------
 	// INIT
 	// -------
-	public IslandBooleanGenerator(int width, int height, long seed)
+	public BooleanMapIslandGenerator(int width, int height, long seed)
 	{
 		super(width, height);
 
