@@ -17,16 +17,16 @@ public class BooleanMapIslandGenerator extends BooleanMapGenerator
 {
 
 	// SETTINGS
+	private int size;
 	private long seed;
 
 
 	// -------
 	// INIT
 	// -------
-	public BooleanMapIslandGenerator(int width, int height, long seed)
+	public BooleanMapIslandGenerator(int size, long seed)
 	{
-		super(width, height);
-
+		this.size = size;
 		this.seed = seed;
 	}
 
@@ -39,7 +39,7 @@ public class BooleanMapIslandGenerator extends BooleanMapGenerator
 		double baseShapeDiameter = RandomUtil.getFromRange(0.4, 0.65, r);
 		double baseShapeExcentricity = RandomUtil.getFromRange(0.5, 3, r);
 		double baseShapeRotationAngle = RandomUtil.getFromRange(0, Math.PI*2, r);
-		BooleanMapEllipseGenerator ellipseGenerator = new BooleanMapEllipseGenerator(this.width, this.height, baseShapeDiameter,
+		BooleanMapEllipseGenerator ellipseGenerator = new BooleanMapEllipseGenerator(this.size, this.size, baseShapeDiameter,
 				baseShapeExcentricity, baseShapeRotationAngle);
 		BooleanMap baseShape = ellipseGenerator.generate();
 
@@ -69,15 +69,14 @@ public class BooleanMapIslandGenerator extends BooleanMapGenerator
 
 	private BooleanMap deform(BooleanMap input, int iteration, long iterationSeed)
 	{
-		double averageSize = (this.width+this.height)/2d;
 		double iterationMultiplier = 1/Math.pow(iteration, 0.7);
 		double baseAmplitudeMultiplier = 1/9d;
 
 		// actually deform the shape
 		OctavedOpenSimplexNoise noiseX = new OctavedOpenSimplexNoise(5, 0.1, 0.3,
-				averageSize*baseAmplitudeMultiplier*iterationMultiplier, 0.35, iterationSeed);
+				this.size*baseAmplitudeMultiplier*iterationMultiplier, 0.35, iterationSeed);
 		OctavedOpenSimplexNoise noiseY = new OctavedOpenSimplexNoise(5, 0.1, 0.3,
-				averageSize*baseAmplitudeMultiplier*iterationMultiplier, 0.35, iterationSeed+0xacab88);
+				this.size*baseAmplitudeMultiplier*iterationMultiplier, 0.35, iterationSeed+0xacab88);
 
 		BooleanMapNoiseDeformer deformer = new BooleanMapNoiseDeformer(noiseX, noiseY, 2, 0.0, 0.1, 1);
 		BooleanMap deformed = deformer.transform(input);

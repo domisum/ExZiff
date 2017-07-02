@@ -6,6 +6,9 @@ public class BooleanMapRectangleGenerator extends BooleanMapGenerator
 {
 
 	// SETTINGS
+	private int width;
+	private int height;
+
 	private double x1;
 	private double y1;
 	private double x2;
@@ -17,7 +20,8 @@ public class BooleanMapRectangleGenerator extends BooleanMapGenerator
 	// -------
 	public BooleanMapRectangleGenerator(int width, int height, double x1, double y1, double x2, double y2)
 	{
-		super(width, height);
+		this.width = width;
+		this.height = height;
 
 		if(x1 < 0 || x1 > 1 || y1 < 0 || y1 > 1 || x2 < 0 || x2 > 1 || y2 < 0 || y2 > 1)
 			throw new IllegalArgumentException("All coordinates have to be between 0.0 and 1.0");
@@ -47,8 +51,7 @@ public class BooleanMapRectangleGenerator extends BooleanMapGenerator
 	// -------
 	// GENERATION
 	// -------
-	@Override
-	public BooleanMap generate()
+	@Override public BooleanMap generate()
 	{
 		boolean[][] pixels = new boolean[this.height][this.width];
 

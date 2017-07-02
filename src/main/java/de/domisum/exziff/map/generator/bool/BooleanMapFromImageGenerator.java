@@ -20,8 +20,6 @@ public class BooleanMapFromImageGenerator extends BooleanMapGenerator
 	// -------
 	public BooleanMapFromImageGenerator(BufferedImage image, double threshold)
 	{
-		super(image.getWidth(), image.getHeight());
-
 		if(threshold < 0 || threshold > 1)
 			throw new IllegalArgumentException("The threshold has to be between 0.0 and 1.0");
 
@@ -33,14 +31,13 @@ public class BooleanMapFromImageGenerator extends BooleanMapGenerator
 	// -------
 	// GENERATION
 	// -------
-	@Override
-	public BooleanMap generate()
+	@Override public BooleanMap generate()
 	{
 		int[][] colorPixels = ImageUtil.getPixels(this.image);
 
 		boolean[][] pixels = new boolean[this.image.getHeight()][this.image.getWidth()];
-		for(int y = 0; y < this.height; y++)
-			for(int x = 0; x < this.width; x++)
+		for(int y = 0; y < this.image.getHeight(); y++)
+			for(int x = 0; x < this.image.getWidth(); x++)
 			{
 				int color = colorPixels[y][x];
 				int blue = color&0xff;

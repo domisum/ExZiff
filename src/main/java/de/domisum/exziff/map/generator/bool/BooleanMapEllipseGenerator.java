@@ -6,6 +6,9 @@ public class BooleanMapEllipseGenerator extends BooleanMapGenerator
 {
 
 	// SETTINGS
+	private int width;
+	private int height;
+
 	private double relativeDiameter;
 	private double excentricity;
 	private double rotationAngle;
@@ -16,7 +19,8 @@ public class BooleanMapEllipseGenerator extends BooleanMapGenerator
 	// -------
 	public BooleanMapEllipseGenerator(int width, int height, double relativeDiameter, double excentricity, double rotationAngle)
 	{
-		super(width, height);
+		this.width = width;
+		this.height = height;
 
 		this.relativeDiameter = relativeDiameter;
 		this.excentricity = excentricity;
