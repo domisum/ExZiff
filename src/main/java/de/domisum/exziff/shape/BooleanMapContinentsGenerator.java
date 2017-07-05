@@ -25,6 +25,16 @@ public class BooleanMapContinentsGenerator extends BooleanMapGenerator
 	private int size;
 	private long seed;
 
+	@Getter @Setter private double desiredMaxSideLength = 0.05;
+	@Getter @Setter private double maxDivisionBasePointCenterOffset = 0.15;
+	@Getter @Setter private double maxInwardsOffsetMultiplier = 0.5;
+	@Getter @Setter private double maxOutwardsOffsetMultiplier = 0.9;
+
+	@Getter @Setter private double minPolygonPolygonDistance = 0.08;
+	@Getter @Setter private double minPolygonEdgeDistance = 0.08;
+	@Getter @Setter private double minPolygonCornerAngleDeg = 30;
+	@Getter @Setter private double minPolygonLinePolygonLineDistance = 0.02;
+
 	@Getter @Setter private int downscalingFactor = 1;
 
 	// temp
@@ -69,8 +79,7 @@ public class BooleanMapContinentsGenerator extends BooleanMapGenerator
 	{
 		PolygonSide longestSide = getLongestSide();
 
-		while(longestSide.getLineSegment().getLength() > 0.05)
-		//for(int i = 0; i < 200; i++)
+		while(longestSide.getLineSegment().getLength() > this.desiredMaxSideLength)
 		{
 			deformPolygonSide(longestSide);
 
@@ -107,10 +116,12 @@ public class BooleanMapContinentsGenerator extends BooleanMapGenerator
 		Vector2D b = polygonSide.getLineSegment().b;
 
 		// determine random points
-		double offsetPointPosAlongSide = RandomUtil.getFromRange(0.4, 1-0.4, this.random);
+		double offsetPointPosAlongSide = RandomUtil.distribute(0.5, this.maxDivisionBasePointCenterOffset, this.random);
 		Vector2D offsetPoint = a.add(b.subtract(a).multiply(offsetPointPosAlongSide));
 
-		double offsetDistance = RandomUtil.getFromRange(-0.5, 1, this.random)*polygonSide.getLineSegment().getLength();
+		double offsetDistance =
+				RandomUtil.getFromRange(-this.maxInwardsOffsetMultiplier, this.maxOutwardsOffsetMultiplier, this.random)
+						*polygonSide.getLineSegment().getLength();
 		Vector2D newPoint = offsetPoint.add(orthogonalOutward.multiply(offsetDistance));
 
 
@@ -129,6 +140,7 @@ public class BooleanMapContinentsGenerator extends BooleanMapGenerator
 
 		// validate polygon, if valid replace old poly with new poly
 		boolean valid = validateReplacementPolygon(newPolygon, polygonSide.polygon);
+		//System.exit(0);
 
 		if(valid)
 		{
@@ -161,12 +173,12 @@ public class BooleanMapContinentsGenerator extends BooleanMapGenerator
 			if(p == toReplace)
 				continue;
 
-			if(newPolygon.getDistanceTo(p) < 0.05)
+			if(newPolygon.getDistanceTo(p) < this.minPolygonPolygonDistance)
 				return false;
 		}
 
 		// too close to edge
-		if(this.OUTSIDE_EDGE_POLYGON.getDistanceTo(newPolygon) < 0.05)
+		if(this.OUTSIDE_EDGE_POLYGON.getDistanceTo(newPolygon) < this.minPolygonEdgeDistance)
 			return false;
 
 		// avoid too pointy angles
@@ -175,10 +187,37 @@ public class BooleanMapContinentsGenerator extends BooleanMapGenerator
 		{
 			double angleRad = lineSegmentBefore.getDirection().getAngleTo(ls.getDirection().invert());
 
-			if(Math.toDegrees(angleRad) < 30)
+			if(Math.toDegrees(angleRad) < this.minPolygonCornerAngleDeg)
 				return false;
 
 			lineSegmentBefore = ls;
+		}
+
+		//System.out.println("in here");
+
+		// avoid lines too close to other lines
+		int nOfLines = newPolygon.getLines().size();
+		for(int i = 0; i < nOfLines; i++)
+		{
+			LineSegment2D ls = newPolygon.getLines().get(i);
+
+			// determine all nonNeighbors
+			List<LineSegment2D> nonNeighbors = new ArrayList<>();
+			for(int j = 0; j < nOfLines; j++)
+			{
+				int directDelta = Math.abs(i-j);
+				int overEdgeDelta = Math.abs(Math.abs(i-j)-nOfLines);
+				int delta = Math.min(directDelta, overEdgeDelta);
+
+				if(delta > 2)
+					nonNeighbors.add(newPolygon.getLines().get(j));
+			}
+
+			for(LineSegment2D other : nonNeighbors)
+			{
+				if(ls.getDistanceTo(other) < this.minPolygonLinePolygonLineDistance)
+					return false;
+			}
 		}
 
 		return true;
