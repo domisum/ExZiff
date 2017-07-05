@@ -5,6 +5,7 @@ import de.domisum.exziff.map.exporter.bool.BooleanMapImageExporter;
 import de.domisum.exziff.shape.BooleanMapContinentsGenerator;
 import de.domisum.lib.auxilium.data.container.math.Polygon2D;
 import de.domisum.lib.auxilium.data.container.math.Vector2D;
+import de.domisum.lib.auxilium.util.FileUtil;
 import de.domisum.lib.auxilium.util.ImageUtil;
 
 import java.awt.image.BufferedImage;
@@ -18,8 +19,9 @@ public class TestLauncher
 	{
 		//test();
 
-		Random random = new Random(3812);
+		Random random = new Random(32);
 
+		FileUtil.deleteDirectoryContents(new File("C:\\Users\\domisum\\testChamber/continents/"));
 		for(int i = 0; i < 30; i++)
 			generate(random.nextLong());
 	}
@@ -27,7 +29,7 @@ public class TestLauncher
 	private static void generate(long seed)
 	{
 		BooleanMapContinentsGenerator generator = new BooleanMapContinentsGenerator((int) Math.pow(2, 14), seed);
-		generator.setDownscalingFactor(16);
+		generator.setDownscalingFactor(4*4);
 		BooleanMap booleanMap = generator.generate();
 		System.out.println("generator done: "+seed);
 
