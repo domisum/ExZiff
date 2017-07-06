@@ -193,8 +193,7 @@ public class BooleanMapContinentsGenerator extends BooleanMapGenerator
 			lineSegmentBefore = ls;
 		}
 
-		//System.out.println("in here");
-
+		// TODO something is fishy here: when minDistance > 0.5 * maxLineDistance it makes the program get into infinite loop
 		// avoid lines too close to other lines
 		int nOfLines = newPolygon.getLines().size();
 		for(int i = 0; i < nOfLines; i++)
