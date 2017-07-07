@@ -33,7 +33,7 @@ public class BooleanMapContinentsGenerator extends BooleanMapGenerator
 	@Getter @Setter private double minPolygonPolygonDistance = 0.08;
 	@Getter @Setter private double minPolygonEdgeDistance = 0.08;
 	@Getter @Setter private double minPolygonCornerAngleDeg = 30;
-	@Getter @Setter private double minPolygonLinePolygonLineDistance = 0.02;
+	@Getter @Setter private double minPolygonLineLineDistance = 0.02;
 
 	@Getter @Setter private int downscalingFactor = 1;
 
@@ -140,8 +140,6 @@ public class BooleanMapContinentsGenerator extends BooleanMapGenerator
 
 		// validate polygon, if valid replace old poly with new poly
 		boolean valid = validateReplacementPolygon(newPolygon, polygonSide.polygon);
-		//System.exit(0);
-
 		if(valid)
 		{
 			this.polygons.remove(polygonSide.polygon);
@@ -193,31 +191,7 @@ public class BooleanMapContinentsGenerator extends BooleanMapGenerator
 			lineSegmentBefore = ls;
 		}
 
-		// TODO something is fishy here: when minDistance > 0.5 * maxLineDistance it makes the program get into infinite loop
-		// avoid lines too close to other lines
-		int nOfLines = newPolygon.getLines().size();
-		for(int i = 0; i < nOfLines; i++)
-		{
-			LineSegment2D ls = newPolygon.getLines().get(i);
-
-			// determine all nonNeighbors
-			List<LineSegment2D> nonNeighbors = new ArrayList<>();
-			for(int j = 0; j < nOfLines; j++)
-			{
-				int directDelta = Math.abs(i-j);
-				int overEdgeDelta = Math.abs(Math.abs(i-j)-nOfLines);
-				int delta = Math.min(directDelta, overEdgeDelta);
-
-				if(delta > 2)
-					nonNeighbors.add(newPolygon.getLines().get(j));
-			}
-
-			for(LineSegment2D other : nonNeighbors)
-			{
-				if(ls.getDistanceTo(other) < this.minPolygonLinePolygonLineDistance)
-					return false;
-			}
-		}
+		// TODO add line to line distance check
 
 		return true;
 	}
