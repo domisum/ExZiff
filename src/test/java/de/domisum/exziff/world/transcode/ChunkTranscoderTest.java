@@ -20,14 +20,14 @@ public class ChunkTranscoderTest
 		ChunkSection[] chunkSections = new ChunkSection[Chunk.NUMBER_OF_SECTIONS];
 		for(int i = 0; i < chunkSections.length; i++)
 			chunkSections[i] = chunkSectionHomogenous1;
-		testEncodeDecodeEquals(transcoder, new Chunk(3, 8, chunkSections));
+		assertEncodeDecodeEquals(transcoder, new Chunk(3, 8, chunkSections));
 
 		chunkSections = new ChunkSection[Chunk.NUMBER_OF_SECTIONS];
 		for(int i = 0; i < chunkSections.length; i++)
 			chunkSections[i] = i%2 == 0 ? chunkSectionHomogenous1 : chunkSectionHomogenous2;
-		testEncodeDecodeEquals(transcoder, new Chunk(-7, 0, chunkSections));
+		assertEncodeDecodeEquals(transcoder, new Chunk(-7, 0, chunkSections));
 
-		testEncodeDecodeEquals(transcoder, new Chunk(7, 7));
+		assertEncodeDecodeEquals(transcoder, new Chunk(7, 7));
 	}
 
 	@Test public void testEncodeDecodeRandomized()
@@ -36,11 +36,11 @@ public class ChunkTranscoderTest
 		Random random = new Random(0xdab);
 
 		for(int test = 0; test < 1000; test++)
-			testEncodeDecodeEquals(transcoder, generateRandomChunk(random));
+			assertEncodeDecodeEquals(transcoder, generateRandomChunk(random));
 	}
 
 
-	private void testEncodeDecodeEquals(ChunkTranscoder transcoder, Chunk chunk)
+	private void assertEncodeDecodeEquals(ChunkTranscoder transcoder, Chunk chunk)
 	{
 		byte[] encoded = transcoder.encode(chunk);
 		Chunk decoded = transcoder.decode(encoded);

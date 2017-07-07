@@ -12,10 +12,10 @@ public class TranscoderTest
 	{
 		Transcoder<?> transcoder = getDummyTranscoder();
 
-		encodeDecodeIntAssertEquals(transcoder, 5, 0);
-		encodeDecodeIntAssertEquals(transcoder, 3, -1);
-		encodeDecodeIntAssertEquals(transcoder, 0, 17);
-		encodeDecodeIntAssertEquals(transcoder, 88, -234234343);
+		assertEncodeDecodeIntEquals(transcoder, 5, 0);
+		assertEncodeDecodeIntEquals(transcoder, 3, -1);
+		assertEncodeDecodeIntEquals(transcoder, 0, 17);
+		assertEncodeDecodeIntEquals(transcoder, 88, -234234343);
 	}
 
 	@Test public void testEncodeDecodeIntRandomized()
@@ -24,11 +24,11 @@ public class TranscoderTest
 		Random random = new Random(0xaffe);
 
 		for(int test = 0; test < 1000; test++)
-			encodeDecodeIntAssertEquals(transcoder, random.nextInt(500), random.nextInt());
+			assertEncodeDecodeIntEquals(transcoder, random.nextInt(500), random.nextInt());
 	}
 
 
-	private void encodeDecodeIntAssertEquals(Transcoder<?> transcoder, int startingPosition, int number)
+	private void assertEncodeDecodeIntEquals(Transcoder<?> transcoder, int startingPosition, int number)
 	{
 		byte[] bytes = new byte[startingPosition+16];
 

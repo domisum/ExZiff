@@ -26,7 +26,7 @@ public class ChunkClusterTranscoderTest
 		for(int i = 0; i < chunks.length; i++)
 			chunks[i] = chunk;
 
-		testEncodeDecodeEquals(transcoder, new ChunkCluster(0, 5, chunks));
+		assertEncodeDecodeEquals(transcoder, new ChunkCluster(0, 5, chunks));
 	}
 
 	@Test public void testEncodeDecodeRandomized()
@@ -35,11 +35,11 @@ public class ChunkClusterTranscoderTest
 		Random random = new Random(0x8877);
 
 		for(int test = 0; test < 50; test++)
-			testEncodeDecodeEquals(transcoder, generateChunkCluster(random));
+			assertEncodeDecodeEquals(transcoder, generateChunkCluster(random));
 	}
 
 
-	private void testEncodeDecodeEquals(ChunkClusterTranscoder transcoder, ChunkCluster chunkCluster)
+	private void assertEncodeDecodeEquals(ChunkClusterTranscoder transcoder, ChunkCluster chunkCluster)
 	{
 		byte[] encoded = transcoder.encode(chunkCluster);
 		ChunkCluster decoded = transcoder.decode(encoded);
