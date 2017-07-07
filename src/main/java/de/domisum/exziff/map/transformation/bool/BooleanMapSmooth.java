@@ -47,8 +47,7 @@ public class BooleanMapSmooth extends BooleanMapTransformation
 	// -------
 	// TRANSFORMATION
 	// -------
-	@Override
-	public BooleanMap transform(BooleanMap input)
+	@Override public BooleanMap transform(BooleanMap input)
 	{
 		BooleanMap deformedShape = input;
 		for(int i = 0; i < this.iterations; i++)

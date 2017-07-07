@@ -8,9 +8,7 @@ public class BooleanMapRecenter extends BooleanMapTransformation
 	// -------
 	// TRANSFORMATION
 	// -------
-	@SuppressWarnings("ConstantConditions")
-	@Override
-	public BooleanMap transform(BooleanMap input)
+	@SuppressWarnings("ConstantConditions") @Override public BooleanMap transform(BooleanMap input)
 	{
 		int minX = Integer.MAX_VALUE;
 		int maxX = Integer.MIN_VALUE;

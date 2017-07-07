@@ -16,8 +16,7 @@ public class BooleanMapImageExporter extends BooleanMapExporter<BufferedImage>
 	// -------
 	// EXPORT
 	// -------
-	@Override
-	public BufferedImage export(BooleanMap input)
+	@Override public BufferedImage export(BooleanMap input)
 	{
 		int[][] pixels = new int[input.getHeight()][input.getWidth()];
 

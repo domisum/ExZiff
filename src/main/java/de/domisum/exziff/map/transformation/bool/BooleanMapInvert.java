@@ -8,8 +8,7 @@ public class BooleanMapInvert extends BooleanMapTransformation
 	// -------
 	// TRANSFORMATION
 	// -------
-	@Override
-	public BooleanMap transform(BooleanMap input)
+	@Override public BooleanMap transform(BooleanMap input)
 	{
 		boolean[][] pixels = new boolean[input.getHeight()][input.getWidth()];
 

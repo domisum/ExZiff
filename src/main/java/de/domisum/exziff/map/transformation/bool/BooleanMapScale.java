@@ -24,8 +24,7 @@ public class BooleanMapScale extends BooleanMapTransformation
 	// -------
 	// TRANSFORMATION
 	// -------
-	@Override
-	public BooleanMap transform(BooleanMap input)
+	@Override public BooleanMap transform(BooleanMap input)
 	{
 		int nWidth = (int) Math.floor(input.getWidth()*this.scalingFactor);
 		int nHeight = (int) Math.floor(input.getHeight()*this.scalingFactor);
