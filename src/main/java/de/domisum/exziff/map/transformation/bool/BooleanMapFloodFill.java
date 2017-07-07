@@ -10,11 +10,8 @@ import java.util.Queue;
 public class BooleanMapFloodFill extends BooleanMapTransformation
 {
 
-	// -------
 	// TRANSFORMATION
-	// -------
-	@Override
-	public BooleanMap transform(BooleanMap input)
+	@Override public BooleanMap transform(BooleanMap input)
 	{
 		boolean[][] pixels = new boolean[input.getHeight()][input.getWidth()];
 
