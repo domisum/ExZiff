@@ -9,10 +9,10 @@ public class BooleanMapRectangleGenerator extends BooleanMapGenerator
 	private int width;
 	private int height;
 
-	private double x1;
-	private double y1;
-	private double x2;
-	private double y2;
+	private double minX;
+	private double maxX;
+	private double minY;
+	private double maxY;
 
 
 	// -------
@@ -26,25 +26,10 @@ public class BooleanMapRectangleGenerator extends BooleanMapGenerator
 		if(x1 < 0 || x1 > 1 || y1 < 0 || y1 > 1 || x2 < 0 || x2 > 1 || y2 < 0 || y2 > 1)
 			throw new IllegalArgumentException("All coordinates have to be between 0.0 and 1.0");
 
-		// swap values so that x1 < x2 and y1 < y2
-		if(x1 > x2)
-		{
-			double temp = x1;
-			x1 = x2;
-			x2 = temp;
-		}
-
-		if(y1 > y2)
-		{
-			double temp = y1;
-			y1 = y2;
-			y2 = temp;
-		}
-
-		this.x1 = x1;
-		this.y1 = y1;
-		this.x2 = x2;
-		this.y2 = y2;
+		this.minX = Math.min(x1, x2);
+		this.maxX = Math.max(x1, x2);
+		this.minY = Math.min(y1, y2);
+		this.maxY = Math.max(y1, y2);
 	}
 
 
@@ -61,7 +46,7 @@ public class BooleanMapRectangleGenerator extends BooleanMapGenerator
 				double rX = x/(double) this.width;
 				double rY = y/(double) this.height;
 
-				if(this.x1 <= rX && rX <= this.x2 && this.y1 <= rY && rY <= this.y2)
+				if(this.minX <= rX && rX <= this.maxX && this.minY <= rY && rY <= this.maxY)
 					pixels[y][x] = true;
 			}
 
