@@ -13,7 +13,7 @@ public class FoundationRegionOceanFloor extends FoundationRegion
 	// GENERATION
 	@Override public void generate()
 	{
-
+		// for now ocean floor is just flat
 	}
 
 	@Override public int getHeightAt(int x, int z)
