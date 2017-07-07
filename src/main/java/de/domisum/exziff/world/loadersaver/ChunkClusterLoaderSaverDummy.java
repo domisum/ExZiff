@@ -32,7 +32,7 @@ public class ChunkClusterLoaderSaverDummy extends ChunkClusterLoaderSaver
 
 	@Override public void saveChunkCluster(ChunkCluster chunkCluster)
 	{
-
+		// do nothing
 	}
 
 }
