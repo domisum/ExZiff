@@ -3,8 +3,6 @@ package de.domisum.exziff;
 import de.domisum.exziff.map.BooleanMap;
 import de.domisum.exziff.map.exporter.bool.BooleanMapImageExporter;
 import de.domisum.exziff.shape.BooleanMapContinentsGenerator;
-import de.domisum.lib.auxilium.data.container.math.Polygon2D;
-import de.domisum.lib.auxilium.data.container.math.Vector2D;
 import de.domisum.lib.auxilium.util.FileUtil;
 import de.domisum.lib.auxilium.util.ImageUtil;
 
@@ -17,8 +15,6 @@ public class TestLauncher
 
 	public static void main(String[] args)
 	{
-		//test();
-
 		Random random = new Random(32);
 
 		FileUtil.deleteDirectoryContents(new File("C:\\Users\\domisum\\testChamber/continents/"));
@@ -36,16 +32,6 @@ public class TestLauncher
 		BooleanMapImageExporter exporter = new BooleanMapImageExporter();
 		BufferedImage image = exporter.export(booleanMap);
 		ImageUtil.writeImage(new File("C:\\Users\\domisum\\testChamber/continents/"+seed+".png"), image);
-	}
-
-
-	private static void test()
-	{
-		Polygon2D polygon2D = new Polygon2D(new Vector2D(0, 0), new Vector2D(1, 0), new Vector2D(1, 1));
-
-		System.out.println(polygon2D.contains(new Vector2D(0.25, 0.25)));
-
-		System.exit(0);
 	}
 
 }
