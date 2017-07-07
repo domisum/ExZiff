@@ -167,7 +167,7 @@ public class BooleanMapContinentsGenerator extends BooleanMapGenerator
 		// too close to other polygons
 		for(Polygon2D p : this.polygons)
 		{
-			if(p == toReplace)
+			if(p.equals(toReplace))
 				continue;
 
 			if(newPolygon.getDistanceTo(p) < this.minPolygonPolygonDistance)
