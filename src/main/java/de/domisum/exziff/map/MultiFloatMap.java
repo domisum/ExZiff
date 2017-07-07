@@ -76,13 +76,11 @@ public class MultiFloatMap
 
 	public void setMap(int key, FloatMap map)
 	{
-		// check if the maps have the same size
+		// check if the new map has the same size as the other maps, if there are any
 		if(!this.maps.isEmpty())
-		{
 			if(getWidth() != map.getWidth() || getHeight() != map.getHeight())
 				throw new IllegalArgumentException(
 						"The supplied Map has to have the same dimensions as the other Maps in the MultiMap");
-		}
 
 		this.maps.put(key, map);
 	}
