@@ -2,7 +2,7 @@ package de.domisum.exziff;
 
 import de.domisum.exziff.map.BooleanMap;
 import de.domisum.exziff.map.exporter.bool.BooleanMapImageExporter;
-import de.domisum.exziff.shape.BooleanMapContinentsGenerator;
+import de.domisum.exziff.shape.ContinentsShapeGenerator;
 import de.domisum.lib.auxilium.util.FileUtil;
 import de.domisum.lib.auxilium.util.ImageUtil;
 
@@ -24,7 +24,7 @@ public class TestLauncher
 
 	private static void generate(long seed)
 	{
-		BooleanMapContinentsGenerator generator = new BooleanMapContinentsGenerator((int) Math.pow(2, 14), seed);
+		ContinentsShapeGenerator generator = new ContinentsShapeGenerator((int) Math.pow(2, 14), seed);
 		generator.setDownscalingFactor(4*4);
 		BooleanMap booleanMap = generator.generate();
 		System.out.println("generator done: "+seed);

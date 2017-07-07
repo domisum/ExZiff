@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class BooleanMapContinentsGenerator extends BooleanMapGenerator
+public class ContinentsShapeGenerator extends BooleanMapGenerator
 {
 
 	// CONSTANTS
@@ -46,7 +46,7 @@ public class BooleanMapContinentsGenerator extends BooleanMapGenerator
 
 
 	// INIT
-	public BooleanMapContinentsGenerator(int size, long seed)
+	public ContinentsShapeGenerator(int size, long seed)
 	{
 		this.size = size;
 		this.seed = seed;
