@@ -1,6 +1,7 @@
 package de.domisum.exziff.foundation;
 
 import de.domisum.exziff.map.FloatMap;
+import de.domisum.lib.auxilium.data.container.bound.IntBounds2D;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -15,6 +16,7 @@ public abstract class FoundationRegion
 	protected final long seed;
 
 	@Setter protected FloatMap influenceMap;
+	@Setter protected IntBounds2D bounds;
 
 	protected final Random seedRandom;
 
@@ -26,6 +28,7 @@ public abstract class FoundationRegion
 		this.id = id;
 		this.seed = seed;
 
+		// improving randomness by salting
 		this.seedRandom = new Random(seed*id*29349349394L);
 		this.seedRandom.nextLong();
 		this.seedRandom.nextLong();

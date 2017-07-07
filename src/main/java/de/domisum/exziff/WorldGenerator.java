@@ -246,12 +246,12 @@ public class WorldGenerator
 
 			FloatMap influenceMap = this.foundationRegionInfluenceMap.getMap(entry.getKey());
 			foundationRegion.setInfluenceMap(influenceMap);
-			/*IntBounds2D influenceMapBounds = determineFloatMapBounds(influenceMap);
 
+			IntBounds2D influenceMapBounds = determineFloatMapBounds(influenceMap);
 			influenceMapBounds = influenceMapBounds.expand(10);
 			influenceMapBounds = influenceMapBounds.limit(new IntBounds2D(0, this.size, 0, this.size));
+			foundationRegion.setBounds(influenceMapBounds);
 
-			foundationRegion.setBounds(influenceMapBounds);*/
 			foundationRegion.generate();
 		}
 
@@ -318,7 +318,7 @@ public class WorldGenerator
 		return false;
 	}
 
-	@SuppressWarnings("ConstantConditions") private IntBounds2D determineFloatMapBounds(FloatMap floatMap)
+	private IntBounds2D determineFloatMapBounds(FloatMap floatMap)
 	{
 		int minX = Integer.MAX_VALUE;
 		int maxX = Integer.MIN_VALUE;
@@ -333,15 +333,11 @@ public class WorldGenerator
 				if(value == 0)
 					continue;
 
-				if(x < minX)
-					minX = x;
-				if(x > maxX)
-					maxX = x;
+				minX = Math.min(minX, x);
+				maxX = Math.max(maxX, x);
 
-				if(z < minZ)
-					minZ = z;
-				if(z > maxZ)
-					maxZ = z;
+				minZ = Math.min(minZ, z);
+				maxZ = Math.max(maxZ, z);
 			}
 
 		// float map is empty
