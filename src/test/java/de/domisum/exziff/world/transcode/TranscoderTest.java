@@ -24,7 +24,7 @@ public class TranscoderTest
 		Random random = new Random(0xaffe);
 
 		for(int test = 0; test < 1000; test++)
-			assertEncodeDecodeIntEquals(transcoder, random.nextInt(500), random.nextInt());
+			assertEncodeDecodeIntEquals(transcoder, random.nextInt(), random.nextInt());
 	}
 
 
