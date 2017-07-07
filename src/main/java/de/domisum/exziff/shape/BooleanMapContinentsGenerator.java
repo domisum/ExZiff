@@ -157,9 +157,8 @@ public class BooleanMapContinentsGenerator extends BooleanMapGenerator
 		{
 			int intersects = 0;
 			for(LineSegment2D ls : newPolygon.getLines())
-				if(!lineSegment.equals(ls))
-					if(lineSegment.intersects(ls))
-						intersects++;
+				if(!lineSegment.equals(ls) && lineSegment.intersects(ls))
+					intersects++;
 
 			if(intersects != 2)
 				return false;
