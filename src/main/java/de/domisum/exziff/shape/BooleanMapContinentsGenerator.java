@@ -149,52 +149,6 @@ public class BooleanMapContinentsGenerator extends BooleanMapGenerator
 		return valid;
 	}
 
-
-	private boolean validateReplacementPolygon(Polygon2D newPolygon, Polygon2D toReplace)
-	{
-		// polygon self intersection
-		for(LineSegment2D lineSegment : newPolygon.getLines())
-		{
-			int intersects = 0;
-			for(LineSegment2D ls : newPolygon.getLines())
-				if(!lineSegment.equals(ls) && lineSegment.intersects(ls))
-					intersects++;
-
-			if(intersects != 2)
-				return false;
-		}
-
-		// too close to other polygons
-		for(Polygon2D p : this.polygons)
-		{
-			if(p.equals(toReplace))
-				continue;
-
-			if(newPolygon.getDistanceTo(p) < this.minPolygonPolygonDistance)
-				return false;
-		}
-
-		// too close to edge
-		if(this.OUTSIDE_EDGE_POLYGON.getDistanceTo(newPolygon) < this.minPolygonEdgeDistance)
-			return false;
-
-		// avoid too pointy angles
-		LineSegment2D lineSegmentBefore = newPolygon.getLines().get(newPolygon.getLines().size()-1);
-		for(LineSegment2D ls : newPolygon.getLines())
-		{
-			double angleRad = lineSegmentBefore.getDirection().getAngleTo(ls.getDirection().invert());
-
-			if(Math.toDegrees(angleRad) < this.minPolygonCornerAngleDeg)
-				return false;
-
-			lineSegmentBefore = ls;
-		}
-
-		// TODO add line to line distance check
-
-		return true;
-	}
-
 	private PolygonSide getLongestSide()
 	{
 		Polygon2D longestSidePolygon = null;
@@ -219,7 +173,76 @@ public class BooleanMapContinentsGenerator extends BooleanMapGenerator
 	}
 
 
-	// conversion
+	// validation
+	private boolean validateReplacementPolygon(Polygon2D newPolygon, Polygon2D toReplace)
+	{
+		if(doesPolygonSelfIntersect(newPolygon))
+			return false;
+
+		if(isPolygonTooCloseToOtherPolygons(newPolygon, toReplace))
+			return false;
+
+		// too close to edge
+		if(this.OUTSIDE_EDGE_POLYGON.getDistanceTo(newPolygon) < this.minPolygonEdgeDistance)
+			return false;
+
+		// avoid too pointy angles
+		if(doesPolygonHaveTooPointyAngles(newPolygon, this.minPolygonCornerAngleDeg))
+			return false;
+
+		// TODO add line to line distance check
+
+		return true;
+	}
+
+	private static boolean doesPolygonSelfIntersect(Polygon2D polygon)
+	{
+		for(LineSegment2D lineSegment : polygon.getLines())
+		{
+			int intersects = 0;
+			for(LineSegment2D ls : polygon.getLines())
+				if(!lineSegment.equals(ls) && lineSegment.intersects(ls))
+					intersects++;
+
+			if(intersects != 2)
+				return true;
+		}
+
+		return false;
+	}
+
+	private boolean isPolygonTooCloseToOtherPolygons(Polygon2D polygon, Polygon2D ignore)
+	{
+		for(Polygon2D p : this.polygons)
+		{
+			if(p.equals(ignore))
+				continue;
+
+			if(polygon.getDistanceTo(p) < this.minPolygonPolygonDistance)
+				return true;
+		}
+
+		return false;
+	}
+
+	private static boolean doesPolygonHaveTooPointyAngles(Polygon2D polygon, double minAngleDeg)
+	{
+		LineSegment2D lineSegmentBefore = polygon.getLines().get(polygon.getLines().size()-1);
+		for(LineSegment2D ls : polygon.getLines())
+		{
+			double angleRad = lineSegmentBefore.getDirection().getAngleTo(ls.getDirection().invert());
+
+			if(Math.toDegrees(angleRad) < minAngleDeg)
+				return true;
+
+			lineSegmentBefore = ls;
+		}
+
+		return false;
+	}
+
+
+	// CONVERSION
 	private void convertToBooleanMap()
 	{
 		int downscaledSize = this.size/this.downscalingFactor;
@@ -242,6 +265,7 @@ public class BooleanMapContinentsGenerator extends BooleanMapGenerator
 	}
 
 
+	// POLYGONSIDE
 	@AllArgsConstructor
 	private class PolygonSide
 	{
