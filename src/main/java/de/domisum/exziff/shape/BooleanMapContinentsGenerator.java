@@ -179,7 +179,9 @@ public class BooleanMapContinentsGenerator extends BooleanMapGenerator
 		if(doesPolygonSelfIntersect(newPolygon))
 			return false;
 
-		if(isPolygonTooCloseToOtherPolygons(newPolygon, toReplace))
+		List<Polygon2D> otherPolygons = new ArrayList<>(this.polygons);
+		otherPolygons.remove(toReplace);
+		if(isPolygonTooCloseToOtherPolygons(newPolygon, otherPolygons, this.minPolygonPolygonDistance))
 			return false;
 
 		// too close to edge
@@ -211,16 +213,11 @@ public class BooleanMapContinentsGenerator extends BooleanMapGenerator
 		return false;
 	}
 
-	private boolean isPolygonTooCloseToOtherPolygons(Polygon2D polygon, Polygon2D ignore)
+	private static boolean isPolygonTooCloseToOtherPolygons(Polygon2D polygon, List<Polygon2D> others, double minDistance)
 	{
-		for(Polygon2D p : this.polygons)
-		{
-			if(p.equals(ignore))
-				continue;
-
-			if(polygon.getDistanceTo(p) < this.minPolygonPolygonDistance)
+		for(Polygon2D p : others)
+			if(polygon.getDistanceTo(p) < minDistance)
 				return true;
-		}
 
 		return false;
 	}
