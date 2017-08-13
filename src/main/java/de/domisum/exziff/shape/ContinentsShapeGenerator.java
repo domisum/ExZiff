@@ -64,7 +64,7 @@ public class ContinentsShapeGenerator extends BooleanMapGenerator
 	@Override public BooleanMap generate()
 	{
 		this.random = new Random(this.seed);
-		System.out.println(seed);
+		System.out.println(this.seed);
 
 		generateBasePolygons();
 		deformPolygons();
@@ -201,6 +201,7 @@ public class ContinentsShapeGenerator extends BooleanMapGenerator
 			deformSuccess = tryDeformPolygonSide(polygonSide, orthogonalOutward);
 			deformTries++;
 
+			// debugging purpose, remove later
 			if(deformTries > 1000)
 				exportFail(polygonSide);
 		}
