@@ -2,6 +2,7 @@ package de.domisum.exziff.shape;
 
 import de.domisum.exziff.map.BooleanMap;
 import de.domisum.exziff.map.generator.bool.BooleanMapGenerator;
+import de.domisum.exziff.map.generator.bool.BooleanMapPolygonGenerator;
 import de.domisum.lib.auxilium.data.container.math.LineSegment2D;
 import de.domisum.lib.auxilium.data.container.math.Polygon2D;
 import de.domisum.lib.auxilium.data.container.math.Vector2D;
@@ -46,9 +47,6 @@ public class ContinentsShapeGenerator extends BooleanMapGenerator
 	private Random random;
 	private List<Polygon2D> polygons = new ArrayList<>();
 
-	// output
-	private BooleanMap output;
-
 
 	// INIT
 	public ContinentsShapeGenerator(int size, long seed)
@@ -65,9 +63,9 @@ public class ContinentsShapeGenerator extends BooleanMapGenerator
 
 		generateBasePolygons();
 		deformPolygons();
-		convertToBooleanMap();
 
-		return this.output;
+		BooleanMapPolygonGenerator generator = new BooleanMapPolygonGenerator(this.size/this.downscalingFactor, this.polygons);
+		return generator.generate();
 	}
 
 
@@ -260,7 +258,7 @@ public class ContinentsShapeGenerator extends BooleanMapGenerator
 	}
 
 
-	// validation
+	// VALIDATION
 	private boolean validateReplacementPolygon(Polygon2D newPolygon, Polygon2D toReplace)
 	{
 		if(doesPolygonSelfIntersect(newPolygon))
@@ -323,29 +321,6 @@ public class ContinentsShapeGenerator extends BooleanMapGenerator
 		}
 
 		return false;
-	}
-
-
-	// CONVERSION
-	private void convertToBooleanMap()
-	{
-		int downscaledSize = this.size/this.downscalingFactor;
-		this.output = new BooleanMap(downscaledSize, downscaledSize);
-
-		for(int y = 0; y < downscaledSize; y++)
-			for(int x = 0; x < downscaledSize; x++)
-			{
-				double rX = (double) x/downscaledSize;
-				double rY = (double) y/downscaledSize;
-				Vector2D relPos = new Vector2D(rX, rY);
-
-				for(Polygon2D p : this.polygons)
-					if(p.contains(relPos))
-					{
-						this.output.set(x, y, true);
-						break;
-					}
-			}
 	}
 
 
