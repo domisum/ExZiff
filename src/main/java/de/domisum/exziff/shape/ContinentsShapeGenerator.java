@@ -35,15 +35,16 @@ public class ContinentsShapeGenerator extends BooleanMapGenerator
 	@Getter @Setter private int desiredPolygonsBase = 3;
 	@Getter @Setter private int desiredPolygonsMaxDifference = 1;
 
-	@Getter @Setter private double desiredMaxSideLength = 0.05;
+	@Getter @Setter private double desiredMaxSideLength = 0.06;
 	@Getter @Setter private double maxDivisionBasePointCenterOffset = 0.15;
 	@Getter @Setter private double maxInwardsOffsetMultiplier = 0.5;
 	@Getter @Setter private double maxOutwardsOffsetMultiplier = 0.9;
 
 	@Getter @Setter private double minPolygonPolygonDistance = 0.08;
 	@Getter @Setter private double minPolygonEdgeDistance = 0.08;
-	@Getter @Setter private double minPolygonCornerAngleDeg = 30;
-	@Getter @Setter private double minPolygonPointLineDistance = 0.05;
+	@Getter @Setter private double minPolygonConvexCornerAngleDeg = 35;
+	@Getter @Setter private double minPolygonConcaveCornerAngleDeg = 50;
+	@Getter @Setter private double minPolygonLineLineDistance = 0.06;
 
 	@Getter @Setter private int downscalingFactor = 1;
 
@@ -85,7 +86,7 @@ public class ContinentsShapeGenerator extends BooleanMapGenerator
 		{
 			Polygon2D newPolygon = generateMiniBasePolygon();
 
-			boolean valid = validateReplacementPolygon(newPolygon, null, 0);
+			boolean valid = validateReplacementPolygon(newPolygon, null);
 			if(valid)
 				this.polygons.add(newPolygon);
 		}
@@ -97,8 +98,7 @@ public class ContinentsShapeGenerator extends BooleanMapGenerator
 
 			Polygon2D modified = modifyBasePolygon(toModify);
 
-
-			boolean valid = validateReplacementPolygon(modified, toModify, 0);
+			boolean valid = validateReplacementPolygon(modified, toModify);
 			if(valid)
 			{
 				this.polygons.remove(toModify);
@@ -109,7 +109,7 @@ public class ContinentsShapeGenerator extends BooleanMapGenerator
 
 	private Polygon2D generateMiniBasePolygon()
 	{
-		double radius = 0.1;
+		double radius = 0.05;
 
 		double centerX = RandomUtil.getFromRange(this.minPolygonEdgeDistance, 1-this.minPolygonEdgeDistance, this.random);
 		double centerY = RandomUtil.getFromRange(this.minPolygonEdgeDistance, 1-this.minPolygonEdgeDistance, this.random);
@@ -236,7 +236,7 @@ public class ContinentsShapeGenerator extends BooleanMapGenerator
 
 
 		// validate polygon, if valid replace old poly with new poly
-		boolean valid = validateReplacementPolygon(newPolygon, polygonSide.polygon, polygonSide.sideIndex+1);
+		boolean valid = validateReplacementPolygon(newPolygon, polygonSide.polygon);
 		if(valid)
 		{
 			this.polygons.remove(polygonSide.polygon);
@@ -271,7 +271,7 @@ public class ContinentsShapeGenerator extends BooleanMapGenerator
 
 
 	// VALIDATION
-	private boolean validateReplacementPolygon(Polygon2D newPolygon, Polygon2D toReplace, int newPointIndex)
+	private boolean validateReplacementPolygon(Polygon2D newPolygon, Polygon2D toReplace)
 	{
 		if(doesPolygonSelfIntersect(newPolygon))
 			return false;
@@ -286,11 +286,11 @@ public class ContinentsShapeGenerator extends BooleanMapGenerator
 			return false;
 
 		// avoid too pointy angles
-		if(doesPolygonHaveTooPointyAngles(newPolygon, this.minPolygonCornerAngleDeg))
+		if(doesPolygonHaveTooPointyAngles(newPolygon, this.minPolygonConvexCornerAngleDeg, this.minPolygonConcaveCornerAngleDeg))
 			return false;
 
 		// avoid very narrow landbridges and very narrow sections of sea
-		if(isPolygonTooCloseToSelf(newPolygon, newPointIndex, this.minPolygonPointLineDistance))
+		if(isPolygonTooCloseToSelf(newPolygon, this.minPolygonLineLineDistance, this.desiredMaxSideLength))
 			return false;
 
 		return true;
@@ -321,66 +321,74 @@ public class ContinentsShapeGenerator extends BooleanMapGenerator
 		return false;
 	}
 
-	private static boolean doesPolygonHaveTooPointyAngles(Polygon2D polygon, double minAngleDeg)
+	private static boolean doesPolygonHaveTooPointyAngles(Polygon2D polygon, double minConvexAngleDeg, double minConcaveAngleDeg)
 	{
-		LineSegment2D lineSegmentBefore = polygon.getLines().get(polygon.getLines().size()-1);
-		for(LineSegment2D ls : polygon.getLines())
+		// initialize with last linesegment, since it is first.before
+		for(Polygon2D.PolygonCorner pc : polygon.getCorners())
 		{
-			double angleRad = lineSegmentBefore.getDirection().getAngleToRad(ls.getDirection().invert());
+			double minAngleDeg =
+					pc.orientation == Polygon2D.PolygonCornerOrientation.CONVEX ? minConvexAngleDeg : minConcaveAngleDeg;
 
-			if(Math.toDegrees(angleRad) < minAngleDeg)
+			if(pc.angleDegAbs < minAngleDeg)
 				return true;
-
-			lineSegmentBefore = ls;
 		}
 
 		return false;
 	}
 
-	private static boolean isPolygonTooCloseToSelf(Polygon2D polygon, int newPointIndex, double minPointLineDistance)
+	private static boolean isPolygonTooCloseToSelf(Polygon2D polygon, double minLineLineDistance, double lineDistanceBuffer)
 	{
 		int size = polygon.points.size();
 
-		for(int pi = newPointIndex; pi <= newPointIndex; pi++)
-		{
-			Vector2D point = polygon.points.get(pi);
-
-			LineSegment2D lsBefore = polygon.getLines().get(pi != 0 ? pi-1 : size-1);
-			LineSegment2D lsAfter = polygon.getLines().get(pi != size-1 ? pi+1 : 0);
-			Vector2D pointDirection = lsBefore.getDirection().add(lsAfter.getDirection()).normalize();
-
-			for(int li = 0; li < size; li++)
+		for(int li1 = 0; li1 < size; li1++)
+			for(int li2 = 0; li2 < size; li2++)
 			{
-				// skip lines that are close neighbors of the point
-				if(isPointNearLine(pi, li, size))
+				if(li1 == li2)
 					continue;
 
-				LineSegment2D line = polygon.getLines().get(li);
-				double angleDeg = pointDirection.getAngleToDeg(line.getDirection());
-
-				// skip lines that are not opposing the point
-				if(angleDeg < 90)
+				// if this applies, we already went through the line combination before, with indexes switched
+				if(li2 < li1)
 					continue;
 
-				if(line.getDistanceTo(point) < minPointLineDistance)
+				double throughLinesDistance = getLineLineDistanceThroughLines(polygon, li1, li2);
+				if(throughLinesDistance == 0) // lines are direct neighbors
+					continue;
+
+				double directDistance = polygon.getLines().get(li1).getDistanceTo(polygon.getLines().get(li2));
+
+				// are lines far enough apart to check absolute distance
+				if(throughLinesDistance/(directDistance+lineDistanceBuffer) < 2)
+					continue;
+
+				if(directDistance < minLineLineDistance)
 				{
-					System.out.println(pi+" "+li);
+					//System.out.println(li1+" "+li2 + " tl: " + throughLinesDistance + " direct: " + directDistance);
 					return true;
 				}
 			}
-		}
 
 		return false;
 	}
 
-
-	private static boolean isPointNearLine(int pi, int li, int size)
+	private static double getLineLineDistanceThroughLines(Polygon2D polygon, int li1, int li2)
 	{
-		int directDistance = pi > li ? pi-li-1 : li-pi;
-		int overEdgeDistance = pi > li ? li+(size-pi) : pi+(size-li)-1;
+		int minIndex = Math.min(li1, li2);
+		int maxIndex = Math.max(li1, li2);
 
-		int minDistance = Math.min(directDistance, overEdgeDistance);
-		return minDistance <= 0;
+		double betweenDistance = 0;
+		double overEdgeDistance = 0;
+		for(int i = 0; i < polygon.getLines().size(); i++)
+		{
+			double lineLength = polygon.getLines().get(i).getLength();
+
+			if(i > minIndex && i < maxIndex)
+				betweenDistance += lineLength;
+
+			if(i < minIndex || i > maxIndex)
+				overEdgeDistance += lineLength;
+		}
+
+		return Math.min(betweenDistance, overEdgeDistance);
 	}
 
 
