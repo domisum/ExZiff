@@ -1,16 +1,20 @@
 package de.domisum.exziff.shape;
 
 import de.domisum.exziff.map.BooleanMap;
+import de.domisum.exziff.map.exporter.bool.BooleanMapImageExporter;
 import de.domisum.exziff.map.generator.bool.BooleanMapGenerator;
 import de.domisum.exziff.map.generator.bool.BooleanMapPolygonGenerator;
 import de.domisum.lib.auxilium.data.container.math.LineSegment2D;
 import de.domisum.lib.auxilium.data.container.math.Polygon2D;
 import de.domisum.lib.auxilium.data.container.math.Vector2D;
+import de.domisum.lib.auxilium.util.ImageUtil;
 import de.domisum.lib.auxilium.util.math.RandomUtil;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -39,7 +43,7 @@ public class ContinentsShapeGenerator extends BooleanMapGenerator
 	@Getter @Setter private double minPolygonPolygonDistance = 0.08;
 	@Getter @Setter private double minPolygonEdgeDistance = 0.08;
 	@Getter @Setter private double minPolygonCornerAngleDeg = 30;
-	@Getter @Setter private double minPolygonLineLineDistance = 0.02;
+	@Getter @Setter private double minPolygonPointLineDistance = 0.05;
 
 	@Getter @Setter private int downscalingFactor = 1;
 
@@ -60,6 +64,7 @@ public class ContinentsShapeGenerator extends BooleanMapGenerator
 	@Override public BooleanMap generate()
 	{
 		this.random = new Random(this.seed);
+		System.out.println(seed);
 
 		generateBasePolygons();
 		deformPolygons();
@@ -80,7 +85,7 @@ public class ContinentsShapeGenerator extends BooleanMapGenerator
 		{
 			Polygon2D newPolygon = generateMiniBasePolygon();
 
-			boolean valid = validateReplacementPolygon(newPolygon, null);
+			boolean valid = validateReplacementPolygon(newPolygon, null, 0);
 			if(valid)
 				this.polygons.add(newPolygon);
 		}
@@ -93,7 +98,7 @@ public class ContinentsShapeGenerator extends BooleanMapGenerator
 			Polygon2D modified = modifyBasePolygon(toModify);
 
 
-			boolean valid = validateReplacementPolygon(modified, toModify);
+			boolean valid = validateReplacementPolygon(modified, toModify, 0);
 			if(valid)
 			{
 				this.polygons.remove(toModify);
@@ -189,10 +194,16 @@ public class ContinentsShapeGenerator extends BooleanMapGenerator
 		else
 			orthogonalOutward = orthogonal.invert();
 
-
+		int deformTries = 0;
 		boolean deformSuccess = false;
 		while(!deformSuccess)
+		{
 			deformSuccess = tryDeformPolygonSide(polygonSide, orthogonalOutward);
+			deformTries++;
+
+			if(deformTries > 1000)
+				exportFail(polygonSide);
+		}
 	}
 
 	private boolean tryDeformPolygonSide(PolygonSide polygonSide, Vector2D orthogonalOutward)
@@ -224,7 +235,7 @@ public class ContinentsShapeGenerator extends BooleanMapGenerator
 
 
 		// validate polygon, if valid replace old poly with new poly
-		boolean valid = validateReplacementPolygon(newPolygon, polygonSide.polygon);
+		boolean valid = validateReplacementPolygon(newPolygon, polygonSide.polygon, polygonSide.sideIndex+1);
 		if(valid)
 		{
 			this.polygons.remove(polygonSide.polygon);
@@ -259,7 +270,7 @@ public class ContinentsShapeGenerator extends BooleanMapGenerator
 
 
 	// VALIDATION
-	private boolean validateReplacementPolygon(Polygon2D newPolygon, Polygon2D toReplace)
+	private boolean validateReplacementPolygon(Polygon2D newPolygon, Polygon2D toReplace, int newPointIndex)
 	{
 		if(doesPolygonSelfIntersect(newPolygon))
 			return false;
@@ -277,7 +288,9 @@ public class ContinentsShapeGenerator extends BooleanMapGenerator
 		if(doesPolygonHaveTooPointyAngles(newPolygon, this.minPolygonCornerAngleDeg))
 			return false;
 
-		// TODO add line to line distance check
+		// avoid very narrow landbridges and very narrow sections of sea
+		if(isPolygonTooCloseToSelf(newPolygon, newPointIndex, this.minPolygonPointLineDistance))
+			return false;
 
 		return true;
 	}
@@ -312,7 +325,7 @@ public class ContinentsShapeGenerator extends BooleanMapGenerator
 		LineSegment2D lineSegmentBefore = polygon.getLines().get(polygon.getLines().size()-1);
 		for(LineSegment2D ls : polygon.getLines())
 		{
-			double angleRad = lineSegmentBefore.getDirection().getAngleTo(ls.getDirection().invert());
+			double angleRad = lineSegmentBefore.getDirection().getAngleToRad(ls.getDirection().invert());
 
 			if(Math.toDegrees(angleRad) < minAngleDeg)
 				return true;
@@ -321,6 +334,52 @@ public class ContinentsShapeGenerator extends BooleanMapGenerator
 		}
 
 		return false;
+	}
+
+	private static boolean isPolygonTooCloseToSelf(Polygon2D polygon, int newPointIndex, double minPointLineDistance)
+	{
+		int size = polygon.points.size();
+
+		for(int pi = newPointIndex; pi <= newPointIndex; pi++)
+		{
+			Vector2D point = polygon.points.get(pi);
+
+			LineSegment2D lsBefore = polygon.getLines().get(pi != 0 ? pi-1 : size-1);
+			LineSegment2D lsAfter = polygon.getLines().get(pi != size-1 ? pi+1 : 0);
+			Vector2D pointDirection = lsBefore.getDirection().add(lsAfter.getDirection()).normalize();
+
+			for(int li = 0; li < size; li++)
+			{
+				// skip lines that are close neighbors of the point
+				if(isPointNearLine(pi, li, size))
+					continue;
+
+				LineSegment2D line = polygon.getLines().get(li);
+				double angleDeg = pointDirection.getAngleToDeg(line.getDirection());
+
+				// skip lines that are not opposing the point
+				if(angleDeg < 90)
+					continue;
+
+				if(line.getDistanceTo(point) < minPointLineDistance)
+				{
+					System.out.println(pi+" "+li);
+					return true;
+				}
+			}
+		}
+
+		return false;
+	}
+
+
+	private static boolean isPointNearLine(int pi, int li, int size)
+	{
+		int directDistance = pi > li ? pi-li-1 : li-pi;
+		int overEdgeDistance = pi > li ? li+(size-pi) : pi+(size-li)-1;
+
+		int minDistance = Math.min(directDistance, overEdgeDistance);
+		return minDistance <= 0;
 	}
 
 
@@ -339,6 +398,37 @@ public class ContinentsShapeGenerator extends BooleanMapGenerator
 			return this.polygon.getLines().get(this.sideIndex);
 		}
 
+	}
+
+
+	private static void exportFail(PolygonSide polygonSide)
+	{
+		System.out.println("fail");
+		System.out.println(polygonSide.sideIndex);
+
+		List<Polygon2D> polygons = new ArrayList<>();
+		polygons.add(polygonSide.polygon);
+		BooleanMapPolygonGenerator generator = new BooleanMapPolygonGenerator(1024, polygons);
+		BooleanMap booleanMap = generator.generate();
+
+		LineSegment2D ls = polygonSide.getLineSegment();
+
+		double d = 0.001;
+		for(int x = 0; x < 1024; x++)
+			for(int y = 0; y < 1024; y++)
+			{
+				double rX = x/1024d;
+				double rY = y/1024d;
+				if(Math.abs(rX-ls.a.x) < d || Math.abs(rX-ls.b.x) < d || Math.abs(rY-ls.a.y) < d || Math.abs(rY-ls.b.y) < d)
+					booleanMap.set(x, y, true);
+			}
+
+		BooleanMapImageExporter exporter = new BooleanMapImageExporter();
+		BufferedImage image = exporter.export(booleanMap);
+		ImageUtil.writeImage(new File("C:\\Users\\domisum\\testChamber\\continentFail.png"), image);
+
+
+		System.exit(0);
 	}
 
 }
