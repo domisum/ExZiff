@@ -1,21 +1,17 @@
 package de.domisum.exziff.shape;
 
 import de.domisum.exziff.map.BooleanMap;
-import de.domisum.exziff.map.exporter.bool.BooleanMapImageExporter;
 import de.domisum.exziff.map.generator.bool.BooleanMapGenerator;
 import de.domisum.exziff.map.generator.bool.BooleanMapPolygonGenerator;
 import de.domisum.exziff.shape.continent.ContinentShapePolygonValidator;
 import de.domisum.lib.auxilium.data.container.math.LineSegment2D;
 import de.domisum.lib.auxilium.data.container.math.Polygon2D;
 import de.domisum.lib.auxilium.data.container.math.Vector2D;
-import de.domisum.lib.auxilium.util.ImageUtil;
 import de.domisum.lib.auxilium.util.math.RandomUtil;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.awt.image.BufferedImage;
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -189,17 +185,9 @@ public class ContinentsShapeGenerator extends BooleanMapGenerator
 		else
 			orthogonalOutward = orthogonal.invert();
 
-		int deformTries = 0;
 		boolean deformSuccess = false;
 		while(!deformSuccess)
-		{
 			deformSuccess = tryDeformPolygonSide(polygonSide, orthogonalOutward);
-			deformTries++;
-
-			// debugging purpose, remove later
-			if(deformTries > 1000)
-				exportFail(polygonSide);
-		}
 	}
 
 	private boolean tryDeformPolygonSide(PolygonSide polygonSide, Vector2D orthogonalOutward)
@@ -280,37 +268,6 @@ public class ContinentsShapeGenerator extends BooleanMapGenerator
 			return this.polygon.getLines().get(this.sideIndex);
 		}
 
-	}
-
-
-	private static void exportFail(PolygonSide polygonSide)
-	{
-		System.out.println("fail");
-		System.out.println(polygonSide.sideIndex);
-
-		List<Polygon2D> polygons = new ArrayList<>();
-		polygons.add(polygonSide.polygon);
-		BooleanMapPolygonGenerator generator = new BooleanMapPolygonGenerator(1024, polygons);
-		BooleanMap booleanMap = generator.generate();
-
-		LineSegment2D ls = polygonSide.getLineSegment();
-
-		double d = 0.001;
-		for(int x = 0; x < 1024; x++)
-			for(int y = 0; y < 1024; y++)
-			{
-				double rX = x/1024d;
-				double rY = y/1024d;
-				if(Math.abs(rX-ls.a.x) < d || Math.abs(rX-ls.b.x) < d || Math.abs(rY-ls.a.y) < d || Math.abs(rY-ls.b.y) < d)
-					booleanMap.set(x, y, true);
-			}
-
-		BooleanMapImageExporter exporter = new BooleanMapImageExporter();
-		BufferedImage image = exporter.export(booleanMap);
-		ImageUtil.writeImage(new File("C:\\Users\\domisum\\testChamber\\continentFail.png"), image);
-
-
-		System.exit(0);
 	}
 
 }
