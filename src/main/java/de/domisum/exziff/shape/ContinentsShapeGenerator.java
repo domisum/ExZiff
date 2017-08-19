@@ -55,7 +55,6 @@ public class ContinentsShapeGenerator extends BooleanMapGenerator
 	@Override public BooleanMap generate()
 	{
 		this.random = new Random(this.seed);
-		System.out.println(this.seed);
 
 		generateBasePolygons();
 		deformPolygons();
