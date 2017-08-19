@@ -4,6 +4,7 @@ import de.domisum.exziff.map.BooleanMap;
 import de.domisum.exziff.map.exporter.bool.BooleanMapImageExporter;
 import de.domisum.exziff.map.generator.bool.BooleanMapGenerator;
 import de.domisum.exziff.map.generator.bool.BooleanMapPolygonGenerator;
+import de.domisum.exziff.shape.continent.ContinentShapePolygonValidator;
 import de.domisum.lib.auxilium.data.container.math.LineSegment2D;
 import de.domisum.lib.auxilium.data.container.math.Polygon2D;
 import de.domisum.lib.auxilium.data.container.math.Vector2D;
@@ -24,10 +25,6 @@ import java.util.Vector;
 public class ContinentsShapeGenerator extends BooleanMapGenerator
 {
 
-	// CONSTANTS
-	private Polygon2D OUTSIDE_EDGE_POLYGON = new Polygon2D(new Vector2D(0, 0), new Vector2D(1, 0), new Vector2D(1, 1),
-			new Vector2D(0, 1), new Vector2D(0, 0), new Vector2D(-1, 2), new Vector2D(2, 2), new Vector2D(2, -1));
-
 	// settings
 	private int size;
 	private long seed;
@@ -40,13 +37,10 @@ public class ContinentsShapeGenerator extends BooleanMapGenerator
 	@Getter @Setter private double maxInwardsOffsetMultiplier = 0.5;
 	@Getter @Setter private double maxOutwardsOffsetMultiplier = 0.9;
 
-	@Getter @Setter private double minPolygonPolygonDistance = 0.08;
-	@Getter @Setter private double minPolygonEdgeDistance = 0.08;
-	@Getter @Setter private double minPolygonConvexCornerAngleDeg = 35;
-	@Getter @Setter private double minPolygonConcaveCornerAngleDeg = 50;
-	@Getter @Setter private double minPolygonLineLineDistance = 0.06;
-
 	@Getter @Setter private int downscalingFactor = 1;
+
+	// references
+	private ContinentShapePolygonValidator polygonValidator = new ContinentShapePolygonValidator();
 
 	// temp
 	private Random random;
@@ -86,7 +80,7 @@ public class ContinentsShapeGenerator extends BooleanMapGenerator
 		{
 			Polygon2D newPolygon = generateMiniBasePolygon();
 
-			boolean valid = validateReplacementPolygon(newPolygon, null);
+			boolean valid = this.polygonValidator.validatePolygon(newPolygon, null, this.polygons);
 			if(valid)
 				this.polygons.add(newPolygon);
 		}
@@ -98,7 +92,7 @@ public class ContinentsShapeGenerator extends BooleanMapGenerator
 
 			Polygon2D modified = modifyBasePolygon(toModify);
 
-			boolean valid = validateReplacementPolygon(modified, toModify);
+			boolean valid = this.polygonValidator.validatePolygon(modified, toModify, this.polygons);
 			if(valid)
 			{
 				this.polygons.remove(toModify);
@@ -111,8 +105,9 @@ public class ContinentsShapeGenerator extends BooleanMapGenerator
 	{
 		double radius = 0.05;
 
-		double centerX = RandomUtil.getFromRange(this.minPolygonEdgeDistance, 1-this.minPolygonEdgeDistance, this.random);
-		double centerY = RandomUtil.getFromRange(this.minPolygonEdgeDistance, 1-this.minPolygonEdgeDistance, this.random);
+		double edgeDistance = this.polygonValidator.getMinPolygonEdgeDistance();
+		double centerX = RandomUtil.getFromRange(edgeDistance, 1-edgeDistance, this.random);
+		double centerY = RandomUtil.getFromRange(edgeDistance, 1-edgeDistance, this.random);
 		Vector2D center = new Vector2D(centerX, centerY);
 
 		List<Vector2D> points = new Vector<>();
@@ -236,7 +231,7 @@ public class ContinentsShapeGenerator extends BooleanMapGenerator
 
 
 		// validate polygon, if valid replace old poly with new poly
-		boolean valid = validateReplacementPolygon(newPolygon, polygonSide.polygon);
+		boolean valid = this.polygonValidator.validatePolygon(newPolygon, polygonSide.polygon, this.polygons);
 		if(valid)
 		{
 			this.polygons.remove(polygonSide.polygon);
@@ -267,128 +262,6 @@ public class ContinentsShapeGenerator extends BooleanMapGenerator
 			}
 
 		return new PolygonSide(longestSidePolygon, longestSideIndex);
-	}
-
-
-	// VALIDATION
-	private boolean validateReplacementPolygon(Polygon2D newPolygon, Polygon2D toReplace)
-	{
-		if(doesPolygonSelfIntersect(newPolygon))
-			return false;
-
-		List<Polygon2D> otherPolygons = new ArrayList<>(this.polygons);
-		otherPolygons.remove(toReplace);
-		if(isPolygonTooCloseToOtherPolygons(newPolygon, otherPolygons, this.minPolygonPolygonDistance))
-			return false;
-
-		// too close to edge
-		if(this.OUTSIDE_EDGE_POLYGON.getDistanceTo(newPolygon) < this.minPolygonEdgeDistance)
-			return false;
-
-		// avoid too pointy angles
-		if(doesPolygonHaveTooPointyAngles(newPolygon, this.minPolygonConvexCornerAngleDeg, this.minPolygonConcaveCornerAngleDeg))
-			return false;
-
-		// avoid very narrow landbridges and very narrow sections of sea
-		if(isPolygonTooCloseToSelf(newPolygon, this.minPolygonLineLineDistance, this.desiredMaxSideLength))
-			return false;
-
-		return true;
-	}
-
-	private static boolean doesPolygonSelfIntersect(Polygon2D polygon)
-	{
-		for(LineSegment2D lineSegment : polygon.getLines())
-		{
-			int intersects = 0;
-			for(LineSegment2D ls : polygon.getLines())
-				if(!lineSegment.equals(ls) && lineSegment.intersects(ls))
-					intersects++;
-
-			if(intersects != 2)
-				return true;
-		}
-
-		return false;
-	}
-
-	private static boolean isPolygonTooCloseToOtherPolygons(Polygon2D polygon, List<Polygon2D> others, double minDistance)
-	{
-		for(Polygon2D p : others)
-			if(polygon.getDistanceTo(p) < minDistance)
-				return true;
-
-		return false;
-	}
-
-	private static boolean doesPolygonHaveTooPointyAngles(Polygon2D polygon, double minConvexAngleDeg, double minConcaveAngleDeg)
-	{
-		// initialize with last linesegment, since it is first.before
-		for(Polygon2D.PolygonCorner pc : polygon.getCorners())
-		{
-			double minAngleDeg =
-					pc.orientation == Polygon2D.PolygonCornerOrientation.CONVEX ? minConvexAngleDeg : minConcaveAngleDeg;
-
-			if(pc.angleDegAbs < minAngleDeg)
-				return true;
-		}
-
-		return false;
-	}
-
-	private static boolean isPolygonTooCloseToSelf(Polygon2D polygon, double minLineLineDistance, double lineDistanceBuffer)
-	{
-		int size = polygon.points.size();
-
-		for(int li1 = 0; li1 < size; li1++)
-			for(int li2 = 0; li2 < size; li2++)
-			{
-				if(li1 == li2)
-					continue;
-
-				// if this applies, we already went through the line combination before, with indexes switched
-				if(li2 < li1)
-					continue;
-
-				double throughLinesDistance = getLineLineDistanceThroughLines(polygon, li1, li2);
-				if(throughLinesDistance == 0) // lines are direct neighbors
-					continue;
-
-				double directDistance = polygon.getLines().get(li1).getDistanceTo(polygon.getLines().get(li2));
-
-				// are lines far enough apart to check absolute distance
-				if(throughLinesDistance/(directDistance+lineDistanceBuffer) < 2)
-					continue;
-
-				if(directDistance < minLineLineDistance)
-				{
-					//System.out.println(li1+" "+li2 + " tl: " + throughLinesDistance + " direct: " + directDistance);
-					return true;
-				}
-			}
-
-		return false;
-	}
-
-	private static double getLineLineDistanceThroughLines(Polygon2D polygon, int li1, int li2)
-	{
-		int minIndex = Math.min(li1, li2);
-		int maxIndex = Math.max(li1, li2);
-
-		double betweenDistance = 0;
-		double overEdgeDistance = 0;
-		for(int i = 0; i < polygon.getLines().size(); i++)
-		{
-			double lineLength = polygon.getLines().get(i).getLength();
-
-			if(i > minIndex && i < maxIndex)
-				betweenDistance += lineLength;
-
-			if(i < minIndex || i > maxIndex)
-				overEdgeDistance += lineLength;
-		}
-
-		return Math.min(betweenDistance, overEdgeDistance);
 	}
 
 
