@@ -38,7 +38,7 @@ public class ContinentShapePolygonDeformer
 
 
 	// DEFORM
-	public List<Polygon2D> deformPolygons(List<Polygon2D> polygons)
+	public synchronized List<Polygon2D> deformPolygons(List<Polygon2D> polygons)
 	{
 		this.polygons = new ArrayList<>(polygons);
 
@@ -140,7 +140,7 @@ public class ContinentShapePolygonDeformer
 
 	// POLYGONSIDE
 	@AllArgsConstructor
-	public class PolygonSide
+	private class PolygonSide
 	{
 
 		private Polygon2D polygon;
