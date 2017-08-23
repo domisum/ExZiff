@@ -4,6 +4,7 @@ import de.domisum.exziff.map.BooleanMap;
 import de.domisum.exziff.map.generator.bool.BooleanMapGenerator;
 import de.domisum.exziff.map.generator.bool.BooleanMapPolygonGenerator;
 import de.domisum.exziff.shape.continent.ContinentShapeBasePolygonGenerator;
+import de.domisum.exziff.shape.continent.ContinentShapeNoiseDeformer;
 import de.domisum.exziff.shape.continent.ContinentShapePolygonDeformer;
 import de.domisum.exziff.shape.continent.ContinentShapePolygonValidator;
 import de.domisum.lib.auxilium.data.container.math.Polygon2D;
@@ -22,6 +23,7 @@ public class ContinentsShapeGenerator extends BooleanMapGenerator
 	// REFERENCES
 	private ContinentShapeBasePolygonGenerator basePolygonGenerator;
 	private ContinentShapePolygonDeformer polygonDeformer;
+	private ContinentShapeNoiseDeformer noiseDeformer;
 
 
 	// INIT
@@ -33,6 +35,7 @@ public class ContinentsShapeGenerator extends BooleanMapGenerator
 
 		this.basePolygonGenerator = new ContinentShapeBasePolygonGenerator(seed, polygonValidator);
 		this.polygonDeformer = new ContinentShapePolygonDeformer(seed, polygonValidator);
+		this.noiseDeformer = new ContinentShapeNoiseDeformer(seed);
 	}
 
 
@@ -43,7 +46,11 @@ public class ContinentsShapeGenerator extends BooleanMapGenerator
 		polygons = this.polygonDeformer.deformPolygons(polygons);
 
 		BooleanMapPolygonGenerator generator = new BooleanMapPolygonGenerator(this.size/this.downscalingFactor, polygons);
-		return generator.generate();
+		BooleanMap continentShape = generator.generate();
+
+		continentShape = this.noiseDeformer.deform(continentShape);
+
+		return continentShape;
 	}
 
 }
