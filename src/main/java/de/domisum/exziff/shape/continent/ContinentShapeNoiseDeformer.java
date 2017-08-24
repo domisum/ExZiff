@@ -17,7 +17,7 @@ public class ContinentShapeNoiseDeformer
 {
 
 	// SETTINGS
-	@Getter @Setter private int iterations = 3;
+	@Getter @Setter private int iterations = 2;
 
 	// REFERENCES
 	private Random random;
@@ -44,16 +44,22 @@ public class ContinentShapeNoiseDeformer
 			cleanup();
 		}
 
+		finalCleanup();
 		return this.map;
 	}
 
 	private void scatter(int iteration)
 	{
-		NoiseLayers noiseLayers = new NoiseLayers(new NoiseLayer(0.03, 0.01, -1));
+		// @formatter:off
+		NoiseLayers noiseLayers = new NoiseLayers(
+				new NoiseLayer(0.08, 0.01, -1),
+				new NoiseLayer(0.03, 0.01, -1),
+				new NoiseLayer(0.03*0.35, 0.01*0.4, -1)
+		);
+		// @formatter:on
 
 		LayeredOpenSimplexNoise noiseXOffset = new LayeredOpenSimplexNoise(noiseLayers.getRandomSeedsCopy(this.random));
 		LayeredOpenSimplexNoise noiseYOffset = new LayeredOpenSimplexNoise(noiseLayers.getRandomSeedsCopy(this.random));
-
 
 		BooleanMapNoiseOffsetter noiseOffsetter = new BooleanMapNoiseOffsetter(noiseXOffset, noiseYOffset);
 		this.map = noiseOffsetter.transform(this.map);
@@ -61,18 +67,25 @@ public class ContinentShapeNoiseDeformer
 
 	private void cleanup()
 	{
-		BooleanMap deformedShape = this.map;
+		cleanup(2, 0.3, 0.35);
+	}
 
-		BooleanMapSmooth smooth = new BooleanMapSmooth(2, 0.3, 0.35);
-		deformedShape = smooth.transform(deformedShape);
+	private void cleanup(int radius, double removeThreshold, double addThreshold)
+	{
+		BooleanMapSmooth smooth = new BooleanMapSmooth(radius, removeThreshold, addThreshold);
+		this.map = smooth.transform(this.map);
 
 		BooleanMapFloodFill floodFill = new BooleanMapFloodFill();
-		deformedShape = floodFill.transform(deformedShape);
+		this.map = floodFill.transform(this.map);
 
 		BooleanMapInvert invert = new BooleanMapInvert();
-		deformedShape = invert.transform(deformedShape);
+		this.map = invert.transform(this.map);
+	}
 
-		this.map = deformedShape;
+	private void finalCleanup()
+	{
+		for(int i = 0; i < 3; i++)
+			cleanup(3, 0.3, 0.35);
 	}
 
 }

@@ -25,7 +25,7 @@ public class TestLauncher
 	private static void generate(long seed)
 	{
 		ContinentsShapeGenerator generator = new ContinentsShapeGenerator((int) Math.pow(2, 14), seed);
-		generator.setDownscalingFactor(4*4);
+		generator.setDownscalingFactor(4);
 		BooleanMap booleanMap = generator.generate();
 		System.out.println("generator done: "+seed);
 

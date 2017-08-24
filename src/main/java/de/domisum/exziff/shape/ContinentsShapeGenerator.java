@@ -20,11 +20,12 @@ public class ContinentsShapeGenerator extends BooleanMapGenerator
 	// settings
 	private int size;
 	@Getter @Setter private int downscalingFactor = 1;
+	private int polygonMapDownscalingFactor = 4;
 
 	// REFERENCES
 	private ContinentShapeBasePolygonGenerator basePolygonGenerator;
 	private ContinentShapePolygonDeformer polygonDeformer;
-	private BooleanMapScale scale = new BooleanMapScale(4);
+	private BooleanMapScale scale = new BooleanMapScale(this.polygonMapDownscalingFactor);
 	private ContinentShapeNoiseDeformer noiseDeformer;
 
 
@@ -48,7 +49,8 @@ public class ContinentsShapeGenerator extends BooleanMapGenerator
 		List<Polygon2D> polygons = this.basePolygonGenerator.generate();
 		polygons = this.polygonDeformer.deformPolygons(polygons);
 
-		BooleanMapPolygonGenerator generator = new BooleanMapPolygonGenerator(this.size/this.downscalingFactor, polygons);
+		BooleanMapPolygonGenerator generator = new BooleanMapPolygonGenerator(
+				this.size/(this.downscalingFactor*this.polygonMapDownscalingFactor), polygons);
 		BooleanMap continentShape = generator.generate();
 
 		continentShape = this.scale.transform(continentShape);
