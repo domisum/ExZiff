@@ -85,7 +85,7 @@ public class ContinentShapeNoiseDeformer
 	private void finalCleanup()
 	{
 		for(int i = 0; i < 3; i++)
-			cleanup(3, 0.3, 0.35);
+			cleanup(3, 0.32, 0.33);
 	}
 
 }
