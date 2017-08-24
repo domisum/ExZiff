@@ -40,7 +40,7 @@ public class ContinentShapeNoiseDeformer
 
 		for(int i = 0; i < this.iterations; i++)
 		{
-			scatter(i);
+			scatter();
 			cleanup();
 		}
 
@@ -48,7 +48,7 @@ public class ContinentShapeNoiseDeformer
 		return this.map;
 	}
 
-	private void scatter(int iteration)
+	private void scatter()
 	{
 		// @formatter:off
 		NoiseLayers noiseLayers = new NoiseLayers(
