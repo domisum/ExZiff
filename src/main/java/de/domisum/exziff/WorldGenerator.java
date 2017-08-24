@@ -14,6 +14,7 @@ import de.domisum.exziff.world.World;
 import de.domisum.exziff.world.loadersaver.ChunkClusterLoaderSaver;
 import de.domisum.layeredopensimplexnoise.LayeredOpenSimplexNoise;
 import de.domisum.layeredopensimplexnoise.NoiseLayer;
+import de.domisum.layeredopensimplexnoise.NoiseLayers;
 import de.domisum.lib.auxilium.data.container.Duo;
 import de.domisum.lib.auxilium.data.container.bound.IntBounds2D;
 import de.domisum.lib.auxilium.data.container.dir.Direction2D;
@@ -105,8 +106,8 @@ public class WorldGenerator
 		int divisionSize = this.size/divisions;
 
 
-		NoiseLayer[] noiseLayers = new NoiseLayer[] {new NoiseLayer(200, 50, this.seed*9239L),
-				new NoiseLayer(20, 15, this.seed*92378389749L), new NoiseLayer(10, 7, this.seed*923783L)};
+		NoiseLayers noiseLayers = new NoiseLayers(new NoiseLayer(200, 50, this.seed*9239L),
+				new NoiseLayer(20, 15, this.seed*92378389749L), new NoiseLayer(10, 7, this.seed*923783L));
 
 		LayeredOpenSimplexNoise noiseX = new LayeredOpenSimplexNoise(noiseLayers);
 		LayeredOpenSimplexNoise noiseZ = new LayeredOpenSimplexNoise(noiseLayers);

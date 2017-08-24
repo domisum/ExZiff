@@ -2,6 +2,7 @@ package de.domisum.exziff.foundation;
 
 import de.domisum.layeredopensimplexnoise.LayeredOpenSimplexNoise;
 import de.domisum.layeredopensimplexnoise.NoiseLayer;
+import de.domisum.layeredopensimplexnoise.NoiseLayers;
 
 public class FoundationRegionBeach extends FoundationRegion
 {
@@ -19,10 +20,10 @@ public class FoundationRegionBeach extends FoundationRegion
 	// GENERATION
 	@Override public void generate()
 	{
-		NoiseLayer[] layers = new NoiseLayer[] {new NoiseLayer(30, 2, this.seed*397439834894L*this.id),
-				new NoiseLayer(10, .8, this.seed*384111L*this.id)};
+		NoiseLayers noiseLayers = new NoiseLayers(new NoiseLayer(30, 2, this.seed*397439834894L*this.id),
+				new NoiseLayer(10, .8, this.seed*384111L*this.id));
 
-		this.noise = new LayeredOpenSimplexNoise(layers);
+		this.noise = new LayeredOpenSimplexNoise(noiseLayers);
 	}
 
 
