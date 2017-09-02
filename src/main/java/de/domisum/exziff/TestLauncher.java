@@ -1,37 +1,23 @@
 package de.domisum.exziff;
 
-import de.domisum.exziff.map.BooleanMap;
-import de.domisum.exziff.map.exporter.bool.BooleanMapImageExporter;
-import de.domisum.exziff.shape.ContinentsShapeGenerator;
-import de.domisum.lib.auxilium.util.FileUtil;
-import de.domisum.lib.auxilium.util.ImageUtil;
-
-import java.awt.image.BufferedImage;
 import java.io.File;
-import java.util.Random;
 
 public class TestLauncher
 {
 
 	public static void main(String[] args)
 	{
-		Random random = new Random(32);
-
-		FileUtil.deleteDirectoryContents(new File("C:\\Users\\domisum\\testChamber/continents/"));
-		for(int i = 0; i < 30; i++)
-			generate(random.nextLong());
+		worldGeneratorTest();
 	}
 
-	private static void generate(long seed)
+	private static void worldGeneratorTest()
 	{
-		ContinentsShapeGenerator generator = new ContinentsShapeGenerator((int) Math.pow(2, 14), seed);
-		generator.setDownscalingFactor(4);
-		BooleanMap booleanMap = generator.generate();
-		System.out.println("generator done: "+seed);
+		File worldDir = new File("C:\\Users\\domisum\\testChamber\\exziff\\testWorld");
 
-		BooleanMapImageExporter exporter = new BooleanMapImageExporter();
-		BufferedImage image = exporter.export(booleanMap);
-		ImageUtil.writeImage(new File("C:\\Users\\domisum\\testChamber/continents/"+seed+".png"), image);
+		WorldGenerator generator = new WorldGenerator(2048, 1337, worldDir);
+		generator.generate();
+
+		System.out.println("done");
 	}
 
 }

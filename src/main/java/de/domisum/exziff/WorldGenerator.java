@@ -343,7 +343,7 @@ public class WorldGenerator
 
 		// float map is empty
 		if(minX == Integer.MAX_VALUE)
-			throw new IllegalArgumentException("floatMap cant be empty");
+			throw new IllegalArgumentException("floatMap can't be empty");
 
 		return new IntBounds2D(minX, maxX, minZ, maxZ);
 	}
