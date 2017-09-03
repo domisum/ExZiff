@@ -2,7 +2,7 @@ package de.domisum.exziff.map.generator.bool;
 
 import de.domisum.exziff.map.BooleanMap;
 
-public class BooleanMapCircleGenerator extends BooleanMapGenerator
+public class BooleanMapFromCircle extends BooleanMapGenerator
 {
 
 	// SETTINGS
@@ -13,7 +13,7 @@ public class BooleanMapCircleGenerator extends BooleanMapGenerator
 
 
 	// INITIALIZATION
-	public BooleanMapCircleGenerator(int width, int height, double relativeDiameter)
+	public BooleanMapFromCircle(int width, int height, double relativeDiameter)
 	{
 		this.width = width;
 		this.height = height;

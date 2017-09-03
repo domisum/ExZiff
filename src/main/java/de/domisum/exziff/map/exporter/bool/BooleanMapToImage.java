@@ -5,7 +5,7 @@ import de.domisum.lib.auxilium.util.ImageUtil;
 
 import java.awt.image.BufferedImage;
 
-public class BooleanMapImageExporter extends BooleanMapExporter<BufferedImage>
+public class BooleanMapToImage extends BooleanMapExporter<BufferedImage>
 {
 
 	// CONSTANTS

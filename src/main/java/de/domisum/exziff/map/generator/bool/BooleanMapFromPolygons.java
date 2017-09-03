@@ -6,7 +6,7 @@ import de.domisum.lib.auxilium.data.container.math.Vector2D;
 
 import java.util.List;
 
-public class BooleanMapPolygonGenerator extends BooleanMapGenerator
+public class BooleanMapFromPolygons extends BooleanMapGenerator
 {
 
 	// SETTINGS
@@ -15,7 +15,7 @@ public class BooleanMapPolygonGenerator extends BooleanMapGenerator
 
 
 	// INIT
-	public BooleanMapPolygonGenerator(int size, List<Polygon2D> polygons)
+	public BooleanMapFromPolygons(int size, List<Polygon2D> polygons)
 	{
 		this.size = size;
 		this.polygons = polygons;

@@ -1,7 +1,7 @@
 package de.domisum.exziff.shape;
 
 import de.domisum.exziff.map.BooleanMap;
-import de.domisum.exziff.map.generator.bool.BooleanMapEllipseGenerator;
+import de.domisum.exziff.map.generator.bool.BooleanMapFromEllipse;
 import de.domisum.exziff.map.generator.bool.BooleanMapGenerator;
 import de.domisum.exziff.map.transformation.bool.BooleanMapFloodFill;
 import de.domisum.exziff.map.transformation.bool.BooleanMapInvert;
@@ -37,7 +37,7 @@ public class IslandShapeGenerator extends BooleanMapGenerator
 		double baseShapeDiameter = RandomUtil.getFromRange(0.4, 0.65, r);
 		double baseShapeExcentricity = RandomUtil.getFromRange(0.5, 3, r);
 		double baseShapeRotationAngle = RandomUtil.getFromRange(0, Math.PI*2, r);
-		BooleanMapEllipseGenerator ellipseGenerator = new BooleanMapEllipseGenerator(this.size, this.size, baseShapeDiameter,
+		BooleanMapFromEllipse ellipseGenerator = new BooleanMapFromEllipse(this.size, this.size, baseShapeDiameter,
 				baseShapeExcentricity, baseShapeRotationAngle);
 		BooleanMap baseShape = ellipseGenerator.generate();
 

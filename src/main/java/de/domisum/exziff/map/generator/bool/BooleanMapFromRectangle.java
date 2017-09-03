@@ -2,7 +2,7 @@ package de.domisum.exziff.map.generator.bool;
 
 import de.domisum.exziff.map.BooleanMap;
 
-public class BooleanMapRectangleGenerator extends BooleanMapGenerator
+public class BooleanMapFromRectangle extends BooleanMapGenerator
 {
 
 	// SETTINGS
@@ -16,7 +16,7 @@ public class BooleanMapRectangleGenerator extends BooleanMapGenerator
 
 
 	// INITIALIZATION
-	public BooleanMapRectangleGenerator(int width, int height, double x1, double y1, double x2, double y2)
+	public BooleanMapFromRectangle(int width, int height, double x1, double y1, double x2, double y2)
 	{
 		this.width = width;
 		this.height = height;

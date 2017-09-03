@@ -2,7 +2,7 @@ package de.domisum.exziff.map.generator.bool;
 
 import de.domisum.exziff.map.BooleanMap;
 
-public class BooleanMapEllipseGenerator extends BooleanMapGenerator
+public class BooleanMapFromEllipse extends BooleanMapGenerator
 {
 
 	// SETTINGS
@@ -15,7 +15,7 @@ public class BooleanMapEllipseGenerator extends BooleanMapGenerator
 
 
 	// INITIALIZATION
-	public BooleanMapEllipseGenerator(int width, int height, double relativeDiameter, double excentricity, double rotationAngle)
+	public BooleanMapFromEllipse(int width, int height, double relativeDiameter, double excentricity, double rotationAngle)
 	{
 		this.width = width;
 		this.height = height;
