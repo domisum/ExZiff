@@ -13,7 +13,7 @@ import lombok.Setter;
 
 import java.util.Random;
 
-public class ContinentShapeNoiseDeformer
+public class ContinentsNoiseDeformer
 {
 
 	// SETTINGS
@@ -27,7 +27,7 @@ public class ContinentShapeNoiseDeformer
 
 
 	// INIT
-	public ContinentShapeNoiseDeformer(long seed)
+	public ContinentsNoiseDeformer(long seed)
 	{
 		this.random = new Random(seed);
 	}

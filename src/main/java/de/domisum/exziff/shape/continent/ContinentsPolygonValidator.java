@@ -9,7 +9,7 @@ import lombok.Setter;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ContinentShapePolygonValidator
+public class ContinentsPolygonValidator
 {
 
 	// CONSTANTS

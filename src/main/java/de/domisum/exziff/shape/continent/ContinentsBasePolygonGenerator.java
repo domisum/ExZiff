@@ -12,7 +12,7 @@ import java.util.Objects;
 import java.util.Random;
 import java.util.Vector;
 
-public class ContinentShapeBasePolygonGenerator
+public class ContinentsBasePolygonGenerator
 {
 
 	// SETTINGS
@@ -20,7 +20,7 @@ public class ContinentShapeBasePolygonGenerator
 	@Getter @Setter private int desiredPolygonsMaxDifference = 1;
 
 	// REFERENCES
-	private ContinentShapePolygonValidator polygonValidator;
+	private ContinentsPolygonValidator polygonValidator;
 	private Random random;
 
 	// OUTPUT
@@ -28,7 +28,7 @@ public class ContinentShapeBasePolygonGenerator
 
 
 	// INIT
-	public ContinentShapeBasePolygonGenerator(long seed, ContinentShapePolygonValidator polygonValidator)
+	public ContinentsBasePolygonGenerator(long seed, ContinentsPolygonValidator polygonValidator)
 	{
 		this.polygonValidator = polygonValidator;
 		this.random = new Random(seed);

@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class ContinentShapePolygonDeformer
+public class ContinentsPolygonDeformer
 {
 
 	// SETTINGS
@@ -22,7 +22,7 @@ public class ContinentShapePolygonDeformer
 	@Getter @Setter private double maxOutwardsOffsetMultiplier = 0.9;
 
 	// REFERENCES
-	private ContinentShapePolygonValidator polygonValidator;
+	private ContinentsPolygonValidator polygonValidator;
 	private Random random;
 
 	// TEMP
@@ -30,7 +30,7 @@ public class ContinentShapePolygonDeformer
 
 
 	// INIT
-	public ContinentShapePolygonDeformer(long seed, ContinentShapePolygonValidator polygonValidator)
+	public ContinentsPolygonDeformer(long seed, ContinentsPolygonValidator polygonValidator)
 	{
 		this.random = new Random(seed);
 		this.polygonValidator = polygonValidator;

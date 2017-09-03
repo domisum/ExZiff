@@ -4,17 +4,17 @@ import de.domisum.exziff.map.BooleanMap;
 import de.domisum.exziff.map.generator.bool.BooleanMapGenerator;
 import de.domisum.exziff.map.generator.bool.BooleanMapFromPolygons;
 import de.domisum.exziff.map.transformation.bool.BooleanMapScale;
-import de.domisum.exziff.shape.continent.ContinentShapeBasePolygonGenerator;
-import de.domisum.exziff.shape.continent.ContinentShapeNoiseDeformer;
-import de.domisum.exziff.shape.continent.ContinentShapePolygonDeformer;
-import de.domisum.exziff.shape.continent.ContinentShapePolygonValidator;
+import de.domisum.exziff.shape.continent.ContinentsBasePolygonGenerator;
+import de.domisum.exziff.shape.continent.ContinentsNoiseDeformer;
+import de.domisum.exziff.shape.continent.ContinentsPolygonDeformer;
+import de.domisum.exziff.shape.continent.ContinentsPolygonValidator;
 import de.domisum.lib.auxilium.data.container.math.Polygon2D;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.util.List;
 
-public class ContinentsShapeGenerator extends BooleanMapGenerator
+public class ContinentsGenerator extends BooleanMapGenerator
 {
 
 	// settings
@@ -23,22 +23,22 @@ public class ContinentsShapeGenerator extends BooleanMapGenerator
 	private int polygonMapDownscalingFactor = 4;
 
 	// REFERENCES
-	private ContinentShapeBasePolygonGenerator basePolygonGenerator;
-	private ContinentShapePolygonDeformer polygonDeformer;
+	private ContinentsBasePolygonGenerator basePolygonGenerator;
+	private ContinentsPolygonDeformer polygonDeformer;
 	private BooleanMapScale scale = new BooleanMapScale(this.polygonMapDownscalingFactor);
-	private ContinentShapeNoiseDeformer noiseDeformer;
+	private ContinentsNoiseDeformer noiseDeformer;
 
 
 	// INIT
-	public ContinentsShapeGenerator(int size, long seed)
+	public ContinentsGenerator(int size, long seed)
 	{
 		this.size = size;
 
-		ContinentShapePolygonValidator polygonValidator = new ContinentShapePolygonValidator();
+		ContinentsPolygonValidator polygonValidator = new ContinentsPolygonValidator();
 
-		this.basePolygonGenerator = new ContinentShapeBasePolygonGenerator(seed, polygonValidator);
-		this.polygonDeformer = new ContinentShapePolygonDeformer(seed, polygonValidator);
-		this.noiseDeformer = new ContinentShapeNoiseDeformer(seed);
+		this.basePolygonGenerator = new ContinentsBasePolygonGenerator(seed, polygonValidator);
+		this.polygonDeformer = new ContinentsPolygonDeformer(seed, polygonValidator);
+		this.noiseDeformer = new ContinentsNoiseDeformer(seed);
 	}
 
 
