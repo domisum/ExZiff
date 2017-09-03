@@ -1,10 +1,10 @@
 package de.domisum.exziff.foundation;
 
-public class FoundationRegionOceanFloor extends FoundationRegion
+public class OceanFloor extends FoundationRegion
 {
 
 	// INIT
-	public FoundationRegionOceanFloor(int id, long seed)
+	public OceanFloor(int id, long seed)
 	{
 		super(FoundationRegionType.OCEAN_FLOOR, id, seed);
 	}

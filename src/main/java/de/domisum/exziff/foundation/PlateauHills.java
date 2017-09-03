@@ -5,7 +5,7 @@ import de.domisum.layeredopensimplexnoise.NoiseLayer;
 import de.domisum.layeredopensimplexnoise.NoiseLayers;
 import de.domisum.lib.auxilium.util.math.RandomUtil;
 
-public class FoundationRegionPlateauHills extends FoundationRegion
+public class PlateauHills extends FoundationRegion
 {
 
 	// generated settings
@@ -18,7 +18,7 @@ public class FoundationRegionPlateauHills extends FoundationRegion
 
 
 	// INIT
-	public FoundationRegionPlateauHills(int id, long seed)
+	public PlateauHills(int id, long seed)
 	{
 		super(FoundationRegionType.PLATEAU_HILLS, id, seed);
 	}

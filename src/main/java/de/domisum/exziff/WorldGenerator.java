@@ -1,7 +1,7 @@
 package de.domisum.exziff;
 
 import de.domisum.exziff.foundation.FoundationRegion;
-import de.domisum.exziff.foundation.FoundationRegionBeach;
+import de.domisum.exziff.foundation.Beach;
 import de.domisum.exziff.foundation.FoundationRegionType;
 import de.domisum.exziff.map.BooleanMap;
 import de.domisum.exziff.map.FloatMap;
@@ -353,7 +353,7 @@ public class WorldGenerator
 	private void determineBeachRegions()
 	{
 		int beachRegionId = Short.MAX_VALUE-29;
-		this.foundationRegions.put(beachRegionId, new FoundationRegionBeach(beachRegionId, this.seed+394939439L));
+		this.foundationRegions.put(beachRegionId, new Beach(beachRegionId, this.seed+394939439L));
 
 		int beachRadiusBase = 15;
 		LayeredOpenSimplexNoise beachRadiusNoise = new LayeredOpenSimplexNoise(new NoiseLayer(30, 10, this.seed*29392493L));
