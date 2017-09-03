@@ -5,9 +5,7 @@ import de.domisum.exziff.map.BooleanMap;
 public class BooleanMapRecenter extends BooleanMapTransformation
 {
 
-	// -------
 	// TRANSFORMATION
-	// -------
 	@SuppressWarnings("ConstantConditions") @Override public BooleanMap transform(BooleanMap input)
 	{
 		int minX = Integer.MAX_VALUE;

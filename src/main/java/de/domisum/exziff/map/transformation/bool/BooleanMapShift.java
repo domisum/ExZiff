@@ -12,9 +12,7 @@ public class BooleanMapShift extends BooleanMapTransformation
 	private int dY;
 
 
-	// -------
 	// TRANSFORMATION
-	// -------
 	@Override public BooleanMap transform(BooleanMap input)
 	{
 		boolean[][] pixels = new boolean[input.getHeight()][input.getWidth()];

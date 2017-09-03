@@ -12,9 +12,7 @@ public class BooleanMapCircleGenerator extends BooleanMapGenerator
 	private double relativeDiameter;
 
 
-	// -------
 	// INITIALIZATION
-	// -------
 	public BooleanMapCircleGenerator(int width, int height, double relativeDiameter)
 	{
 		this.width = width;
@@ -24,9 +22,7 @@ public class BooleanMapCircleGenerator extends BooleanMapGenerator
 	}
 
 
-	// -------
 	// GENERATION
-	// -------
 	@Override public BooleanMap generate()
 	{
 		boolean[][] pixels = new boolean[this.height][this.width];

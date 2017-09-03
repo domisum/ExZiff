@@ -9,9 +9,7 @@ public class BooleanMapScale extends BooleanMapTransformation
 	private double scalingFactor;
 
 
-	// -------
 	// INITIALIZATION
-	// -------
 	public BooleanMapScale(double scalingFactor)
 	{
 		if(scalingFactor <= 0)
@@ -21,9 +19,7 @@ public class BooleanMapScale extends BooleanMapTransformation
 	}
 
 
-	// -------
 	// TRANSFORMATION
-	// -------
 	@Override public BooleanMap transform(BooleanMap input)
 	{
 		int nWidth = (int) Math.floor(input.getWidth()*this.scalingFactor);

@@ -12,9 +12,7 @@ public class BooleanMapSmooth extends BooleanMapTransformation
 	private final int iterations;
 
 
-	// -------
 	// INIT
-	// -------
 	public BooleanMapSmooth(int radius, double removeThreshold, double addThreshold)
 	{
 		this(radius, removeThreshold, addThreshold, 1);
@@ -44,9 +42,7 @@ public class BooleanMapSmooth extends BooleanMapTransformation
 	}
 
 
-	// -------
 	// TRANSFORMATION
-	// -------
 	@Override public BooleanMap transform(BooleanMap input)
 	{
 		BooleanMap deformedShape = input;

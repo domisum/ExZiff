@@ -13,9 +13,7 @@ public class BooleanMapImageExporter extends BooleanMapExporter<BufferedImage>
 	private static final int COLOR_FALSE = 0x000000;
 
 
-	// -------
 	// EXPORT
-	// -------
 	@Override public BufferedImage export(BooleanMap input)
 	{
 		int[][] pixels = new int[input.getHeight()][input.getWidth()];

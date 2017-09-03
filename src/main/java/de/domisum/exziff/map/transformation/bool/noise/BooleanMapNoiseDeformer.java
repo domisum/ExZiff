@@ -20,9 +20,7 @@ public class BooleanMapNoiseDeformer extends BooleanMapTransformation
 	private int smoothIterations;
 
 
-	// -------
 	// INIT
-	// -------
 	public BooleanMapNoiseDeformer(LayeredOpenSimplexNoise noiseX, LayeredOpenSimplexNoise noiseY, int smoothRadius,
 			double removeThreshold, double addThreshold, int smoothIterations)
 	{
@@ -36,9 +34,7 @@ public class BooleanMapNoiseDeformer extends BooleanMapTransformation
 	}
 
 
-	// -------
 	// TRANSFORMATION
-	// -------
 	@Override public BooleanMap transform(BooleanMap input)
 	{
 		BooleanMap deformedShape = input;

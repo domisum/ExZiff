@@ -51,9 +51,7 @@ public class Chunk
 	}
 
 
-	// -------
 	// GETTERS
-	// -------
 	public byte getMaterialId(int icX, int icY, int icZ)
 	{
 		ChunkSection section = getSection(icY);
@@ -71,9 +69,7 @@ public class Chunk
 	}
 
 
-	// -------
 	// SETTERS
-	// -------
 	public void setMaterialIdAndSubId(int icX, int icY, int icZ, byte materialId, byte materialSubId)
 	{
 		ChunkSection section = getSection(icY);

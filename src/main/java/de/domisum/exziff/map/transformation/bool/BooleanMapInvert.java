@@ -5,9 +5,7 @@ import de.domisum.exziff.map.BooleanMap;
 public class BooleanMapInvert extends BooleanMapTransformation
 {
 
-	// -------
 	// TRANSFORMATION
-	// -------
 	@Override public BooleanMap transform(BooleanMap input)
 	{
 		boolean[][] pixels = new boolean[input.getHeight()][input.getWidth()];

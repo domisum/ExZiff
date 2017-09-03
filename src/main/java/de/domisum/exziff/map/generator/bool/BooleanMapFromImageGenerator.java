@@ -15,9 +15,7 @@ public class BooleanMapFromImageGenerator extends BooleanMapGenerator
 	private double threshold;
 
 
-	// -------
 	// INITIALIZATION
-	// -------
 	public BooleanMapFromImageGenerator(BufferedImage image, double threshold)
 	{
 		if(threshold < 0 || threshold > 1)
@@ -28,9 +26,7 @@ public class BooleanMapFromImageGenerator extends BooleanMapGenerator
 	}
 
 
-	// -------
 	// GENERATION
-	// -------
 	@Override public BooleanMap generate()
 	{
 		int[][] colorPixels = ImageUtil.getPixels(this.image);

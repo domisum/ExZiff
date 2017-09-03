@@ -15,9 +15,7 @@ public class BooleanMapRectangleGenerator extends BooleanMapGenerator
 	private double maxY;
 
 
-	// -------
 	// INITIALIZATION
-	// -------
 	public BooleanMapRectangleGenerator(int width, int height, double x1, double y1, double x2, double y2)
 	{
 		this.width = width;
@@ -33,9 +31,7 @@ public class BooleanMapRectangleGenerator extends BooleanMapGenerator
 	}
 
 
-	// -------
 	// GENERATION
-	// -------
 	@Override public BooleanMap generate()
 	{
 		boolean[][] pixels = new boolean[this.height][this.width];

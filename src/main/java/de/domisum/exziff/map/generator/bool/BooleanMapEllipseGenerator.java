@@ -14,9 +14,7 @@ public class BooleanMapEllipseGenerator extends BooleanMapGenerator
 	private double rotationAngle;
 
 
-	// -------
 	// INITIALIZATION
-	// -------
 	public BooleanMapEllipseGenerator(int width, int height, double relativeDiameter, double excentricity, double rotationAngle)
 	{
 		this.width = width;
@@ -28,9 +26,7 @@ public class BooleanMapEllipseGenerator extends BooleanMapGenerator
 	}
 
 
-	// -------
 	// GENERATION
-	// -------
 	@Override public BooleanMap generate()
 	{
 		double scaleA = 1+this.excentricity;

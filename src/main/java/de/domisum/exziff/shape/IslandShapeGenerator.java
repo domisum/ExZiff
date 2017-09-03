@@ -21,9 +21,7 @@ public class IslandShapeGenerator extends BooleanMapGenerator
 	private long seed;
 
 
-	// -------
 	// INIT
-	// -------
 	public IslandShapeGenerator(int size, long seed)
 	{
 		this.size = size;
