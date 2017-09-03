@@ -45,7 +45,7 @@ public class ChunkCluster
 	// OBJECT
 	@Override public String toString()
 	{
-		return "ChunkCluster{"+"clX="+clX+", clZ="+clZ+'}';
+		return "ChunkCluster{"+"clX="+this.clX+", clZ="+this.clZ+'}';
 	}
 
 

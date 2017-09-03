@@ -1,5 +1,4 @@
 <configuration>
-
 	<timestamp key="bySecond" datePattern="z_yyyy-MM-dd_HH-mm-ss,SSS"/>
 
 	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
