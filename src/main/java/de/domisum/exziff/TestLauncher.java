@@ -131,23 +131,24 @@ public class TestLauncher
 	{
 		int regionId = shortMap.get(x, y);
 
-		if(!sameAsCheckBounds(shortMap, x, y+1, regionId) || !sameAsCheckBounds(shortMap, x, y-1, regionId) || !sameAsCheckBounds(
-				shortMap, x+1, y, regionId) || !sameAsCheckBounds(shortMap, x-1, y, regionId))
+		if(otherThanCheckBounds(shortMap, x, y+1, regionId) || otherThanCheckBounds(shortMap, x, y-1, regionId)
+				|| otherThanCheckBounds(
+						shortMap, x+1, y, regionId) || otherThanCheckBounds(shortMap, x-1, y, regionId))
 			return true;
 
 		return false;
 	}
 
-	private static boolean sameAsCheckBounds(ShortMap shortMap, int nX, int nY, int otherValue)
+	private static boolean otherThanCheckBounds(ShortMap shortMap, int nX, int nY, int otherValue)
 	{
 		if(nX < 0 || nX >= shortMap.getWidth() || nY < 0 || nY >= shortMap.getHeight())
-			return true;
+			return false;
 
 		int thisValue = shortMap.get(nX, nY);
 		if(thisValue == 0)
-			return true;
+			return false;
 
-		return thisValue == otherValue;
+		return thisValue != otherValue;
 	}
 
 

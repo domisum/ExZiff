@@ -126,7 +126,7 @@ public class WorldGenerator
 
 				int offsetX = (int) Math.round(x+dX);
 				int offsetZ = (int) Math.round(z+dZ);
-				if(!isInBounds(offsetX, offsetZ))
+				if(isOutOfBounds(offsetX, offsetZ))
 					continue;
 
 				int regionId = (offsetZ/divisionSize)*divisions+(offsetX/divisionSize)+1;
@@ -173,7 +173,7 @@ public class WorldGenerator
 				this.foundationRegionInfluenceMap.set(x, z, regionId, 1f);
 
 				// the influence spreading is only needed if this pixel is at the border to another FoundationRegion
-				if(!hasDifferentFoundationRegionNeighbors(x, z))
+				if(hasNoNeighbors(x, z))
 					continue;
 
 				for(int rZ = -FOUNDATION_REGION_BLEND_DISTANCE; rZ <= FOUNDATION_REGION_BLEND_DISTANCE; rZ++)
@@ -182,7 +182,7 @@ public class WorldGenerator
 						int nX = x+rX;
 						int nZ = z+rZ;
 
-						if(!isInBounds(nX, nZ))
+						if(isOutOfBounds(nX, nZ))
 							continue;
 
 						double distance = Math.sqrt(rX*rX+rZ*rZ);
@@ -295,12 +295,12 @@ public class WorldGenerator
 
 
 	// helper
-	private boolean isInBounds(int x, int z)
+	private boolean isOutOfBounds(int x, int z)
 	{
-		return x >= 0 && z >= 0 && x < this.size && z < this.size;
+		return x < 0 || z < 0 || x >= this.size || z >= this.size;
 	}
 
-	private boolean hasDifferentFoundationRegionNeighbors(int x, int z)
+	private boolean hasNoNeighbors(int x, int z)
 	{
 		int foundationRegionId = this.foundationRegionsMap.get(x, z);
 
@@ -309,14 +309,14 @@ public class WorldGenerator
 			int nX = x+dir.dX;
 			int nZ = z+dir.dZ;
 
-			if(!isInBounds(nX, nZ))
+			if(isOutOfBounds(nX, nZ))
 				continue;
 
 			if(this.foundationRegionsMap.get(nX, nZ) != foundationRegionId)
-				return true;
+				return false;
 		}
 
-		return false;
+		return true;
 	}
 
 	private IntBounds2D determineFloatMapBounds(FloatMap floatMap)
@@ -365,7 +365,7 @@ public class WorldGenerator
 				if(this.continentShape.get(x, z))
 					continue;
 
-				if(!hasDifferentFoundationRegionNeighbors(x, z))
+				if(hasNoNeighbors(x, z))
 					continue;
 
 				int localBeachRadius = (int) Math.round(beachRadiusBase+beachRadiusNoise.evaluate(x, z));
@@ -376,7 +376,7 @@ public class WorldGenerator
 						int oX = x+rX;
 						int oZ = z+rZ;
 
-						if(!isInBounds(oX, oZ))
+						if(isOutOfBounds(oX, oZ))
 							continue;
 
 						if(!this.continentShape.get(oX, oZ))

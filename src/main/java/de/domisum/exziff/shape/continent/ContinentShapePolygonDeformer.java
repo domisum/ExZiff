@@ -148,7 +148,7 @@ public class ContinentShapePolygonDeformer
 
 
 		// GETTERS
-		public LineSegment2D getLineSegment()
+		protected LineSegment2D getLineSegment()
 		{
 			return this.polygon.getLines().get(this.sideIndex);
 		}

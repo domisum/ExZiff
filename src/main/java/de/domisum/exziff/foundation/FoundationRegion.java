@@ -22,7 +22,7 @@ public abstract class FoundationRegion
 
 
 	// INIT
-	public FoundationRegion(FoundationRegionType type, int id, long seed)
+	protected FoundationRegion(FoundationRegionType type, int id, long seed)
 	{
 		this.type = type;
 		this.id = id;
