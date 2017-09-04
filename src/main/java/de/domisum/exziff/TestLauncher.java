@@ -3,17 +3,20 @@ package de.domisum.exziff;
 import de.domisum.exziff.map.BooleanMap;
 import de.domisum.exziff.map.ShortMap;
 import de.domisum.exziff.map.generator.bool.BooleanMapFromImageGenerator;
+import de.domisum.lib.auxilium.data.container.math.Polygon2D;
 import de.domisum.lib.auxilium.data.container.math.Vector2D;
 import de.domisum.lib.auxilium.util.ImageUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.awt.*;
+import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.PriorityQueue;
+import java.util.Queue;
 import java.util.Random;
 
 public class TestLauncher
@@ -52,6 +55,7 @@ public class TestLauncher
 		logger.info("Image loading done");
 
 
+		//continentShape = new BooleanMap(1024, 1024);
 		Random random = new Random(381);
 		ShortMap regions = generateRegions(continentShape, random);
 
@@ -64,47 +68,160 @@ public class TestLauncher
 
 	private static ShortMap generateRegions(BooleanMap continentShape, Random random)
 	{
+		List<Vector2D> points = generatePoints(continentShape, random);
+
+		ShortMap regions = new ShortMap(continentShape.getWidth(), continentShape.getHeight());
+		//Queue<RegionCoord> queuedPoints = new ArrayDeque<>();
+		PriorityQueue<RegionCoord> queuedPoints = new PriorityQueue<>(
+				Comparator.comparingDouble(c->distance(continentShape.getWidth(), points, c)));
+
+		for(int i = 0; i < points.size(); i++)
+		{
+			Vector2D p = points.get(i);
+
+			RegionCoord regionCoord = new RegionCoord((int) (p.x*continentShape.getWidth()),
+					(int) (p.y*continentShape.getHeight()), i+1, 0);
+
+			regions.set(regionCoord.x, regionCoord.y, (short) regionCoord.regionId);
+			queuedPoints.add(regionCoord);
+		}
+
+		int counter = 0;
+		while(!queuedPoints.isEmpty())
+		{
+			if(counter++%100000 == 0)
+				System.out.println(queuedPoints.size());
+
+			RegionCoord coord = queuedPoints.poll();
+
+			addIfNotRegionSet(continentShape, regions, queuedPoints, coord.x+1, coord.y, coord.regionId, coord.travelDistance+1);
+			addIfNotRegionSet(continentShape, regions, queuedPoints, coord.x-1, coord.y, coord.regionId, coord.travelDistance+1);
+			addIfNotRegionSet(continentShape, regions, queuedPoints, coord.x, coord.y+1, coord.regionId, coord.travelDistance+1);
+			addIfNotRegionSet(continentShape, regions, queuedPoints, coord.x, coord.y-1, coord.regionId, coord.travelDistance+1);
+
+			//			addIfNotRegionSet(continentShape, regions, queuedPoints, coord.x+1, coord.y+1, coord.regionId);
+			//			addIfNotRegionSet(continentShape, regions, queuedPoints, coord.x+1, coord.y-1, coord.regionId);
+			//			addIfNotRegionSet(continentShape, regions, queuedPoints, coord.x-1, coord.y+1, coord.regionId);
+			//			addIfNotRegionSet(continentShape, regions, queuedPoints, coord.x-1, coord.y-1, coord.regionId);
+		}
+
+		for(int i = 0; i < points.size(); i++)
+		{
+			Vector2D p = points.get(i);
+
+			RegionCoord regionCoord = new RegionCoord((int) (p.x*continentShape.getWidth()),
+					(int) (p.y*continentShape.getHeight()), i+1, 0);
+
+			regions.set(regionCoord.x, regionCoord.y, (short) 0);
+
+			regions.set(regionCoord.x, regionCoord.y-1, (short) 0);
+			regions.set(regionCoord.x, regionCoord.y+1, (short) 0);
+			regions.set(regionCoord.x-1, regionCoord.y, (short) 0);
+			regions.set(regionCoord.x+1, regionCoord.y, (short) 0);
+		}
+
+		return regions;
+	}
+
+	private static List<Vector2D> generatePoints(BooleanMap continentShape, Random random)
+	{
 		int numberOfPoints = 500;
+
+
 		List<Vector2D> points = new ArrayList<>();
 		while(points.size() < numberOfPoints)
 		{
 			Vector2D rPoint = new Vector2D(random.nextDouble(), random.nextDouble());
-			if(!continentShape.get((int) (rPoint.x*continentShape.getWidth()), (int) (rPoint.y*continentShape.getHeight())))
-				continue;
+			//			if(!continentShape.get((int) (rPoint.x*continentShape.getWidth()), (int) (rPoint.y*continentShape.getHeight())))
+			//				continue;
 
 			points.add(rPoint);
 		}
 
-		points.sort(Comparator.comparingDouble(p->p.x));
+		for(int i = 0; i < 5; i++)
+			points = balancePoints(points);
+
 		points.sort(Comparator.comparingDouble(p->p.y));
+		return points;
+	}
 
-		ShortMap regions = new ShortMap(continentShape.getWidth(), continentShape.getHeight());
-		for(int y = 0; y < regions.getHeight(); y++)
-			for(int x = 0; x < regions.getWidth(); x++)
-			{
-				if(!continentShape.get(x, y))
-					continue;
+	private static List<Vector2D> balancePoints(List<Vector2D> points)
+	{
+		List<Vector2D> newPoints = new ArrayList<>(points);
 
-				Vector2D pointHere = new Vector2D(x/(double) continentShape.getWidth(), y/(double) continentShape.getHeight());
+		for(int i = 0; i < points.size(); i++)
+		{
+			Vector2D point = points.get(i);
 
-				int closestPointIndex = -1;
-				double closestPointDistanceSquared = Double.MAX_VALUE;
-				for(int i = 0; i < points.size(); i++)
+			int numberOfNeighbors = 1;
+			Vector2D neighborSum = point;
+			for(Vector2D p : points)
+				if(p != point && isNeighborPoint(point, p, points))
 				{
-					Vector2D p = points.get(i);
-					double distanceSquared = pointHere.distanceToSquared(p);
-					if(distanceSquared < closestPointDistanceSquared)
-					{
-						closestPointIndex = i;
-						closestPointDistanceSquared = distanceSquared;
-					}
+					numberOfNeighbors++;
+					neighborSum = neighborSum.add(point.add(p.subtract(point).divide(2)));
 				}
 
-				regions.set(x, y, (short) (closestPointIndex+1));
-			}
+			Vector2D newPoint = neighborSum.divide(numberOfNeighbors);
 
-		return regions;
+			if(isEdgePoint(point, points))
+				newPoint = point;
+
+			newPoints.set(i, newPoint);
+		}
+
+		return newPoints;
 	}
+
+	private static boolean isNeighborPoint(Vector2D p1, Vector2D p2, List<Vector2D> points)
+	{
+		Vector2D p1ToP2 = p2.subtract(p1);
+		Vector2D center = p1.add(p1ToP2.divide(2));
+
+		Vector2D orthogonal = p1ToP2.orthogonal().normalize();
+		Vector2D centerSideward = orthogonal.multiply(p1ToP2.length()/2);
+
+		Polygon2D polygon = new Polygon2D(p1, center.add(centerSideward), p2, center.subtract(centerSideward));
+
+		for(Vector2D p : points)
+			if(p != p1 && p != p2)
+				if(polygon.contains(p))
+					return false;
+
+		return true;
+	}
+
+	private static boolean isEdgePoint(Vector2D p, List<Vector2D> points)
+	{
+		Polygon2D OUTSIDE_EDGE_POLYGON = new Polygon2D(new Vector2D(0, 0), new Vector2D(1, 0), new Vector2D(1, 1),
+				new Vector2D(0, 1), new Vector2D(0, 0), new Vector2D(-1, 2), new Vector2D(2, 2), new Vector2D(2, -1));
+
+		return OUTSIDE_EDGE_POLYGON.getDistanceTo(p) < 0.07;
+	}
+
+
+	private static double distance(double size, List<Vector2D> points, RegionCoord regionCoord)
+	{
+		Vector2D rRC = new Vector2D(regionCoord.x/size, regionCoord.y/size);
+		return rRC.distanceTo(points.get(regionCoord.regionId-1));
+	}
+
+	private static void addIfNotRegionSet(BooleanMap continentShape, ShortMap regions, Queue<RegionCoord> queue, int x, int y,
+			int regionId, int travelDistance)
+	{
+		if(!continentShape.get(x, y))
+			return;
+
+		if(isOutOfBounds(regions.getWidth(), regions.getHeight(), x, y))
+			return;
+
+		if(regions.get(x, y) != 0)
+			return;
+
+		queue.add(new RegionCoord(x, y, regionId, travelDistance));
+		regions.set(x, y, (short) regionId);
+	}
+
 
 	private static BufferedImage export(ShortMap regions)
 	{
@@ -132,8 +249,7 @@ public class TestLauncher
 		int regionId = shortMap.get(x, y);
 
 		if(otherThanCheckBounds(shortMap, x, y+1, regionId) || otherThanCheckBounds(shortMap, x, y-1, regionId)
-				|| otherThanCheckBounds(
-						shortMap, x+1, y, regionId) || otherThanCheckBounds(shortMap, x-1, y, regionId))
+				|| otherThanCheckBounds(shortMap, x+1, y, regionId) || otherThanCheckBounds(shortMap, x-1, y, regionId))
 			return true;
 
 		return false;
@@ -141,7 +257,7 @@ public class TestLauncher
 
 	private static boolean otherThanCheckBounds(ShortMap shortMap, int nX, int nY, int otherValue)
 	{
-		if(nX < 0 || nX >= shortMap.getWidth() || nY < 0 || nY >= shortMap.getHeight())
+		if(isOutOfBounds(shortMap.getWidth(), shortMap.getHeight(), nX, nY))
 			return false;
 
 		int thisValue = shortMap.get(nX, nY);
@@ -149,6 +265,11 @@ public class TestLauncher
 			return false;
 
 		return thisValue != otherValue;
+	}
+
+	private static boolean isOutOfBounds(int width, int height, int nX, int nY)
+	{
+		return nX < 0 || nX >= width || nY < 0 || nY >= height;
 	}
 
 
