@@ -6,6 +6,7 @@ import de.domisum.exziff.map.generator.bool.BooleanMapFromImageGenerator;
 import de.domisum.lib.auxilium.data.container.math.Polygon2D;
 import de.domisum.lib.auxilium.data.container.math.Vector2D;
 import de.domisum.lib.auxilium.util.ImageUtil;
+import de.domisum.lib.auxilium.util.math.RandomUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,7 +23,7 @@ import java.util.Random;
 public class Prototype
 {
 
-	private static Logger logger = LoggerFactory.getLogger(TestLauncher.class);
+	private final Logger logger = LoggerFactory.getLogger(getClass());
 	private static int[][] colorsRGB = new int[][] {{240, 163, 255}, {0, 117, 220}, {153, 63, 0}, {76, 0, 92}, {25, 25, 25},
 			{0, 80, 49}, {43, 206, 72}, {255, 204, 153}, {128, 128, 128}, {143, 124, 0}, {157, 204, 0}, {194, 0, 136},
 			{0, 51, 128}, {255, 164, 5}, {75, 117, 0}, {255, 0, 16}, {94, 241, 242}, {0, 153, 143}, {224, 255, 102},
@@ -40,25 +41,31 @@ public class Prototype
 	}
 
 
-	public static void partitioningTest()
+	public static void partitoningTest()
 	{
-		logger.info("Starting image loading");
+		new Prototype().pt();
+	}
+
+	public void pt()
+	{
+		this.logger.info("Starting image loading");
 		BooleanMapFromImageGenerator fromImageGenerator = new BooleanMapFromImageGenerator(
 				ImageUtil.loadImage("C:\\Users\\domisum\\testChamber\\exziff\\res\\continentShape.png"), 0.5);
 		BooleanMap continentShape = fromImageGenerator.generate();
-		logger.info("Image loading done");
+		this.logger.info("Image loading done");
 
 
 		//continentShape = new BooleanMap(1024, 1024);
-		Random random = new Random(381);
+		Random random = new Random(3881);
 		ShortMap regions = generateRegions(continentShape, random);
 
 
-		logger.info("Starting export");
+		this.logger.info("Starting export");
 		BufferedImage image = export(regions);
 		ImageUtil.writeImage(new File("C:\\Users\\domisum\\testChamber\\exziff//regions.png"), image);
-		logger.info("Export done");
+		this.logger.info("Export done");
 	}
+
 
 	private static ShortMap generateRegions(BooleanMap continentShape, Random random)
 	{
@@ -83,8 +90,8 @@ public class Prototype
 		int counter = 0;
 		while(!queuedPoints.isEmpty())
 		{
-			if(counter++%100000 == 0)
-				System.out.println(queuedPoints.size());
+			//			if(counter++%100000 == 0)
+			//				System.out.println(queuedPoints.size());
 
 			RegionCoord coord = queuedPoints.poll();
 
@@ -92,11 +99,6 @@ public class Prototype
 			addIfNotRegionSet(continentShape, regions, queuedPoints, coord.x-1, coord.y, coord.regionId, coord.travelDistance+1);
 			addIfNotRegionSet(continentShape, regions, queuedPoints, coord.x, coord.y+1, coord.regionId, coord.travelDistance+1);
 			addIfNotRegionSet(continentShape, regions, queuedPoints, coord.x, coord.y-1, coord.regionId, coord.travelDistance+1);
-
-			//			addIfNotRegionSet(continentShape, regions, queuedPoints, coord.x+1, coord.y+1, coord.regionId);
-			//			addIfNotRegionSet(continentShape, regions, queuedPoints, coord.x+1, coord.y-1, coord.regionId);
-			//			addIfNotRegionSet(continentShape, regions, queuedPoints, coord.x-1, coord.y+1, coord.regionId);
-			//			addIfNotRegionSet(continentShape, regions, queuedPoints, coord.x-1, coord.y-1, coord.regionId);
 		}
 
 		for(int i = 0; i < points.size(); i++)
@@ -119,7 +121,7 @@ public class Prototype
 
 	private static List<Vector2D> generatePoints(BooleanMap continentShape, Random random)
 	{
-		int numberOfPoints = 500;
+		int numberOfPoints = 300;
 
 
 		List<Vector2D> points = new ArrayList<>();
@@ -134,6 +136,9 @@ public class Prototype
 
 		for(int i = 0; i < 5; i++)
 			points = balancePoints(points);
+
+		for(int i = 0; i < numberOfPoints/2; i++)
+			points.remove(RandomUtil.getFromRange(0, points.size()-1, random));
 
 		points.sort(Comparator.comparingDouble(p->p.y));
 		return points;
@@ -276,6 +281,5 @@ public class Prototype
 
 		System.out.println("done");
 	}
-
 
 }

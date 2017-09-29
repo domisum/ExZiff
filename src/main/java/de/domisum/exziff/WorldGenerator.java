@@ -1,7 +1,7 @@
 package de.domisum.exziff;
 
-import de.domisum.exziff.foundation.FoundationRegion;
 import de.domisum.exziff.foundation.Beach;
+import de.domisum.exziff.foundation.FoundationRegion;
 import de.domisum.exziff.foundation.FoundationRegionType;
 import de.domisum.exziff.map.BooleanMap;
 import de.domisum.exziff.map.FloatMap;
@@ -20,6 +20,8 @@ import de.domisum.lib.auxilium.data.container.bound.IntBounds2D;
 import de.domisum.lib.auxilium.data.container.dir.Direction2D;
 import de.domisum.lib.auxilium.util.ImageUtil;
 import de.domisum.lib.auxilium.util.math.RandomUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -30,6 +32,8 @@ import java.util.Set;
 
 public class WorldGenerator
 {
+
+	private final Logger logger = LoggerFactory.getLogger(getClass());
 
 	// SETTINGS
 	private static final int FOUNDATION_REGION_BLEND_DISTANCE = 15;
@@ -65,13 +69,15 @@ public class WorldGenerator
 	// GENERATION
 	public World generate()
 	{
+		this.logger.info("Starting world generation...");
+
 		ChunkClusterLoaderSaver chunkClusterLoaderSaver = new ChunkClusterLoaderSaver(this.worldDirectory, true);
 		this.world = new World(chunkClusterLoaderSaver);
 
-
 		// shape
-		System.out.println("generateShape "+(System.currentTimeMillis()%100000));
+		this.logger.info("Generating continent shape...");
 		generateContinentShape();
+		this.logger.info("Generating continent shape done.");
 
 		// foundation
 		System.out.println("foundationRegion "+(System.currentTimeMillis()%100000));
@@ -81,8 +87,10 @@ public class WorldGenerator
 		System.out.println("foundationBuild "+(System.currentTimeMillis()%100000));
 		buildFoundation();
 
-		System.out.println("done "+(System.currentTimeMillis()%100000));
+		this.logger.info("World generation done. Saving world...");
+
 		this.world.save();
+		this.logger.info("Saving world done.");
 		return this.world;
 	}
 
