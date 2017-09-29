@@ -13,6 +13,9 @@ import lombok.Setter;
 
 import java.util.Random;
 
+/**
+ * Deforms the rough continent shapes to look more organic.
+ */
 public class ContinentsNoiseDeformer
 {
 

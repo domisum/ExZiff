@@ -12,6 +12,9 @@ import java.util.Objects;
 import java.util.Random;
 import java.util.Vector;
 
+/**
+ * Generates simple polygons as a starting point for ContinentsShapeGenerator.
+ */
 public class ContinentsBasePolygonGenerator
 {
 
