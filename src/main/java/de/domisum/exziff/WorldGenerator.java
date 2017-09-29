@@ -1,8 +1,8 @@
 package de.domisum.exziff;
 
-import de.domisum.exziff.foundation.Beach;
-import de.domisum.exziff.foundation.FoundationRegion;
-import de.domisum.exziff.foundation.FoundationRegionType;
+import de.domisum.exziff.bedrockzone.Beach;
+import de.domisum.exziff.bedrockzone.BedrockZone;
+import de.domisum.exziff.bedrockzone.BedrockZoneType;
 import de.domisum.exziff.map.BooleanMap;
 import de.domisum.exziff.map.FloatMap;
 import de.domisum.exziff.map.MultiFloatMap;
@@ -48,7 +48,7 @@ public class WorldGenerator
 	// TEMP
 	private BooleanMap continentShape;
 
-	private Map<Integer, FoundationRegion> foundationRegions = new HashMap<>();
+	private Map<Integer, BedrockZone> foundationRegions = new HashMap<>();
 	private ShortMap foundationRegionsMap;
 	private MultiFloatMap foundationRegionInfluenceMap = new MultiFloatMap();
 
@@ -79,7 +79,7 @@ public class WorldGenerator
 		generateContinentShape();
 		this.logger.info("Generating continent shape done.");
 
-		// foundation
+		// bedrockzone
 		System.out.println("foundationRegion "+(System.currentTimeMillis()%100000));
 		generateFoundationRegions();
 		System.out.println("blendFoundationRegion "+(System.currentTimeMillis()%100000));
@@ -144,14 +144,14 @@ public class WorldGenerator
 		determineBeachRegions();
 
 		// remove unneeded regions
-		this.foundationRegions.put(0, FoundationRegionType.OCEAN_FLOOR.getInstance(0, this.seed*1734913+47893948));
+		this.foundationRegions.put(0, BedrockZoneType.OCEAN_FLOOR.getInstance(0, this.seed*1734913+47893948));
 		for(int i = 1; i <= divisions*divisions; i++)
 		{
 			if(!isRegionUsed(i))
 				continue;
 
-			FoundationRegion foundationRegion = getRandomFoundationRegion(i);
-			this.foundationRegions.put(i, foundationRegion);
+			BedrockZone bedrockZone = getRandomFoundationRegion(i);
+			this.foundationRegions.put(i, bedrockZone);
 		}
 
 		// test export
@@ -164,7 +164,7 @@ public class WorldGenerator
 
 		// ocean map, use normal FloatMap since it covers the whole map
 		this.foundationRegionInfluenceMap.setMap(0, new FloatMap(this.size, this.size));
-		for(Map.Entry<Integer, FoundationRegion> entry : this.foundationRegions.entrySet())
+		for(Map.Entry<Integer, BedrockZone> entry : this.foundationRegions.entrySet())
 		{
 			FloatMap influenceMap = new FloatMap(this.size, this.size); // TODO add reduced memory FloatMap
 			this.foundationRegionInfluenceMap.setMap(entry.getKey(), influenceMap);
@@ -180,7 +180,7 @@ public class WorldGenerator
 				int regionId = this.foundationRegionsMap.get(x, z);
 				this.foundationRegionInfluenceMap.set(x, z, regionId, 1f);
 
-				// the influence spreading is only needed if this pixel is at the border to another FoundationRegion
+				// the influence spreading is only needed if this pixel is at the border to another BedrockZone
 				if(hasNoNeighbors(x, z))
 					continue;
 
@@ -249,19 +249,19 @@ public class WorldGenerator
 	private void buildFoundation()
 	{
 		// generate foundationRegions
-		for(Map.Entry<Integer, FoundationRegion> entry : this.foundationRegions.entrySet())
+		for(Map.Entry<Integer, BedrockZone> entry : this.foundationRegions.entrySet())
 		{
-			FoundationRegion foundationRegion = entry.getValue();
+			BedrockZone bedrockZone = entry.getValue();
 
 			FloatMap influenceMap = this.foundationRegionInfluenceMap.getMap(entry.getKey());
-			foundationRegion.setInfluenceMap(influenceMap);
+			bedrockZone.setInfluenceMap(influenceMap);
 
 			IntBounds2D influenceMapBounds = determineFloatMapBounds(influenceMap);
 			influenceMapBounds = influenceMapBounds.expand(10);
 			influenceMapBounds = influenceMapBounds.limit(new IntBounds2D(0, this.size, 0, this.size));
-			foundationRegion.setBounds(influenceMapBounds);
+			bedrockZone.setBounds(influenceMapBounds);
 
-			foundationRegion.generate();
+			bedrockZone.generate();
 		}
 
 		for(int z = 0; z < this.size; z++)
@@ -272,9 +272,9 @@ public class WorldGenerator
 				double sumHeight = 0;
 				for(Duo<Integer, Float> duo : influences)
 				{
-					FoundationRegion foundationRegion = this.foundationRegions.get(duo.a);
+					BedrockZone bedrockZone = this.foundationRegions.get(duo.a);
 
-					sumHeight += foundationRegion.getHeightAt(x, z)*duo.b;
+					sumHeight += bedrockZone.getHeightAt(x, z)*duo.b;
 				}
 
 				int combinedHeight = (int) Math.round(sumHeight);
@@ -292,10 +292,10 @@ public class WorldGenerator
 					this.world.setMaterial(x, y, z, material);
 				}
 
-				FoundationRegion foundationRegion = this.foundationRegions.get((int) this.foundationRegionsMap.get(x, z));
+				BedrockZone bedrockZone = this.foundationRegions.get((int) this.foundationRegionsMap.get(x, z));
 
 				// water
-				if(!this.continentShape.get(x, z) || foundationRegion.getType() == FoundationRegionType.BEACH)
+				if(!this.continentShape.get(x, z) || bedrockZone.getType() == BedrockZoneType.BEACH)
 					for(int y = combinedHeight+1; y <= WATER_HEIGHT; y++)
 						this.world.setMaterial(x, y, z, Material.WATER);
 			}
@@ -399,15 +399,15 @@ public class WorldGenerator
 			}
 	}
 
-	private FoundationRegion getRandomFoundationRegion(int id)
+	private BedrockZone getRandomFoundationRegion(int id)
 	{
 		Random random = new Random((this.seed+id)*120014384L);
 		long foundationRegionSeed = random.nextLong();
 
-		FoundationRegionType type;
+		BedrockZoneType type;
 		do
-			type = RandomUtil.getElement(FoundationRegionType.values(), random);
-		while(type == FoundationRegionType.OCEAN_FLOOR || type == FoundationRegionType.BEACH);
+			type = RandomUtil.getElement(BedrockZoneType.values(), random);
+		while(type == BedrockZoneType.OCEAN_FLOOR || type == BedrockZoneType.BEACH);
 
 		return type.getInstance(id, foundationRegionSeed);
 	}
@@ -425,16 +425,16 @@ public class WorldGenerator
 					continue;
 
 				int regionId = this.foundationRegionsMap.get(x, y);
-				FoundationRegion region = this.foundationRegions.get(regionId);
+				BedrockZone region = this.foundationRegions.get(regionId);
 
 				int brightnessInt = (regionId*67)%(256-minBrightness)+minBrightness;
 				int color = (brightnessInt)|(brightnessInt<<8)|(brightnessInt<<16);
 
-				if(region.getType() == FoundationRegionType.FLATLANDS)
+				if(region.getType() == BedrockZoneType.FLATLANDS)
 					color = (10<<16)|(250<<8)|((27*regionId)%100);
-				else if(region.getType() == FoundationRegionType.PLATEAU_HILLS)
+				else if(region.getType() == BedrockZoneType.PLATEAU_HILLS)
 					color = (250<<16)|(10<<8)|((27*regionId)%100);
-				else if(region.getType() == FoundationRegionType.BEACH)
+				else if(region.getType() == BedrockZoneType.BEACH)
 					color = (250<<16)|(250<<8)|((27*regionId)%100);
 
 				pixels[y][x] = color;

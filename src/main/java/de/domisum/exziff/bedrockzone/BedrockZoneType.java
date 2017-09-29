@@ -1,6 +1,6 @@
-package de.domisum.exziff.foundation;
+package de.domisum.exziff.bedrockzone;
 
-public enum FoundationRegionType
+public enum BedrockZoneType
 {
 
 	// @formatter:off
@@ -12,7 +12,7 @@ public enum FoundationRegionType
 	// @formatter:on
 
 
-	public FoundationRegion getInstance(int id, long seed)
+	public BedrockZone getInstance(int id, long seed)
 	{
 		if(this == OCEAN_FLOOR)
 			return new OceanFloor(id, seed);
