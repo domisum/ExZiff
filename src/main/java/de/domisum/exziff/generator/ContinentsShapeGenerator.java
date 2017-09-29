@@ -11,6 +11,8 @@ import de.domisum.exziff.map.transformation.bool.BooleanMapScale;
 import de.domisum.lib.auxilium.data.container.math.Polygon2D;
 import lombok.Getter;
 import lombok.Setter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
@@ -20,6 +22,8 @@ import java.util.List;
 public class ContinentsShapeGenerator extends BooleanMapGenerator
 {
 
+	private final Logger logger = LoggerFactory.getLogger(getClass());
+
 	// settings
 	private int size;
 	@Getter @Setter private int downscalingFactor = 1;
@@ -28,7 +32,7 @@ public class ContinentsShapeGenerator extends BooleanMapGenerator
 	// REFERENCES
 	private ContinentsBasePolygonGenerator basePolygonGenerator;
 	private ContinentsPolygonDeformer polygonDeformer;
-	private BooleanMapScale scale = new BooleanMapScale(this.polygonMapDownscalingFactor);
+	private BooleanMapScale scaleBackUp = new BooleanMapScale(this.polygonMapDownscalingFactor);
 	private ContinentsNoiseDeformer noiseDeformer;
 
 
@@ -49,16 +53,20 @@ public class ContinentsShapeGenerator extends BooleanMapGenerator
 	@Override public BooleanMap generate()
 	{
 		// generate using polygons
+		this.logger.info("Generate base polygons...");
 		List<Polygon2D> polygons = this.basePolygonGenerator.generate();
+
+		this.logger.info("Deform polygon shapes...");
 		polygons = this.polygonDeformer.deformPolygons(polygons);
 
+		this.logger.info("Convert polygons to map...");
 		BooleanMapFromPolygons generator = new BooleanMapFromPolygons(
 				this.size/(this.downscalingFactor*this.polygonMapDownscalingFactor), polygons);
 		BooleanMap continentShape = generator.generate();
 
-		continentShape = this.scale.transform(continentShape);
+		continentShape = this.scaleBackUp.transform(continentShape);
 
-		// deform
+		this.logger.info("Deform continent polygon shape...");
 		continentShape = this.noiseDeformer.deform(continentShape);
 
 		return continentShape;

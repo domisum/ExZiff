@@ -7,8 +7,7 @@ import de.domisum.exziff.map.BooleanMap;
 import de.domisum.exziff.map.FloatMap;
 import de.domisum.exziff.map.MultiFloatMap;
 import de.domisum.exziff.map.ShortMap;
-import de.domisum.exziff.map.generator.bool.BooleanMapGenerator;
-import de.domisum.exziff.prototype.IslandShapeGenerator;
+import de.domisum.exziff.map.transformation.bool.BooleanMapScale;
 import de.domisum.exziff.world.Material;
 import de.domisum.exziff.world.World;
 import de.domisum.exziff.world.loadersaver.ChunkClusterLoaderSaver;
@@ -98,9 +97,16 @@ public class WorldGenerator
 	// SHAPE
 	private void generateContinentShape()
 	{
-		BooleanMapGenerator generator = new IslandShapeGenerator(this.size, this.seed*1337L);
+		int scalingFactor = 4;
+
+		ContinentsShapeGenerator generator = new ContinentsShapeGenerator(this.size, this.seed*1337L);
+		generator.setDownscalingFactor(scalingFactor);
 
 		this.continentShape = generator.generate();
+
+		this.logger.info("Scaling continents shape to full size...");
+		BooleanMapScale scale = new BooleanMapScale(scalingFactor);
+		this.continentShape = scale.transform(this.continentShape);
 	}
 
 
