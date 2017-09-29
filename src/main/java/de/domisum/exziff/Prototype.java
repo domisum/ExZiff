@@ -41,7 +41,7 @@ public class Prototype
 	}
 
 
-	public static void partitoningTest()
+	public static void partitioningTest()
 	{
 		new Prototype().pt();
 	}
