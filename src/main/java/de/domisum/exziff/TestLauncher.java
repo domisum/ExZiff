@@ -11,7 +11,7 @@ public class TestLauncher
 	{
 		//Prototype.partitioningTest();
 
-		WorldGenerator generator = new WorldGenerator((int) Math.pow(2, 12), 1338,
+		WorldGenerator generator = new WorldGenerator((int) Math.pow(2, 14), 1338,
 				new File("C:\\Users\\domisum\\testChamber\\exziff\\testWorld"));
 		generator.generate();
 	}

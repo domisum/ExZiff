@@ -66,7 +66,7 @@ public class ContinentsShapeGenerator extends BooleanMapGenerator
 
 		continentShape = this.scaleBackUp.transform(continentShape);
 
-		this.logger.info("Deform continent polygon shape...");
+		this.logger.info("Deform continent shape using noise...");
 		continentShape = this.noiseDeformer.deform(continentShape);
 
 		return continentShape;
