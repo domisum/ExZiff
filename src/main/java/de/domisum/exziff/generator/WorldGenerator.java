@@ -40,6 +40,10 @@ public class WorldGenerator
 	// GENERATION
 	public World generate()
 	{
+		this.logger.info("size: {}", this.size);
+		this.logger.info("seed: {}", this.seed);
+
+
 		this.logger.info("Starting world generation...");
 
 		ChunkClusterLoaderSaver chunkClusterLoaderSaver = new ChunkClusterLoaderSaver(this.worldDirectory, true);
