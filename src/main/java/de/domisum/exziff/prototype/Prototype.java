@@ -1,5 +1,6 @@
-package de.domisum.exziff;
+package de.domisum.exziff.prototype;
 
+import de.domisum.exziff.generator.WorldGenerator;
 import de.domisum.exziff.map.BooleanMap;
 import de.domisum.exziff.map.ShortMap;
 import de.domisum.exziff.map.generator.bool.BooleanMapFromImageGenerator;

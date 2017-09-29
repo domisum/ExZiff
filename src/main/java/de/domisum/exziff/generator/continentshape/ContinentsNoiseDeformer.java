@@ -1,4 +1,4 @@
-package de.domisum.exziff.shape.continent;
+package de.domisum.exziff.generator.continentshape;
 
 import de.domisum.exziff.map.BooleanMap;
 import de.domisum.exziff.map.transformation.bool.BooleanMapFloodFill;

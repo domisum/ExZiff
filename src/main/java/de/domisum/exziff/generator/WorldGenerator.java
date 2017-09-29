@@ -1,4 +1,4 @@
-package de.domisum.exziff;
+package de.domisum.exziff.generator;
 
 import de.domisum.exziff.bedrockzone.Beach;
 import de.domisum.exziff.bedrockzone.BedrockZone;
@@ -8,7 +8,7 @@ import de.domisum.exziff.map.FloatMap;
 import de.domisum.exziff.map.MultiFloatMap;
 import de.domisum.exziff.map.ShortMap;
 import de.domisum.exziff.map.generator.bool.BooleanMapGenerator;
-import de.domisum.exziff.shape.IslandShapeGenerator;
+import de.domisum.exziff.prototype.IslandShapeGenerator;
 import de.domisum.exziff.world.Material;
 import de.domisum.exziff.world.World;
 import de.domisum.exziff.world.loadersaver.ChunkClusterLoaderSaver;

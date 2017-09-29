@@ -1,4 +1,6 @@
-package de.domisum.exziff;
+package de.domisum.exziff.prototype;
+
+import de.domisum.exziff.PixelCoordinates;
 
 public class RegionCoord extends PixelCoordinates
 {

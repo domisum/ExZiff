@@ -1,5 +1,7 @@
 package de.domisum.exziff;
 
+import de.domisum.exziff.prototype.Prototype;
+
 public class TestLauncher
 {
 

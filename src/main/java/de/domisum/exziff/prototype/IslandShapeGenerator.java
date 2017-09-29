@@ -1,4 +1,4 @@
-package de.domisum.exziff.shape;
+package de.domisum.exziff.prototype;
 
 import de.domisum.exziff.map.BooleanMap;
 import de.domisum.exziff.map.generator.bool.BooleanMapFromEllipse;

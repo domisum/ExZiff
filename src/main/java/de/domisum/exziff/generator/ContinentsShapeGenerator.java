@@ -1,20 +1,20 @@
-package de.domisum.exziff.shape;
+package de.domisum.exziff.generator;
 
 import de.domisum.exziff.map.BooleanMap;
 import de.domisum.exziff.map.generator.bool.BooleanMapGenerator;
 import de.domisum.exziff.map.generator.bool.BooleanMapFromPolygons;
 import de.domisum.exziff.map.transformation.bool.BooleanMapScale;
-import de.domisum.exziff.shape.continent.ContinentsBasePolygonGenerator;
-import de.domisum.exziff.shape.continent.ContinentsNoiseDeformer;
-import de.domisum.exziff.shape.continent.ContinentsPolygonDeformer;
-import de.domisum.exziff.shape.continent.ContinentsPolygonValidator;
+import de.domisum.exziff.generator.continentshape.ContinentsBasePolygonGenerator;
+import de.domisum.exziff.generator.continentshape.ContinentsNoiseDeformer;
+import de.domisum.exziff.generator.continentshape.ContinentsPolygonDeformer;
+import de.domisum.exziff.generator.continentshape.ContinentsPolygonValidator;
 import de.domisum.lib.auxilium.data.container.math.Polygon2D;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.util.List;
 
-public class ContinentsGenerator extends BooleanMapGenerator
+public class ContinentsShapeGenerator extends BooleanMapGenerator
 {
 
 	// settings
@@ -30,7 +30,7 @@ public class ContinentsGenerator extends BooleanMapGenerator
 
 
 	// INIT
-	public ContinentsGenerator(int size, long seed)
+	public ContinentsShapeGenerator(int size, long seed)
 	{
 		this.size = size;
 

@@ -1,4 +1,4 @@
-package de.domisum.exziff.shape.continent;
+package de.domisum.exziff.generator.continentshape;
 
 import de.domisum.lib.auxilium.data.container.math.LineSegment2D;
 import de.domisum.lib.auxilium.data.container.math.Polygon2D;
