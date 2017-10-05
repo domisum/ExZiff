@@ -1,12 +1,12 @@
-package de.domisum.exziff.bedrockzone;
+package de.domisum.exziff.bedrockregion;
 
-public class OceanFloor extends BedrockZone
+public class OceanFloor extends BedrockRegion
 {
 
 	// INIT
 	public OceanFloor(int id, long seed)
 	{
-		super(BedrockZoneType.OCEAN_FLOOR, id, seed);
+		super(BedrockRegionType.OCEAN_FLOOR, id, seed);
 	}
 
 

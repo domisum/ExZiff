@@ -1,11 +1,11 @@
-package de.domisum.exziff.bedrockzone;
+package de.domisum.exziff.bedrockregion;
 
 import de.domisum.layeredopensimplexnoise.LayeredOpenSimplexNoise;
 import de.domisum.layeredopensimplexnoise.NoiseLayer;
 import de.domisum.layeredopensimplexnoise.NoiseLayers;
 import de.domisum.lib.auxilium.util.math.RandomUtil;
 
-public class PlateauHills extends BedrockZone
+public class PlateauHills extends BedrockRegion
 {
 
 	// generated settings
@@ -20,7 +20,7 @@ public class PlateauHills extends BedrockZone
 	// INIT
 	public PlateauHills(int id, long seed)
 	{
-		super(BedrockZoneType.PLATEAU_HILLS, id, seed);
+		super(BedrockRegionType.PLATEAU_HILLS, id, seed);
 	}
 
 

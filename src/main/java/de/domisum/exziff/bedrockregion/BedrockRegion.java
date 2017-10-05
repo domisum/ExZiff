@@ -1,4 +1,4 @@
-package de.domisum.exziff.bedrockzone;
+package de.domisum.exziff.bedrockregion;
 
 import de.domisum.exziff.map.FloatMap;
 import de.domisum.lib.auxilium.data.container.bound.IntBounds2D;
@@ -7,11 +7,11 @@ import lombok.Setter;
 
 import java.util.Random;
 
-public abstract class BedrockZone
+public abstract class BedrockRegion
 {
 
 	// properties
-	@Getter protected final BedrockZoneType type;
+	@Getter protected final BedrockRegionType type;
 	@Getter protected final int id;
 	protected final long seed;
 
@@ -22,7 +22,7 @@ public abstract class BedrockZone
 
 
 	// INIT
-	protected BedrockZone(BedrockZoneType type, int id, long seed)
+	protected BedrockRegion(BedrockRegionType type, int id, long seed)
 	{
 		this.type = type;
 		this.id = id;
