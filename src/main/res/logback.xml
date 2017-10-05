@@ -3,7 +3,7 @@
 
 	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
 		<encoder>
-			<pattern>[%d{z yyyy-MM-dd HH:mm:ss.SSS} %5level] [%-16logger{16}] %msg%n</pattern>
+			<pattern>[%d{yyyy-MM-dd HH:mm:ss.SSS} %5level] [%logger{1}] %msg%n</pattern>
 		</encoder>
 	</appender>
 
@@ -12,7 +12,7 @@
 		<append>true</append>
 		<immediateFlush>true</immediateFlush>
 		<encoder>
-			<pattern>[%d{z yyyy-MM-dd HH:mm:ss.SSS} %5level] [%-16logger{16}] %msg%n</pattern>
+			<pattern>[%d{yyyy-MM-dd HH:mm:ss.SSS} %5level] [%logger{1}] %msg%n</pattern>
 		</encoder>
 	</appender>
 
