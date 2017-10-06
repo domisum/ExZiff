@@ -2,6 +2,7 @@ package de.domisum.exziff.generator;
 
 import de.domisum.exziff.map.BooleanMap;
 import de.domisum.exziff.map.transformation.bool.BooleanMapScale;
+import de.domisum.exziff.map.transformation.bool.BooleanMapSmooth;
 import de.domisum.exziff.world.World;
 import de.domisum.exziff.world.loadersaver.ChunkClusterLoaderSaver;
 import org.slf4j.Logger;
@@ -78,6 +79,9 @@ public class WorldGenerator
 		this.logger.info("Scaling continents shape to full size...");
 		BooleanMapScale scale = new BooleanMapScale(scalingFactor);
 		this.continentShape = scale.transform(this.continentShape);
+		this.logger.info("Smoothing upscaled shape...");
+		BooleanMapSmooth smooth = new BooleanMapSmooth(2, 0.3, 0.7);
+		this.continentShape = smooth.transform(this.continentShape);
 	}
 
 }
