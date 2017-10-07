@@ -77,6 +77,7 @@ public class Prototype
 		PriorityQueue<RegionCoord> queuedPoints = new PriorityQueue<>(
 				Comparator.comparingDouble(c->distance(continentShape.getWidth(), points, c)));
 
+
 		for(int i = 0; i < points.size(); i++)
 		{
 			Vector2D p = points.get(i);
@@ -101,6 +102,13 @@ public class Prototype
 			addIfNotRegionSet(continentShape, regions, queuedPoints, coord.x, coord.y+1, coord.regionId, coord.travelDistance+1);
 			addIfNotRegionSet(continentShape, regions, queuedPoints, coord.x, coord.y-1, coord.regionId, coord.travelDistance+1);
 		}
+
+		if(System.currentTimeMillis() < 0)
+			for(int i = 0; i < 100; i++)
+			{
+				System.out.println("randomize "+i);
+				regions = randomizeBorders(regions, random);
+			}
 
 		for(int i = 0; i < points.size(); i++)
 		{
@@ -223,6 +231,71 @@ public class Prototype
 	}
 
 
+	private static ShortMap randomizeBorders(ShortMap regions, Random random)
+	{
+		ShortMap newMap = new ShortMap(regions.getWidth(), regions.getHeight());
+
+		for(int y = 0; y < regions.getHeight(); y++)
+			for(int x = 0; x < regions.getWidth(); x++)
+			{
+				short newRegion;
+
+				newRegion = regions.get(x, y);
+				if(multipleNeighbors(regions, x, y) && regions.get(x, y) != 0)
+					if(RandomUtil.getByChance(0.5, random))
+					{
+						List<Short> nonselfNeighbors = getNonselfNeighbors(regions, x, y);
+						newRegion = RandomUtil.getElement(nonselfNeighbors, random);
+					}
+
+				newMap.set(x, y, newRegion);
+			}
+
+		for(int y = 0; y < regions.getHeight(); y++)
+			for(int x = 0; x < regions.getWidth(); x++)
+			{
+				short self = newMap.get(x, y);
+				if(self == 0)
+					continue;
+
+				if(!multipleNeighbors(newMap, x, y))
+					continue;
+
+				List<Short> neighbors = getNonselfNeighbors(newMap, x, y);
+
+				if(neighbors.contains(self))
+					continue;
+
+				newMap.set(x, y, neighbors.get(0));
+			}
+
+		return newMap;
+	}
+
+	private static List<Short> getNonselfNeighbors(ShortMap regions, int x, int y)
+	{
+		List<Short> nsn = new ArrayList<>();
+
+		short self = regions.get(x, y);
+
+		addIfNotSame(regions, nsn, self, x+1, y);
+		addIfNotSame(regions, nsn, self, x-1, y);
+		addIfNotSame(regions, nsn, self, x, y+1);
+		addIfNotSame(regions, nsn, self, x, y-1);
+
+		return nsn;
+	}
+
+	private static void addIfNotSame(ShortMap regions, List<Short> nsn, short self, int nX, int nY)
+	{
+		short v = regions.get(nX, nY);
+		if(v == 0)
+			return;
+
+		nsn.add(v);
+	}
+
+
 	private static BufferedImage export(ShortMap regions)
 	{
 		int[][] pixels = new int[regions.getHeight()][regions.getWidth()];
@@ -235,8 +308,8 @@ public class Prototype
 					continue;
 
 				int color = colorsInt[regionId%colorsInt.length];
-				if(multipleNeighbors(regions, x, y))
-					color = -1; // new Color(255, 255, 255).getRGB();
+				//				if(multipleNeighbors(regions, x, y))
+				//					color = -1; // new Color(255, 255, 255).getRGB();
 
 				pixels[y][x] = color;
 			}
