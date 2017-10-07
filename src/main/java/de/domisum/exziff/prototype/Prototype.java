@@ -4,9 +4,13 @@ import de.domisum.exziff.generator.WorldGenerator;
 import de.domisum.exziff.map.BooleanMap;
 import de.domisum.exziff.map.ShortMap;
 import de.domisum.exziff.map.generator.bool.BooleanMapFromImageGenerator;
+import de.domisum.exziff.map.transformation.bool.BooleanMapScale;
+import de.domisum.layeredopensimplexnoise.LayeredOpenSimplexNoise;
+import de.domisum.layeredopensimplexnoise.OctavedOpenSimplexNoise;
 import de.domisum.lib.auxilium.data.container.math.Polygon2D;
 import de.domisum.lib.auxilium.data.container.math.Vector2D;
 import de.domisum.lib.auxilium.util.ImageUtil;
+import de.domisum.lib.auxilium.util.math.MathUtil;
 import de.domisum.lib.auxilium.util.math.RandomUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,7 +21,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.Random;
 
@@ -56,6 +59,8 @@ public class Prototype
 		this.logger.info("Image loading done");
 
 
+		BooleanMapScale scale = new BooleanMapScale(0.25);
+		continentShape = scale.transform(continentShape);
 		//continentShape = new BooleanMap(1024, 1024);
 		Random random = new Random(3881);
 		ShortMap regions = generateRegions(continentShape, random);
@@ -72,43 +77,48 @@ public class Prototype
 	{
 		List<Vector2D> points = generatePoints(continentShape, random);
 
-		ShortMap regions = new ShortMap(continentShape.getWidth(), continentShape.getHeight());
-		//Queue<RegionCoord> queuedPoints = new ArrayDeque<>();
-		PriorityQueue<RegionCoord> queuedPoints = new PriorityQueue<>(
-				Comparator.comparingDouble(c->distance(continentShape.getWidth(), points, c)));
-
-
+		LayeredOpenSimplexNoise noise = new OctavedOpenSimplexNoise(7, 0.35, 0.3, 0.2, 0.5, 0);
+		List<LayeredOpenSimplexNoise> noises = new ArrayList<>();
 		for(int i = 0; i < points.size(); i++)
+			noises.add(new LayeredOpenSimplexNoise(noise.getNoiseLayers().getRandomSeedsCopy(random)));
+
+
+		ShortMap regions = new ShortMap(continentShape.getWidth(), continentShape.getHeight());
+		for(int y = 0; y < regions.getHeight(); y++)
 		{
-			Vector2D p = points.get(i);
+			if(y%128 == 0)
+				System.out.println(y);
 
-			RegionCoord regionCoord = new RegionCoord((int) (p.x*continentShape.getWidth()),
-					(int) (p.y*continentShape.getHeight()), i+1, 0);
-
-			regions.set(regionCoord.x, regionCoord.y, (short) regionCoord.regionId);
-			queuedPoints.add(regionCoord);
-		}
-
-		int counter = 0;
-		while(!queuedPoints.isEmpty())
-		{
-			//			if(counter++%100000 == 0)
-			//				System.out.println(queuedPoints.size());
-
-			RegionCoord coord = queuedPoints.poll();
-
-			addIfNotRegionSet(continentShape, regions, queuedPoints, coord.x+1, coord.y, coord.regionId, coord.travelDistance+1);
-			addIfNotRegionSet(continentShape, regions, queuedPoints, coord.x-1, coord.y, coord.regionId, coord.travelDistance+1);
-			addIfNotRegionSet(continentShape, regions, queuedPoints, coord.x, coord.y+1, coord.regionId, coord.travelDistance+1);
-			addIfNotRegionSet(continentShape, regions, queuedPoints, coord.x, coord.y-1, coord.regionId, coord.travelDistance+1);
-		}
-
-		if(System.currentTimeMillis() < 0)
-			for(int i = 0; i < 100; i++)
+			for(int x = 0; x < regions.getWidth(); x++)
 			{
-				System.out.println("randomize "+i);
-				regions = randomizeBorders(regions, random);
+				if(!continentShape.get(x, y))
+					continue;
+
+				Vector2D curr = new Vector2D((double) x/regions.getWidth(), (double) y/regions.getHeight());
+
+				double closestDistance = Double.MAX_VALUE;
+				int closestPointIndex = -1;
+				for(int i = 0; i < points.size(); i++)
+				{
+					Vector2D p = points.get(i);
+
+					double rawDistance = curr.distanceTo(p);
+
+					double noiseEval = noises.get(i).evaluate(curr.x, curr.y);
+					double noiseRemapped = MathUtil.remapLinear(-1, 1, 0, 1, noiseEval);
+
+					double distance = rawDistance*noiseRemapped;
+
+					if(distance < closestDistance)
+					{
+						closestDistance = distance;
+						closestPointIndex = i;
+					}
+				}
+
+				regions.set(x, y, (short) (closestPointIndex+1));
 			}
+		}
 
 		for(int i = 0; i < points.size(); i++)
 		{
@@ -119,10 +129,10 @@ public class Prototype
 
 			regions.set(regionCoord.x, regionCoord.y, (short) 0);
 
-			regions.set(regionCoord.x, regionCoord.y-1, (short) 0);
-			regions.set(regionCoord.x, regionCoord.y+1, (short) 0);
-			regions.set(regionCoord.x-1, regionCoord.y, (short) 0);
-			regions.set(regionCoord.x+1, regionCoord.y, (short) 0);
+			//			regions.set(regionCoord.x, regionCoord.y-1, (short) 0);
+			//			regions.set(regionCoord.x, regionCoord.y+1, (short) 0);
+			//			regions.set(regionCoord.x-1, regionCoord.y, (short) 0);
+			//			regions.set(regionCoord.x+1, regionCoord.y, (short) 0);
 		}
 
 		return regions;
