@@ -57,7 +57,7 @@ public class ChunkClusterLoaderSaver
 				getChunkClusterFileName(chunkCluster.getClX(), chunkCluster.getClZ()));
 
 		byte[] encodedChunkCluster = this.chunkClusterTranscoder.encode(chunkCluster);
-		encodedChunkCluster = CompressionUtil.compress(encodedChunkCluster, false);
+		encodedChunkCluster = CompressionUtil.compress(encodedChunkCluster, CompressionUtil.Speed.FAST);
 
 		FileUtil.writeByteArrayToFile(clusterFile, encodedChunkCluster);
 	}

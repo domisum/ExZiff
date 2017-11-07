@@ -4,13 +4,11 @@ import de.domisum.exziff.generator.WorldGenerator;
 import de.domisum.exziff.map.BooleanMap;
 import de.domisum.exziff.map.ShortMap;
 import de.domisum.exziff.map.generator.bool.BooleanMapFromImageGenerator;
-import de.domisum.exziff.map.transformation.bool.BooleanMapScale;
 import de.domisum.layeredopensimplexnoise.LayeredOpenSimplexNoise;
 import de.domisum.layeredopensimplexnoise.OctavedOpenSimplexNoise;
 import de.domisum.lib.auxilium.data.container.math.Polygon2D;
 import de.domisum.lib.auxilium.data.container.math.Vector2D;
 import de.domisum.lib.auxilium.util.ImageUtil;
-import de.domisum.lib.auxilium.util.math.MathUtil;
 import de.domisum.lib.auxilium.util.math.RandomUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,6 +19,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.Random;
 
@@ -59,8 +58,6 @@ public class Prototype
 		this.logger.info("Image loading done");
 
 
-		BooleanMapScale scale = new BooleanMapScale(0.25);
-		continentShape = scale.transform(continentShape);
 		//continentShape = new BooleanMap(1024, 1024);
 		Random random = new Random(3881);
 		ShortMap regions = generateRegions(continentShape, random);
@@ -77,48 +74,38 @@ public class Prototype
 	{
 		List<Vector2D> points = generatePoints(continentShape, random);
 
-		LayeredOpenSimplexNoise noise = new OctavedOpenSimplexNoise(7, 0.35, 0.3, 0.2, 0.5, 0);
-		List<LayeredOpenSimplexNoise> noises = new ArrayList<>();
-		for(int i = 0; i < points.size(); i++)
-			noises.add(new LayeredOpenSimplexNoise(noise.getNoiseLayers().getRandomSeedsCopy(random)));
-
-
 		ShortMap regions = new ShortMap(continentShape.getWidth(), continentShape.getHeight());
-		for(int y = 0; y < regions.getHeight(); y++)
+		//Queue<RegionCoord> queuedPoints = new ArrayDeque<>();
+		PriorityQueue<RegionCoord> queuedPoints = new PriorityQueue<>(
+				Comparator.comparingDouble(c->distance(continentShape.getWidth(), points, c)));
+
+		for(int i = 0; i < points.size(); i++)
 		{
-			if(y%128 == 0)
-				System.out.println(y);
+			Vector2D p = points.get(i);
 
-			for(int x = 0; x < regions.getWidth(); x++)
-			{
-				if(!continentShape.get(x, y))
-					continue;
+			RegionCoord regionCoord = new RegionCoord((int) (p.x*continentShape.getWidth()),
+					(int) (p.y*continentShape.getHeight()), i+1, 0);
 
-				Vector2D curr = new Vector2D((double) x/regions.getWidth(), (double) y/regions.getHeight());
-
-				double closestDistance = Double.MAX_VALUE;
-				int closestPointIndex = -1;
-				for(int i = 0; i < points.size(); i++)
-				{
-					Vector2D p = points.get(i);
-
-					double rawDistance = curr.distanceTo(p);
-
-					double noiseEval = noises.get(i).evaluate(curr.x, curr.y);
-					double noiseRemapped = MathUtil.remapLinear(-1, 1, 0, 1, noiseEval);
-
-					double distance = rawDistance*noiseRemapped;
-
-					if(distance < closestDistance)
-					{
-						closestDistance = distance;
-						closestPointIndex = i;
-					}
-				}
-
-				regions.set(x, y, (short) (closestPointIndex+1));
-			}
+			regions.set(regionCoord.x, regionCoord.y, (short) regionCoord.regionId);
+			queuedPoints.add(regionCoord);
 		}
+
+		int counter = 0;
+		while(!queuedPoints.isEmpty())
+		{
+			//			if(counter++%100000 == 0)
+			//				System.out.println(queuedPoints.size());
+
+			RegionCoord coord = queuedPoints.poll();
+
+			addIfNotRegionSet(continentShape, regions, queuedPoints, coord.x+1, coord.y, coord.regionId, coord.travelDistance+1);
+			addIfNotRegionSet(continentShape, regions, queuedPoints, coord.x-1, coord.y, coord.regionId, coord.travelDistance+1);
+			addIfNotRegionSet(continentShape, regions, queuedPoints, coord.x, coord.y+1, coord.regionId, coord.travelDistance+1);
+			addIfNotRegionSet(continentShape, regions, queuedPoints, coord.x, coord.y-1, coord.regionId, coord.travelDistance+1);
+		}
+
+		for(int i = 0; i < 3; i++)
+			regions = disturb(regions, random);
 
 		for(int i = 0; i < points.size(); i++)
 		{
@@ -129,14 +116,48 @@ public class Prototype
 
 			regions.set(regionCoord.x, regionCoord.y, (short) 0);
 
-			//			regions.set(regionCoord.x, regionCoord.y-1, (short) 0);
-			//			regions.set(regionCoord.x, regionCoord.y+1, (short) 0);
-			//			regions.set(regionCoord.x-1, regionCoord.y, (short) 0);
-			//			regions.set(regionCoord.x+1, regionCoord.y, (short) 0);
+			regions.set(regionCoord.x, regionCoord.y-1, (short) 0);
+			regions.set(regionCoord.x, regionCoord.y+1, (short) 0);
+			regions.set(regionCoord.x-1, regionCoord.y, (short) 0);
+			regions.set(regionCoord.x+1, regionCoord.y, (short) 0);
 		}
 
 		return regions;
 	}
+
+
+	private static ShortMap disturb(ShortMap regions, Random random)
+	{
+		ShortMap disturbedMap = new ShortMap(regions.getWidth(), regions.getWidth());
+
+		LayeredOpenSimplexNoise noise = new OctavedOpenSimplexNoise(3, 0.1, 0.3, 0.015, 0.35, -1);
+		LayeredOpenSimplexNoise noiseX = new LayeredOpenSimplexNoise(noise.getNoiseLayers().getRandomSeedsCopy(random));
+		LayeredOpenSimplexNoise noiseY = new LayeredOpenSimplexNoise(noise.getNoiseLayers().getRandomSeedsCopy(random));
+
+		for(int y = 0; y < regions.getHeight(); y++)
+			for(int x = 0; x < regions.getHeight(); x++)
+			{
+				if(regions.get(x, y) == 0)
+					continue;
+
+				Vector2D rP = new Vector2D((double) x/regions.getHeight(), (double) y/regions.getHeight());
+
+				double dX = noiseX.evaluate(rP.x, rP.y);
+				double dY = noiseY.evaluate(rP.x, rP.y);
+
+				Vector2D oP = rP.add(new Vector2D(dX, dY));
+				int oX = (int) (oP.x*regions.getWidth());
+				int oY = (int) (oP.y*regions.getWidth());
+
+				if(isOutOfBounds(regions.getWidth(), regions.getWidth(), oX, oY) || regions.get(oX, oY) == 0)
+					disturbedMap.set(x, y, regions.get(x, y));
+				else
+					disturbedMap.set(x, y, regions.get(oX, oY));
+			}
+
+		return disturbedMap;
+	}
+
 
 	private static List<Vector2D> generatePoints(BooleanMap continentShape, Random random)
 	{
@@ -241,71 +262,6 @@ public class Prototype
 	}
 
 
-	private static ShortMap randomizeBorders(ShortMap regions, Random random)
-	{
-		ShortMap newMap = new ShortMap(regions.getWidth(), regions.getHeight());
-
-		for(int y = 0; y < regions.getHeight(); y++)
-			for(int x = 0; x < regions.getWidth(); x++)
-			{
-				short newRegion;
-
-				newRegion = regions.get(x, y);
-				if(multipleNeighbors(regions, x, y) && regions.get(x, y) != 0)
-					if(RandomUtil.getByChance(0.5, random))
-					{
-						List<Short> nonselfNeighbors = getNonselfNeighbors(regions, x, y);
-						newRegion = RandomUtil.getElement(nonselfNeighbors, random);
-					}
-
-				newMap.set(x, y, newRegion);
-			}
-
-		for(int y = 0; y < regions.getHeight(); y++)
-			for(int x = 0; x < regions.getWidth(); x++)
-			{
-				short self = newMap.get(x, y);
-				if(self == 0)
-					continue;
-
-				if(!multipleNeighbors(newMap, x, y))
-					continue;
-
-				List<Short> neighbors = getNonselfNeighbors(newMap, x, y);
-
-				if(neighbors.contains(self))
-					continue;
-
-				newMap.set(x, y, neighbors.get(0));
-			}
-
-		return newMap;
-	}
-
-	private static List<Short> getNonselfNeighbors(ShortMap regions, int x, int y)
-	{
-		List<Short> nsn = new ArrayList<>();
-
-		short self = regions.get(x, y);
-
-		addIfNotSame(regions, nsn, self, x+1, y);
-		addIfNotSame(regions, nsn, self, x-1, y);
-		addIfNotSame(regions, nsn, self, x, y+1);
-		addIfNotSame(regions, nsn, self, x, y-1);
-
-		return nsn;
-	}
-
-	private static void addIfNotSame(ShortMap regions, List<Short> nsn, short self, int nX, int nY)
-	{
-		short v = regions.get(nX, nY);
-		if(v == 0)
-			return;
-
-		nsn.add(v);
-	}
-
-
 	private static BufferedImage export(ShortMap regions)
 	{
 		int[][] pixels = new int[regions.getHeight()][regions.getWidth()];
@@ -318,8 +274,13 @@ public class Prototype
 					continue;
 
 				int color = colorsInt[regionId%colorsInt.length];
-				//				if(multipleNeighbors(regions, x, y))
-				//					color = -1; // new Color(255, 255, 255).getRGB();
+				if(multipleNeighbors(regions, x, y)&& false)
+				{
+					if((x+y)%2 == 0)
+						color = -1; // new Color(255, 255, 255).getRGB();
+					else
+						color = -16777216; //new Color(0, 0, 0).getRGB();
+				}
 
 				pixels[y][x] = color;
 			}
