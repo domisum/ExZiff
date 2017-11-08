@@ -8,6 +8,7 @@ import de.domisum.layeredopensimplexnoise.LayeredOpenSimplexNoise;
 import de.domisum.layeredopensimplexnoise.OctavedOpenSimplexNoise;
 import de.domisum.lib.auxilium.data.container.math.Polygon2D;
 import de.domisum.lib.auxilium.data.container.math.Vector2D;
+import de.domisum.lib.auxilium.util.FileUtil;
 import de.domisum.lib.auxilium.util.ImageUtil;
 import de.domisum.lib.auxilium.util.math.RandomUtil;
 import org.slf4j.Logger;
@@ -53,7 +54,7 @@ public class Prototype
 	{
 		this.logger.info("Starting image loading");
 		BooleanMapFromImageGenerator fromImageGenerator = new BooleanMapFromImageGenerator(
-				ImageUtil.loadImage("C:\\Users\\domisum\\testChamber\\exziff\\res\\continentShape.png"), 0.5);
+				FileUtil.readImage(new File("C:\\Users\\domisum\\testChamber\\exziff\\res\\continentShape.png")), 0.5);
 		BooleanMap continentShape = fromImageGenerator.generate();
 		this.logger.info("Image loading done");
 
@@ -65,7 +66,7 @@ public class Prototype
 
 		this.logger.info("Starting export");
 		BufferedImage image = export(regions);
-		ImageUtil.writeImage(new File("C:\\Users\\domisum\\testChamber\\exziff//regions.png"), image);
+		FileUtil.writeImage(new File("C:\\Users\\domisum\\testChamber\\exziff//regions.png"), image);
 		this.logger.info("Export done");
 	}
 
@@ -274,7 +275,7 @@ public class Prototype
 					continue;
 
 				int color = colorsInt[regionId%colorsInt.length];
-				if(multipleNeighbors(regions, x, y)&& false)
+				if(multipleNeighbors(regions, x, y) && false)
 				{
 					if((x+y)%2 == 0)
 						color = -1; // new Color(255, 255, 255).getRGB();
