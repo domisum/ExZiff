@@ -1,8 +1,8 @@
 package de.domisum.exziff.prototype;
 
-import de.domisum.exziff.PixelCoordinates;
+import de.domisum.lib.auxilium.data.container.math.Coordinate2DInt;
 
-public class RegionCoord extends PixelCoordinates
+public class RegionCoord extends Coordinate2DInt
 {
 
 	public final int regionId;

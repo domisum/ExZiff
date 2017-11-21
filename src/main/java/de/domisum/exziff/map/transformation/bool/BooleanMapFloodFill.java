@@ -1,7 +1,7 @@
 package de.domisum.exziff.map.transformation.bool;
 
-import de.domisum.exziff.PixelCoordinates;
 import de.domisum.exziff.map.BooleanMap;
+import de.domisum.lib.auxilium.data.container.math.Coordinate2DInt;
 
 import java.util.Collection;
 import java.util.LinkedList;
@@ -16,7 +16,7 @@ public class BooleanMapFloodFill extends BooleanMapTransformation
 		boolean[][] pixels = new boolean[input.getHeight()][input.getWidth()];
 
 		// these pixels have yet to be processed
-		Queue<PixelCoordinates> unvisitedPixels = new LinkedList<>();
+		Queue<Coordinate2DInt> unvisitedPixels = new LinkedList<>();
 		// the pixels marked with true have already been processend and can be ignored
 		boolean[][] processedPixels = new boolean[input.getHeight()][input.getWidth()];
 
@@ -26,13 +26,13 @@ public class BooleanMapFloodFill extends BooleanMapTransformation
 				if(x == 0 || y == 0 || x == input.getWidth()-1 || y == input.getHeight()-1) // only the pixels on the outer edge
 					if(!input.get(x, y)) // and only if they are not blocked themselves
 					{
-						unvisitedPixels.add(new PixelCoordinates(x, y));
+						unvisitedPixels.add(new Coordinate2DInt(x, y));
 						processedPixels[y][x] = true;
 					}
 
 		while(unvisitedPixels.size() > 0)
 		{
-			PixelCoordinates coordinates = unvisitedPixels.poll();
+			Coordinate2DInt coordinates = unvisitedPixels.poll();
 			pixels[coordinates.y][coordinates.x] = true;
 
 			// check all neighbors in 4 directions
@@ -45,7 +45,7 @@ public class BooleanMapFloodFill extends BooleanMapTransformation
 		return new BooleanMap(pixels);
 	}
 
-	private void tryAddNeighborPixel(BooleanMap input, PixelCoordinates base, Collection<PixelCoordinates> unvisitedPixels,
+	private void tryAddNeighborPixel(BooleanMap input, Coordinate2DInt base, Collection<Coordinate2DInt> unvisitedPixels,
 			boolean[][] processedPixels, int dX, int dY)
 	{
 		int nX = base.x+dX;
@@ -64,7 +64,7 @@ public class BooleanMapFloodFill extends BooleanMapTransformation
 		if(input.get(nX, nY)) // don't add the pixel to the queue if the pixel is blocked
 			return;
 
-		unvisitedPixels.add(new PixelCoordinates(base.x+dX, base.y+dY));
+		unvisitedPixels.add(new Coordinate2DInt(base.x+dX, base.y+dY));
 	}
 
 }
