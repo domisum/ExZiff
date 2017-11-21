@@ -8,7 +8,7 @@ import lombok.Getter;
 
 import java.io.File;
 
-public class ChunkClusterLoaderSaver
+public class ChunkClusterSourceFromDisk implements ChunkClusterSource
 {
 
 	// SETTINGS
@@ -20,7 +20,7 @@ public class ChunkClusterLoaderSaver
 
 
 	// INIT
-	public ChunkClusterLoaderSaver(File chunkClusterDirectory, boolean saveClusters)
+	public ChunkClusterSourceFromDisk(File chunkClusterDirectory, boolean saveClusters)
 	{
 		this.chunkClusterDirectory = chunkClusterDirectory;
 		this.saveClusters = saveClusters;
@@ -31,7 +31,7 @@ public class ChunkClusterLoaderSaver
 
 
 	// LOADING
-	public ChunkCluster loadChunkCluster(int clX, int clZ)
+	@Override public ChunkCluster loadChunkCluster(int clX, int clZ)
 	{
 		File clusterFile = new File(this.chunkClusterDirectory, getChunkClusterFileName(clX, clZ));
 
@@ -48,7 +48,7 @@ public class ChunkClusterLoaderSaver
 
 
 	// SAVING
-	public void saveChunkCluster(ChunkCluster chunkCluster)
+	@Override public void saveChunkCluster(ChunkCluster chunkCluster)
 	{
 		if(!this.saveClusters)
 			return;

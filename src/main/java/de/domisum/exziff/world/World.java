@@ -1,6 +1,6 @@
 package de.domisum.exziff.world;
 
-import de.domisum.exziff.world.loadersaver.ChunkClusterLoaderSaver;
+import de.domisum.exziff.world.loadersaver.ChunkClusterSource;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -14,23 +14,23 @@ public class World
 	private ChunkClusterField clusterField = new ChunkClusterField(CHUNK_CLUSTER_RADIUS);
 
 	// REFERENCES
-	@Setter private ChunkClusterLoaderSaver chunkClusterLoaderSaver;
+	@Setter private ChunkClusterSource chunkClusterSource;
 
 	// SETTINGS
 	/**
 	 * A ChunkCluster takes up at most 32MiB of memory.
 	 * <p>
 	 * So:
-	 * 128 ChunkClusters ^= 4GiB
-	 * 256 ChunkClusters ^= 8GiB
+	 * 128 ChunkClusters ^= max 4GiB
+	 * 256 ChunkClusters ^= max 8GiB
 	 */
 	@Getter @Setter private int maximumLoadedChunkClusters = 128;
 
 
 	// INIT
-	public World(ChunkClusterLoaderSaver chunkClusterLoaderSaver)
+	public World(ChunkClusterSource chunkClusterSource)
 	{
-		this.chunkClusterLoaderSaver = chunkClusterLoaderSaver;
+		this.chunkClusterSource = chunkClusterSource;
 	}
 
 
@@ -61,6 +61,7 @@ public class World
 
 	private int getUnsignedByteValue(byte input)
 	{
+		// TODO improve method signatures to make this unnecessary/hide it further down
 		return input&0xFF;
 	}
 
@@ -120,7 +121,7 @@ public class World
 		while(this.clusterField.getClusterList().size() >= this.maximumLoadedChunkClusters)
 			unloadLongestUnusedChunkCluster();
 
-		ChunkCluster chunkCluster = this.chunkClusterLoaderSaver.loadChunkCluster(clX, clZ);
+		ChunkCluster chunkCluster = this.chunkClusterSource.loadChunkCluster(clX, clZ);
 
 		// chunk cluster not saved to disk, create new chunk cluster
 		if(chunkCluster == null)
@@ -134,14 +135,14 @@ public class World
 	{
 		ChunkCluster longestUnusedChunkCluster = this.clusterField.getLongestUnusedChunkCluster();
 
-		this.chunkClusterLoaderSaver.saveChunkCluster(longestUnusedChunkCluster);
+		this.chunkClusterSource.saveChunkCluster(longestUnusedChunkCluster);
 		this.clusterField.removeCluster(longestUnusedChunkCluster);
 	}
 
 	public void save()
 	{
 		for(ChunkCluster cluster : this.clusterField.getClusterList())
-			this.chunkClusterLoaderSaver.saveChunkCluster(cluster);
+			this.chunkClusterSource.saveChunkCluster(cluster);
 	}
 
 

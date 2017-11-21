@@ -4,7 +4,7 @@ import de.domisum.exziff.map.BooleanMap;
 import de.domisum.exziff.map.transformation.bool.BooleanMapScale;
 import de.domisum.exziff.map.transformation.bool.BooleanMapSmooth;
 import de.domisum.exziff.world.World;
-import de.domisum.exziff.world.loadersaver.ChunkClusterLoaderSaver;
+import de.domisum.exziff.world.loadersaver.ChunkClusterSourceFromDisk;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -41,7 +41,7 @@ public class WorldGenerator
 	// GENERATION
 	public World generate()
 	{
-		ChunkClusterLoaderSaver chunkClusterLoaderSaver = new ChunkClusterLoaderSaver(this.worldDirectory, true);
+		ChunkClusterSourceFromDisk chunkClusterLoaderSaver = new ChunkClusterSourceFromDisk(this.worldDirectory, true);
 		this.world = new World(chunkClusterLoaderSaver);
 
 		this.logger.info("Starting world generation...");
