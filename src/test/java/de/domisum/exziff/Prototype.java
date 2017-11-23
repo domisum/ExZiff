@@ -1,4 +1,4 @@
-package de.domisum.exziff.prototype;
+package de.domisum.exziff;
 
 import de.domisum.exziff.generator.WorldGenerator;
 import de.domisum.exziff.map.BooleanMap;

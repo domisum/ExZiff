@@ -1,7 +1,6 @@
 package de.domisum.exziff;
 
 import de.domisum.exziff.generator.WorldGenerator;
-import de.domisum.exziff.prototype.Prototype;
 
 import java.io.File;
 

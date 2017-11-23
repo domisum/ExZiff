@@ -1,4 +1,4 @@
-package de.domisum.exziff.prototype;
+package de.domisum.exziff;
 
 import de.domisum.lib.auxilium.data.container.math.Coordinate2DInt;
 
