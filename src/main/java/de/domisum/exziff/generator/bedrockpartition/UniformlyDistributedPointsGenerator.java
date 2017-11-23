@@ -3,9 +3,7 @@ package de.domisum.exziff.generator.bedrockpartition;
 import de.domisum.exziff.generator.RandomizedGeneratorOneInput;
 import de.domisum.lib.auxilium.data.container.math.Vector2D;
 import de.domisum.lib.auxilium.util.math.RandomUtil;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 
 import java.util.HashSet;
 import java.util.Random;
@@ -13,10 +11,6 @@ import java.util.Set;
 
 public class UniformlyDistributedPointsGenerator implements RandomizedGeneratorOneInput<Integer, Set<Vector2D>>
 {
-
-	// SETTINGS
-	@Getter @Setter private int desiredNumberOfPoints = 300;
-
 
 	// GENERATE
 	@Override public Set<Vector2D> generate(long seed, Integer desiredNumberOfPoints)
