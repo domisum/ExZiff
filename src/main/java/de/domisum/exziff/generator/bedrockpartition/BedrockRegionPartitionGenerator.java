@@ -4,8 +4,10 @@ import de.domisum.exziff.generator.RandomizedGeneratorOneInput;
 import de.domisum.exziff.map.BooleanMap;
 import de.domisum.exziff.map.ShortMap;
 import de.domisum.lib.auxilium.data.container.math.Vector2D;
+import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
+import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
 
@@ -32,16 +34,78 @@ public class BedrockRegionPartitionGenerator implements RandomizedGeneratorOneIn
 		private final BooleanMap continentShape;
 
 		// TEMP
-		private Set<Vector2D> regionCenterPoints;
+		private Set<RegionCenterPoint> regionCenterPoints = new HashSet<>();
 
 
 		// GENERATE
 		public ShortMap generate()
 		{
-			regionCenterPoints = regionCenterPointsGenerator.generate(random.nextLong(), 300);
+			generateRegionCenterPoints();
 
-			return null;
+			ShortMap closestPointMap = generateClosestPointMap();
+			return closestPointMap;
 		}
+
+		private void generateRegionCenterPoints()
+		{
+			Set<Vector2D> points = regionCenterPointsGenerator.generate(random.nextLong(), 300);
+
+			short regionIdCounter = 1;
+			for(Vector2D p : points)
+			{
+				regionCenterPoints.add(new RegionCenterPoint(regionIdCounter, p));
+				regionIdCounter++;
+			}
+		}
+
+		private ShortMap generateClosestPointMap()
+		{
+			ShortMap closestPointMap = new ShortMap(continentShape.getWidth(), continentShape.getHeight());
+
+			for(int x = 0; x < closestPointMap.getWidth(); x++)
+				for(int y = 0; y < closestPointMap.getHeight(); y++)
+				{
+					if(!continentShape.get(x, y))
+						continue;
+
+					double rX = x/(double) closestPointMap.getWidth();
+					double rY = y/(double) closestPointMap.getHeight();
+					RegionCenterPoint closestRegionCenterPoint = getClosestRegionCenterPoint(rX, rY);
+
+					closestPointMap.set(x, y, closestRegionCenterPoint.regionId);
+				}
+
+			return closestPointMap;
+		}
+
+		private RegionCenterPoint getClosestRegionCenterPoint(double rX, double rY)
+		{
+			Vector2D fromPoint = new Vector2D(rX, rY);
+
+			RegionCenterPoint closetRegionCenterPoint = null;
+			double closestRegionCenterPointDistanceSquared = Double.MAX_VALUE;
+			for(RegionCenterPoint rcp : regionCenterPoints)
+			{
+				double distance = fromPoint.distanceToSquared(rcp.point);
+				if(distance < closestRegionCenterPointDistanceSquared)
+				{
+					closetRegionCenterPoint = rcp;
+					closestRegionCenterPointDistanceSquared = distance;
+				}
+			}
+
+			return closetRegionCenterPoint;
+		}
+
+	}
+
+
+	@AllArgsConstructor
+	private static class RegionCenterPoint
+	{
+
+		public final short regionId;
+		public final Vector2D point;
 
 	}
 
