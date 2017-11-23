@@ -9,12 +9,14 @@ import de.domisum.exziff.map.generator.bool.BooleanMapFromPolygons;
 import de.domisum.exziff.map.generator.bool.BooleanMapGenerator;
 import de.domisum.exziff.map.transformation.bool.BooleanMapScale;
 import de.domisum.lib.auxilium.data.container.math.Polygon2D;
+import de.domisum.lib.auxilium.util.math.RandomUtil;
 import lombok.Getter;
 import lombok.Setter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.List;
+import java.util.Random;
 
 /**
  * Generates random continent shapes from a given seed.
@@ -24,13 +26,15 @@ public class ContinentsShapeGenerator extends BooleanMapGenerator
 
 	private final Logger logger = LoggerFactory.getLogger(getClass());
 
+
 	// settings
 	private int size;
+	private Random random;
 	@Getter @Setter private int downscalingFactor = 1;
 	private int polygonMapDownscalingFactor = 4;
 
 	// REFERENCES
-	private ContinentsBasePolygonGenerator basePolygonGenerator;
+	private RandomizedGenerator<Integer, List<Polygon2D>> basePolygonGenerator;
 	private ContinentsPolygonDeformer polygonDeformer;
 	private BooleanMapScale scaleBackUp = new BooleanMapScale(this.polygonMapDownscalingFactor);
 	private ContinentsNoiseDeformer noiseDeformer;
@@ -40,10 +44,11 @@ public class ContinentsShapeGenerator extends BooleanMapGenerator
 	public ContinentsShapeGenerator(int size, long seed)
 	{
 		this.size = size;
+		this.random = new Random(seed);
 
 		ContinentsPolygonValidator polygonValidator = new ContinentsPolygonValidator();
 
-		this.basePolygonGenerator = new ContinentsBasePolygonGenerator(seed, polygonValidator);
+		this.basePolygonGenerator = new ContinentsBasePolygonGenerator(polygonValidator);
 		this.polygonDeformer = new ContinentsPolygonDeformer(seed, polygonValidator);
 		this.noiseDeformer = new ContinentsNoiseDeformer(seed);
 	}
@@ -54,7 +59,8 @@ public class ContinentsShapeGenerator extends BooleanMapGenerator
 	{
 		// generate using polygons
 		this.logger.info("Generate base polygons...");
-		List<Polygon2D> polygons = this.basePolygonGenerator.generate();
+		int numberOfPolygonsToGenerate = RandomUtil.distribute(3, 1, random);
+		List<Polygon2D> polygons = this.basePolygonGenerator.generate(random.nextLong(), numberOfPolygonsToGenerate);
 
 		this.logger.info("Deform polygon shapes...");
 		polygons = this.polygonDeformer.deformPolygons(polygons);
@@ -65,6 +71,7 @@ public class ContinentsShapeGenerator extends BooleanMapGenerator
 		BooleanMap continentShape = generator.generate();
 
 		continentShape = this.scaleBackUp.transform(continentShape);
+
 
 		this.logger.info("Deform continent shape using noise...");
 		continentShape = this.noiseDeformer.deform(continentShape);

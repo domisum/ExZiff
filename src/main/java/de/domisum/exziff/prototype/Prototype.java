@@ -71,7 +71,7 @@ public class Prototype
 	}
 
 
-	private static ShortMap generateRegions(BooleanMap continentShape, Random random)
+	private ShortMap generateRegions(BooleanMap continentShape, Random random)
 	{
 		List<Vector2D> points = generatePoints(continentShape, random);
 
@@ -105,7 +105,8 @@ public class Prototype
 			addIfNotRegionSet(continentShape, regions, queuedPoints, coord.x, coord.y-1, coord.regionId, coord.travelDistance+1);
 		}
 
-		for(int i = 0; i < 3; i++)
+		logger.info("before disturb");
+		for(int i = 0; i < 5; i++)
 			regions = disturb(regions, random);
 
 		for(int i = 0; i < points.size(); i++)
@@ -131,7 +132,7 @@ public class Prototype
 	{
 		ShortMap disturbedMap = new ShortMap(regions.getWidth(), regions.getWidth());
 
-		LayeredOpenSimplexNoise noise = new OctavedOpenSimplexNoise(3, 0.1, 0.3, 0.015, 0.35, -1);
+		LayeredOpenSimplexNoise noise = new OctavedOpenSimplexNoise(2, 0.1, 0.3, 0.01, 0.35, -1);
 		LayeredOpenSimplexNoise noiseX = new LayeredOpenSimplexNoise(noise.getNoiseLayers().getRandomSeedsCopy(random));
 		LayeredOpenSimplexNoise noiseY = new LayeredOpenSimplexNoise(noise.getNoiseLayers().getRandomSeedsCopy(random));
 
