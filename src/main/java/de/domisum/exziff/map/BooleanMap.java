@@ -17,7 +17,7 @@ public class BooleanMap
 
 	public BooleanMap(int width, int height)
 	{
-		this.pixels = new boolean[height][width];
+		this(new boolean[height][width]);
 	}
 
 
