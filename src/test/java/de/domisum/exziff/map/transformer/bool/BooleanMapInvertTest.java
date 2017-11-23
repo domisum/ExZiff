@@ -37,7 +37,6 @@ public class BooleanMapInvertTest
 		return booleanMap;
 	}
 
-
 	// ACT
 	private static void invertAndAssertInverted(BooleanMap booleanMap)
 	{
@@ -46,7 +45,6 @@ public class BooleanMapInvertTest
 		BooleanMap inverted = booleanMapInvert.transform(booleanMap);
 		assertInverted(booleanMap, inverted);
 	}
-
 
 	// ASSERT
 	private static void assertInverted(BooleanMap base, BooleanMap inverted)
