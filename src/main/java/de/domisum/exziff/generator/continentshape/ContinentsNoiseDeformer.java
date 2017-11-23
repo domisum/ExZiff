@@ -2,10 +2,10 @@ package de.domisum.exziff.generator.continentshape;
 
 import de.domisum.exziff.generator.RandomizedGenerator;
 import de.domisum.exziff.map.BooleanMap;
-import de.domisum.exziff.map.transformation.bool.BooleanMapFloodFill;
-import de.domisum.exziff.map.transformation.bool.BooleanMapInvert;
-import de.domisum.exziff.map.transformation.bool.BooleanMapNoiseOffsetter;
-import de.domisum.exziff.map.transformation.bool.BooleanMapSmooth;
+import de.domisum.exziff.map.transformer.bool.BooleanMapFloodFill;
+import de.domisum.exziff.map.transformer.bool.BooleanMapInvert;
+import de.domisum.exziff.map.transformer.bool.BooleanMapNoiseOffsetter;
+import de.domisum.exziff.map.transformer.bool.BooleanMapSmooth;
 import de.domisum.layeredopensimplexnoise.LayeredOpenSimplexNoise;
 import de.domisum.layeredopensimplexnoise.NoiseLayer;
 import de.domisum.layeredopensimplexnoise.NoiseLayers;

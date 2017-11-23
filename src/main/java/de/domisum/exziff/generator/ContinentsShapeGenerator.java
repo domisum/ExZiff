@@ -6,7 +6,7 @@ import de.domisum.exziff.generator.continentshape.ContinentsPolygonDeformer;
 import de.domisum.exziff.generator.continentshape.ContinentsPolygonValidator;
 import de.domisum.exziff.map.BooleanMap;
 import de.domisum.exziff.map.generator.bool.BooleanMapFromPolygons;
-import de.domisum.exziff.map.transformation.bool.BooleanMapScale;
+import de.domisum.exziff.map.transformer.bool.BooleanMapScale;
 import de.domisum.lib.auxilium.data.container.math.Polygon2D;
 import de.domisum.lib.auxilium.util.math.RandomUtil;
 import lombok.Getter;

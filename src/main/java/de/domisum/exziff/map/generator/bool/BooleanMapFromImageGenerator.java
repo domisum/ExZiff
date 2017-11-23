@@ -1,7 +1,7 @@
 package de.domisum.exziff.map.generator.bool;
 
 import de.domisum.exziff.map.BooleanMap;
-import de.domisum.exziff.map.Generator;
+import de.domisum.exziff.map.generator.Generator;
 import de.domisum.lib.auxilium.util.ImageUtil;
 
 import java.awt.image.BufferedImage;

@@ -1,4 +1,4 @@
-package de.domisum.exziff.map;
+package de.domisum.exziff.map.transformer;
 
 public interface Transformer<IO>
 {

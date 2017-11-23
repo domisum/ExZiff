@@ -1,4 +1,4 @@
-package de.domisum.exziff.map;
+package de.domisum.exziff.map.generator;
 
 public interface Generator<I, O>
 {
