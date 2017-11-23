@@ -1,39 +1,36 @@
 package de.domisum.exziff.map.generator.bool;
 
 import de.domisum.exziff.map.BooleanMap;
+import de.domisum.exziff.map.Generator;
 import de.domisum.lib.auxilium.util.ImageUtil;
 
 import java.awt.image.BufferedImage;
 
-public class BooleanMapFromImageGenerator extends BooleanMapGenerator
+public class BooleanMapFromImageGenerator implements Generator<BufferedImage, BooleanMap>
 {
-
-	// INPUT
-	private BufferedImage image;
 
 	// SETTINGS
 	private double threshold;
 
 
 	// INITIALIZATION
-	public BooleanMapFromImageGenerator(BufferedImage image, double threshold)
+	public BooleanMapFromImageGenerator(double threshold)
 	{
 		if(threshold < 0 || threshold > 1)
 			throw new IllegalArgumentException("The threshold has to be between 0.0 and 1.0");
 
-		this.image = image;
 		this.threshold = threshold;
 	}
 
 
 	// GENERATION
-	@Override public BooleanMap generate()
+	@Override public BooleanMap generate(BufferedImage image)
 	{
-		int[][] colorPixels = ImageUtil.getPixels(this.image);
+		int[][] colorPixels = ImageUtil.getPixels(image);
 
-		boolean[][] pixels = new boolean[this.image.getHeight()][this.image.getWidth()];
-		for(int y = 0; y < this.image.getHeight(); y++)
-			for(int x = 0; x < this.image.getWidth(); x++)
+		boolean[][] pixels = new boolean[image.getHeight()][image.getWidth()];
+		for(int y = 0; y < image.getHeight(); y++)
+			for(int x = 0; x < image.getWidth(); x++)
 			{
 				int color = colorPixels[y][x];
 				int blue = color&0xff;

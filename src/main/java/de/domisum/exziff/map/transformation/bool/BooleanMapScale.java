@@ -1,8 +1,9 @@
 package de.domisum.exziff.map.transformation.bool;
 
 import de.domisum.exziff.map.BooleanMap;
+import de.domisum.exziff.map.Transformer;
 
-public class BooleanMapScale extends BooleanMapTransformer
+public class BooleanMapScale implements Transformer<BooleanMap>
 {
 
 	// SETTINGS

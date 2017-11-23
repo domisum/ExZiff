@@ -53,9 +53,9 @@ public class Prototype
 	public void pt()
 	{
 		this.logger.info("Starting image loading");
-		BooleanMapFromImageGenerator fromImageGenerator = new BooleanMapFromImageGenerator(
-				FileUtil.readImage(new File("C:\\Users\\domisum\\testChamber\\exziff\\res\\continentShape.png")), 0.5);
-		BooleanMap continentShape = fromImageGenerator.generate();
+		BooleanMapFromImageGenerator fromImageGenerator = new BooleanMapFromImageGenerator(0.5);
+		BooleanMap continentShape = fromImageGenerator
+				.generate(FileUtil.readImage(new File("C:\\Users\\domisum\\testChamber\\exziff\\res\\continentShape.png")));
 		this.logger.info("Image loading done");
 
 

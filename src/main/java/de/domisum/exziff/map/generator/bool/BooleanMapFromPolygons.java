@@ -1,29 +1,23 @@
 package de.domisum.exziff.map.generator.bool;
 
 import de.domisum.exziff.map.BooleanMap;
+import de.domisum.exziff.map.Generator;
 import de.domisum.lib.auxilium.data.container.math.Polygon2D;
 import de.domisum.lib.auxilium.data.container.math.Vector2D;
+import lombok.AllArgsConstructor;
 
-import java.util.List;
+import java.util.Collection;
 
-public class BooleanMapFromPolygons extends BooleanMapGenerator
+@AllArgsConstructor
+public class BooleanMapFromPolygons implements Generator<Collection<Polygon2D>, BooleanMap>
 {
 
 	// SETTINGS
-	private int size;
-	private List<Polygon2D> polygons;
-
-
-	// INIT
-	public BooleanMapFromPolygons(int size, List<Polygon2D> polygons)
-	{
-		this.size = size;
-		this.polygons = polygons;
-	}
+	private final int size;
 
 
 	// GENERATION
-	@Override public BooleanMap generate()
+	@Override public BooleanMap generate(Collection<Polygon2D> polygons)
 	{
 		BooleanMap booleanMap = new BooleanMap(this.size, this.size);
 
@@ -34,7 +28,7 @@ public class BooleanMapFromPolygons extends BooleanMapGenerator
 				double rY = (double) y/this.size;
 				Vector2D relPos = new Vector2D(rX, rY);
 
-				for(Polygon2D p : this.polygons)
+				for(Polygon2D p : polygons)
 					if(p.contains(relPos))
 					{
 						booleanMap.set(x, y, true);

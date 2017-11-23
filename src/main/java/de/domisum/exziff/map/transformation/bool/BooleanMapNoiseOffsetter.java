@@ -1,10 +1,11 @@
 package de.domisum.exziff.map.transformation.bool;
 
 import de.domisum.exziff.map.BooleanMap;
+import de.domisum.exziff.map.Transformer;
 import de.domisum.layeredopensimplexnoise.LayeredOpenSimplexNoise;
 
 
-public class BooleanMapNoiseOffsetter extends BooleanMapTransformer
+public class BooleanMapNoiseOffsetter implements Transformer<BooleanMap>
 {
 
 	// SETTINGS

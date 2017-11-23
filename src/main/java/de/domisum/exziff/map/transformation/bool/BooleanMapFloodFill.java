@@ -1,13 +1,14 @@
 package de.domisum.exziff.map.transformation.bool;
 
 import de.domisum.exziff.map.BooleanMap;
+import de.domisum.exziff.map.Transformer;
 import de.domisum.lib.auxilium.data.container.math.Coordinate2DInt;
 
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.Queue;
 
-public class BooleanMapFloodFill extends BooleanMapTransformer
+public class BooleanMapFloodFill implements Transformer<BooleanMap>
 {
 
 	// TRANSFORMATION

@@ -80,8 +80,8 @@ public class ContinentsShapeGenerator implements RandomizedGenerator<Integer, Bo
 
 			logger.info("Convert polygons to map...");
 			BooleanMapFromPolygons generator = new BooleanMapFromPolygons(
-					this.size/(downscalingFactor*POLYGON_MAP_DOWNSCALING_FACTOR), polygons);
-			BooleanMap continentShape = generator.generate();
+					this.size/(downscalingFactor*POLYGON_MAP_DOWNSCALING_FACTOR));
+			BooleanMap continentShape = generator.generate(polygons);
 			continentShape = scaleBackUp.transform(continentShape);
 
 
