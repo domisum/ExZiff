@@ -34,7 +34,7 @@ public class ChunkClusterTranscoderTest
 		ChunkClusterTranscoder transcoder = new ChunkClusterTranscoder();
 		Random random = new Random(0x8877);
 
-		for(int test = 0; test < 50; test++)
+		for(int test = 0; test < 5; test++)
 			assertEncodeDecodeEquals(transcoder, generateChunkCluster(random));
 	}
 

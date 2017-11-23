@@ -35,7 +35,7 @@ public class ChunkTranscoderTest
 		ChunkTranscoder transcoder = new ChunkTranscoder();
 		Random random = new Random(0xdab);
 
-		for(int test = 0; test < 1000; test++)
+		for(int test = 0; test < 100; test++)
 			assertEncodeDecodeEquals(transcoder, generateRandomChunk(random));
 	}
 
