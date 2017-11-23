@@ -1,6 +1,6 @@
 package de.domisum.exziff.world;
 
-import de.domisum.exziff.world.loadersaver.ChunkClusterSource;
+import de.domisum.exziff.world.chunkclustersource.ChunkClusterSource;
 import lombok.Getter;
 import lombok.Setter;
 

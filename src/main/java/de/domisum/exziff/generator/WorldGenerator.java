@@ -5,7 +5,7 @@ import de.domisum.exziff.map.BooleanMap;
 import de.domisum.exziff.map.transformer.bool.BooleanMapScale;
 import de.domisum.exziff.map.transformer.bool.BooleanMapSmooth;
 import de.domisum.exziff.world.World;
-import de.domisum.exziff.world.loadersaver.ChunkClusterSourceFromDisk;
+import de.domisum.exziff.world.chunkclustersource.ChunkClusterSourceFromDisk;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

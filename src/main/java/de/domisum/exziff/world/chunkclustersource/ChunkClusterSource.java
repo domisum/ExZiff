@@ -1,4 +1,4 @@
-package de.domisum.exziff.world.loadersaver;
+package de.domisum.exziff.world.chunkclustersource;
 
 import de.domisum.exziff.world.ChunkCluster;
 
