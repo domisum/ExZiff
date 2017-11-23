@@ -275,7 +275,7 @@ public class Prototype
 					continue;
 
 				int color = colorsInt[regionId%colorsInt.length];
-				if(multipleNeighbors(regions, x, y) && false)
+				if(multipleNeighbors(regions, x, y))
 				{
 					if((x+y)%2 == 0)
 						color = -1; // new Color(255, 255, 255).getRGB();
