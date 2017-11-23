@@ -9,7 +9,7 @@ public class TestLauncher
 
 	public static void main(String[] args)
 	{
-		Prototype.partitioningTest();
+		Prototype.start();
 
 		if(System.currentTimeMillis() > 0)
 			return;
