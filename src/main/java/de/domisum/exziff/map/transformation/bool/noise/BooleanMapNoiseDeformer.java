@@ -4,10 +4,10 @@ import de.domisum.exziff.map.BooleanMap;
 import de.domisum.exziff.map.transformation.bool.BooleanMapFloodFill;
 import de.domisum.exziff.map.transformation.bool.BooleanMapInvert;
 import de.domisum.exziff.map.transformation.bool.BooleanMapSmooth;
-import de.domisum.exziff.map.transformation.bool.BooleanMapTransformation;
+import de.domisum.exziff.map.transformation.bool.BooleanMapTransformer;
 import de.domisum.layeredopensimplexnoise.LayeredOpenSimplexNoise;
 
-public class BooleanMapNoiseDeformer extends BooleanMapTransformation
+public class BooleanMapNoiseDeformer extends BooleanMapTransformer
 {
 
 	// SETTINGS

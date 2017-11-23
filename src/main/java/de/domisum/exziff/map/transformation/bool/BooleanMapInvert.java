@@ -2,7 +2,7 @@ package de.domisum.exziff.map.transformation.bool;
 
 import de.domisum.exziff.map.BooleanMap;
 
-public class BooleanMapInvert extends BooleanMapTransformation
+public class BooleanMapInvert extends BooleanMapTransformer
 {
 
 	// TRANSFORMATION

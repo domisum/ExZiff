@@ -7,7 +7,7 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.Queue;
 
-public class BooleanMapFloodFill extends BooleanMapTransformation
+public class BooleanMapFloodFill extends BooleanMapTransformer
 {
 
 	// TRANSFORMATION
