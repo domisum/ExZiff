@@ -8,8 +8,9 @@ import org.apache.commons.lang3.Validate;
  * <p>
  * The coordinates prefixed with 'ic' (icX, icY and icZ) are in-chunk-coordinates,
  * which means they are relative to the base of the chunk.
- * <h1>Internal implementation:</h1>
- * <p>
+ * </p>
+ * <hr/>
+ * <b>Implementation:</b>
  * The chunk is divided into 16 ChunkSections that are layered on top of each other.
  */
 public class Chunk
