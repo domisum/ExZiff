@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.util.Random;
 
 public class WorldGenerator
 {
@@ -18,6 +19,7 @@ public class WorldGenerator
 	// INPUT
 	private int size;
 	private long seed;
+	private Random random;
 
 	private File worldDirectory;
 
@@ -33,6 +35,7 @@ public class WorldGenerator
 	{
 		this.size = size;
 		this.seed = seed;
+		this.random = new Random(seed);
 
 		this.worldDirectory = worldDirectory;
 	}
@@ -46,8 +49,8 @@ public class WorldGenerator
 
 		this.logger.info("Starting world generation...");
 
-		this.logger.info("size: {}", this.size);
-		this.logger.info("seed: {}", this.seed);
+		this.logger.info("size: {}", size);
+		this.logger.info("seed: {}", seed);
 
 
 		// shape
@@ -71,10 +74,10 @@ public class WorldGenerator
 	{
 		int scalingFactor = 4;
 
-		ContinentsShapeGenerator generator = new ContinentsShapeGenerator(this.size, this.seed*1337L);
+		ContinentsShapeGenerator generator = new ContinentsShapeGenerator();
 		generator.setDownscalingFactor(scalingFactor);
 
-		this.continentShape = generator.generate();
+		this.continentShape = generator.generate(random.nextLong(), size);
 
 		this.logger.info("Scaling continents shape to full size...");
 		BooleanMapScale scale = new BooleanMapScale(scalingFactor);
