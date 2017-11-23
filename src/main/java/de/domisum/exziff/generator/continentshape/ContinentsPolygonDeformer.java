@@ -104,7 +104,7 @@ public class ContinentsPolygonDeformer
 
 
 		// validate polygon, if valid replace old poly with new poly
-		boolean valid = this.polygonValidator.validatePolygon(newPolygon, polygonSide.polygon, this.polygons);
+		boolean valid = this.polygonValidator.isPolygonValid(newPolygon, polygonSide.polygon, this.polygons);
 		if(valid)
 		{
 			this.polygons.remove(polygonSide.polygon);

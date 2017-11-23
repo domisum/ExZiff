@@ -49,7 +49,7 @@ public class ContinentsBasePolygonGenerator
 		{
 			Polygon2D newPolygon = generateMiniBasePolygon();
 
-			boolean valid = this.polygonValidator.validatePolygon(newPolygon, null, this.polygons);
+			boolean valid = this.polygonValidator.isPolygonValid(newPolygon, null, this.polygons);
 			if(valid)
 				this.polygons.add(newPolygon);
 		}
@@ -61,7 +61,7 @@ public class ContinentsBasePolygonGenerator
 
 			Polygon2D modified = modifyBasePolygon(toModify);
 
-			boolean valid = this.polygonValidator.validatePolygon(modified, toModify, this.polygons);
+			boolean valid = this.polygonValidator.isPolygonValid(modified, toModify, this.polygons);
 			if(valid)
 			{
 				this.polygons.remove(toModify);
@@ -76,7 +76,7 @@ public class ContinentsBasePolygonGenerator
 	{
 		double radius = 0.05;
 
-		double edgeDistance = this.polygonValidator.getMinPolygonEdgeDistance();
+		double edgeDistance = this.polygonValidator.getMinToEdgeDistance();
 		double centerX = RandomUtil.getFromRange(edgeDistance, 1-edgeDistance, this.random);
 		double centerY = RandomUtil.getFromRange(edgeDistance, 1-edgeDistance, this.random);
 		Vector2D center = new Vector2D(centerX, centerY);
