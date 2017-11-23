@@ -1,11 +1,11 @@
-package de.domisum.exziff.map.exporter;
+package de.domisum.exziff.map.converter;
 
 import de.domisum.exziff.map.BooleanMap;
 import de.domisum.lib.auxilium.util.ImageUtil;
 
 import java.awt.image.BufferedImage;
 
-public class BooleanMapToImage
+public class BooleanMapToImageConverter implements Converter<BooleanMap, BufferedImage>
 {
 
 	// CONSTANTS
@@ -14,7 +14,7 @@ public class BooleanMapToImage
 
 
 	// EXPORT
-	public BufferedImage export(BooleanMap input)
+	@Override public BufferedImage convert(BooleanMap input)
 	{
 		int[][] pixels = new int[input.getHeight()][input.getWidth()];
 
