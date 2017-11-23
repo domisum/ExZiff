@@ -1,5 +1,6 @@
-package de.domisum.exziff.generator;
+package de.domisum.exziff.generator.bedrockpartition;
 
+import de.domisum.exziff.generator.RandomizedGenerator;
 import de.domisum.exziff.map.BooleanMap;
 import de.domisum.exziff.map.ShortMap;
 import lombok.RequiredArgsConstructor;

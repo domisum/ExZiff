@@ -1,9 +1,6 @@
-package de.domisum.exziff.generator;
+package de.domisum.exziff.generator.continentshape;
 
-import de.domisum.exziff.generator.continentshape.ContinentsBasePolygonGenerator;
-import de.domisum.exziff.generator.continentshape.ContinentsNoiseDeformer;
-import de.domisum.exziff.generator.continentshape.ContinentsPolygonDeformer;
-import de.domisum.exziff.generator.continentshape.ContinentsPolygonValidator;
+import de.domisum.exziff.generator.RandomizedGenerator;
 import de.domisum.exziff.map.BooleanMap;
 import de.domisum.exziff.map.generator.bool.BooleanMapFromPolygons;
 import de.domisum.exziff.map.transformer.bool.BooleanMapScale;

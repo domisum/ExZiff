@@ -1,5 +1,6 @@
 package de.domisum.exziff.generator;
 
+import de.domisum.exziff.generator.continentshape.ContinentsShapeGenerator;
 import de.domisum.exziff.map.BooleanMap;
 import de.domisum.exziff.map.transformer.bool.BooleanMapScale;
 import de.domisum.exziff.map.transformer.bool.BooleanMapSmooth;
