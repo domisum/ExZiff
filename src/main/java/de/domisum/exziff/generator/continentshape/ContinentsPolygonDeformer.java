@@ -31,7 +31,7 @@ public class ContinentsPolygonDeformer implements RandomizedGenerator<List<Polyg
 	// GENERATE
 	@Override public List<Polygon2D> generate(long seed, List<Polygon2D> polygons)
 	{
-		return new GenerateMethodObject(new Random(seed), new ArrayList<>(polygons)).generate();
+		return new GenerateMethodObject(new Random(seed), new ArrayList<>(polygons)).deform();
 	}
 
 
@@ -45,9 +45,8 @@ public class ContinentsPolygonDeformer implements RandomizedGenerator<List<Polyg
 
 
 		// DEFORM
-		public List<Polygon2D> generate()
+		public List<Polygon2D> deform()
 		{
-
 			PolygonSide longestSide = getLongestSide();
 			while(longestSide.getLineSegment().getLength() > desiredMaxSideLength)
 			{

@@ -48,10 +48,9 @@ public class ContinentsShapeGenerator extends BooleanMapGenerator
 		this.random = new Random(seed);
 
 		ContinentsPolygonValidator polygonValidator = new ContinentsPolygonValidator();
-
 		this.basePolygonGenerator = new ContinentsBasePolygonGenerator(polygonValidator);
 		this.polygonDeformer = new ContinentsPolygonDeformer(polygonValidator);
-		this.noiseDeformer = new ContinentsNoiseDeformer(seed);
+		this.noiseDeformer = new ContinentsNoiseDeformer();
 	}
 
 
@@ -75,7 +74,7 @@ public class ContinentsShapeGenerator extends BooleanMapGenerator
 
 
 		this.logger.info("Deform continent shape using noise...");
-		continentShape = this.noiseDeformer.deform(continentShape);
+		continentShape = this.noiseDeformer.generate(random.nextLong(), continentShape);
 
 		return continentShape;
 	}
