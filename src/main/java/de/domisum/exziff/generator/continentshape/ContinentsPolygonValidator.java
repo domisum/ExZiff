@@ -131,7 +131,7 @@ public class ContinentsPolygonValidator
 					if(li2 < li1)
 						continue;
 
-					double throughLinesDistance = getLineLineDistanceThroughLines(toValidate, li1, li2);
+					double throughLinesDistance = getLineToLineDistanceAlongLines(toValidate, li1, li2);
 					if(throughLinesDistance == 0) // lines are direct neighbors
 						continue;
 
@@ -152,7 +152,7 @@ public class ContinentsPolygonValidator
 
 
 	// UTIL
-	private static double getLineLineDistanceThroughLines(Polygon2D polygon, int li1, int li2)
+	private static double getLineToLineDistanceAlongLines(Polygon2D polygon, int li1, int li2)
 	{
 		int minIndex = Math.min(li1, li2);
 		int maxIndex = Math.max(li1, li2);
