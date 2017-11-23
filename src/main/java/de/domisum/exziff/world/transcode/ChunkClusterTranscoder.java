@@ -9,12 +9,13 @@ public class ChunkClusterTranscoder implements Transcoder<ChunkCluster>
 	/*
 	Format:
 
-	The first 8 bytes contain two integers, representing the Chunk's cX and cY coordinate.
+	The first 4 bytes contain the Chunk's cX as an integer.
+	The second 4 bytes contain the Chunk's cY as an integer.
 
-	The following Chunk.NUMBER_OF_SECTIONS*4 bytes are occupied with Chunk.NUMBER_OF_SECTIONS integers,
+	The following (Chunk.NUMBER_OF_SECTIONS*4) bytes are occupied with Chunk.NUMBER_OF_SECTIONS integers,
 	which hold the length of their respective ChunkSection in the byte array.
 
-	The rest of the bytes are occupied with the Chunks in sequence.
+	The rest of the bytes are occupied with the Chunks' data in sequence.
 	 */
 
 
@@ -41,8 +42,8 @@ public class ChunkClusterTranscoder implements Transcoder<ChunkCluster>
 		}
 
 		byte[] encodedChunkCluster = new byte[BYTES_BEFORE_CHUNK_DATA+encodedChunksCombinedLength];
-		encodeInt(encodedChunkCluster, 0, toEncode.getClX());
-		encodeInt(encodedChunkCluster, 4, toEncode.getClZ());
+		Transcoder.encodeInt(encodedChunkCluster, 0, toEncode.getClX());
+		Transcoder.encodeInt(encodedChunkCluster, 4, toEncode.getClZ());
 
 		int currentWritingPosition = BYTES_BEFORE_CHUNK_DATA;
 		for(int i = 0; i < ChunkCluster.NUMBER_OF_CHUNKS; i++)
@@ -50,7 +51,7 @@ public class ChunkClusterTranscoder implements Transcoder<ChunkCluster>
 			byte[] encodedChunk = encodedChunks[i];
 
 			// write chunk length
-			encodeInt(encodedChunkCluster, (2+i)*4, encodedChunk.length);
+			Transcoder.encodeInt(encodedChunkCluster, (2+i)*4, encodedChunk.length);
 
 			// write chunk data itself
 			System.arraycopy(encodedChunk, 0, encodedChunkCluster, currentWritingPosition, encodedChunk.length);
@@ -63,14 +64,14 @@ public class ChunkClusterTranscoder implements Transcoder<ChunkCluster>
 
 	@Override public ChunkCluster decode(byte[] toDecode)
 	{
-		int clX = decodeInt(toDecode, 0);
-		int clZ = decodeInt(toDecode, 4);
+		int clX = Transcoder.decodeInt(toDecode, 0);
+		int clZ = Transcoder.decodeInt(toDecode, 4);
 		Chunk[] chunks = new Chunk[ChunkCluster.NUMBER_OF_CHUNKS];
 
 		int currentReadingPosition = BYTES_BEFORE_CHUNK_DATA;
 		for(int i = 0; i < chunks.length; i++)
 		{
-			int chunkLength = decodeInt(toDecode, (2+i)*4);
+			int chunkLength = Transcoder.decodeInt(toDecode, (2+i)*4);
 
 			// isolate byte array
 			byte[] chunkData = new byte[chunkLength];

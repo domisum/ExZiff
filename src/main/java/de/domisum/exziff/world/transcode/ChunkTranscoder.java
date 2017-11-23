@@ -39,8 +39,8 @@ public class ChunkTranscoder implements Transcoder<Chunk>
 		}
 
 		byte[] encodedChunk = new byte[BYTES_BEFORE_SECTION_DATA+encodedChunkSectionsCombinedLength];
-		encodeInt(encodedChunk, 0, toEncode.getCX());
-		encodeInt(encodedChunk, 4, toEncode.getCZ());
+		Transcoder.encodeInt(encodedChunk, 0, toEncode.getCX());
+		Transcoder.encodeInt(encodedChunk, 4, toEncode.getCZ());
 
 		int currentWritingPosition = BYTES_BEFORE_SECTION_DATA;
 		for(int i = 0; i < Chunk.NUMBER_OF_SECTIONS; i++)
@@ -48,7 +48,7 @@ public class ChunkTranscoder implements Transcoder<Chunk>
 			byte[] encodedChunkSection = encodedChunkSections[i];
 
 			// write the length of the ChunkSection
-			encodeInt(encodedChunk, (2+i)*4, encodedChunkSection.length);
+			Transcoder.encodeInt(encodedChunk, (2+i)*4, encodedChunkSection.length);
 
 			// write chunk section
 			System.arraycopy(encodedChunkSection, 0, encodedChunk, currentWritingPosition, encodedChunkSection.length);
@@ -61,14 +61,14 @@ public class ChunkTranscoder implements Transcoder<Chunk>
 
 	@Override public Chunk decode(byte[] toDecode)
 	{
-		int cX = decodeInt(toDecode, 0);
-		int cZ = decodeInt(toDecode, 4);
+		int cX = Transcoder.decodeInt(toDecode, 0);
+		int cZ = Transcoder.decodeInt(toDecode, 4);
 		ChunkSection[] chunkSections = new ChunkSection[Chunk.NUMBER_OF_SECTIONS];
 
 		int currentReadingPosition = BYTES_BEFORE_SECTION_DATA;
 		for(int i = 0; i < Chunk.NUMBER_OF_SECTIONS; i++)
 		{
-			int chunkSectionLength = decodeInt(toDecode, (2+i)*4);
+			int chunkSectionLength = Transcoder.decodeInt(toDecode, (2+i)*4);
 
 			// isolate byte array
 			byte[] chunkSectionData = new byte[chunkSectionLength];

@@ -10,7 +10,7 @@ public interface Transcoder<T>
 
 
 	// PRIMITIVE TRANSCODING
-	default void encodeInt(byte[] encodeTo, int startingPosition, int number)
+	static void encodeInt(byte[] encodeTo, int startingPosition, int number)
 	{
 		encodeTo[startingPosition] = (byte) (number>>24);
 		encodeTo[startingPosition+1] = (byte) (number>>16);
@@ -18,7 +18,7 @@ public interface Transcoder<T>
 		encodeTo[startingPosition+3] = (byte) (number);
 	}
 
-	default int decodeInt(byte[] decodeFrom, int startingPosition)
+	static int decodeInt(byte[] decodeFrom, int startingPosition)
 	{
 		int number = 0;
 		number |= (decodeFrom[startingPosition]&0xFF)<<24;
