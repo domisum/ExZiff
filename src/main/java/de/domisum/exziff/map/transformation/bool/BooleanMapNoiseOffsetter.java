@@ -1,7 +1,6 @@
-package de.domisum.exziff.map.transformation.bool.noise;
+package de.domisum.exziff.map.transformation.bool;
 
 import de.domisum.exziff.map.BooleanMap;
-import de.domisum.exziff.map.transformation.bool.BooleanMapTransformer;
 import de.domisum.layeredopensimplexnoise.LayeredOpenSimplexNoise;
 
 
