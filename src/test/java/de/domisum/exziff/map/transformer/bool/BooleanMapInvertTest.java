@@ -20,7 +20,7 @@ public class BooleanMapInvertTest
 		int sizeMax = 500;
 		Random random = new Random(0xaffe8);
 
-		for(int i = 0; i < 100; i++)
+		for(int i = 0; i < 30; i++)
 			invertAndAssertInverted(generateRandomBooleanMap(1+random.nextInt(sizeMax), 1+random.nextInt(sizeMax), random));
 	}
 
