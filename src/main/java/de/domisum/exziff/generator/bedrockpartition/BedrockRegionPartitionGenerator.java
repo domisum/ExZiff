@@ -1,13 +1,13 @@
 package de.domisum.exziff.generator.bedrockpartition;
 
-import de.domisum.exziff.generator.RandomizedGenerator;
+import de.domisum.exziff.generator.RandomizedGeneratorOneInput;
 import de.domisum.exziff.map.BooleanMap;
 import de.domisum.exziff.map.ShortMap;
 import lombok.RequiredArgsConstructor;
 
 import java.util.Random;
 
-public class BedrockRegionPartitionGenerator implements RandomizedGenerator<BooleanMap, ShortMap>
+public class BedrockRegionPartitionGenerator implements RandomizedGeneratorOneInput<BooleanMap, ShortMap>
 {
 
 	// GENERATE

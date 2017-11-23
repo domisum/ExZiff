@@ -1,6 +1,6 @@
 package de.domisum.exziff.generator.continentshape;
 
-import de.domisum.exziff.generator.RandomizedGenerator;
+import de.domisum.exziff.generator.RandomizedGeneratorOneInput;
 import de.domisum.lib.auxilium.data.container.math.LineSegment2D;
 import de.domisum.lib.auxilium.data.container.math.Polygon2D;
 import de.domisum.lib.auxilium.data.container.math.Vector2D;
@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Random;
 
 @RequiredArgsConstructor
-public class ContinentsPolygonDeformer implements RandomizedGenerator<List<Polygon2D>, List<Polygon2D>>
+public class ContinentsPolygonDeformer implements RandomizedGeneratorOneInput<List<Polygon2D>, List<Polygon2D>>
 {
 
 	// SETTINGS

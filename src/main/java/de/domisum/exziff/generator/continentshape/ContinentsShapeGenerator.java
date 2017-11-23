@@ -1,6 +1,6 @@
 package de.domisum.exziff.generator.continentshape;
 
-import de.domisum.exziff.generator.RandomizedGenerator;
+import de.domisum.exziff.generator.RandomizedGeneratorOneInput;
 import de.domisum.exziff.map.BooleanMap;
 import de.domisum.exziff.map.generator.bool.BooleanMapFromPolygons;
 import de.domisum.exziff.map.transformer.bool.BooleanMapScale;
@@ -18,7 +18,7 @@ import java.util.Random;
 /**
  * Generates random continent shapes from a given seed.
  */
-public class ContinentsShapeGenerator implements RandomizedGenerator<Integer, BooleanMap>
+public class ContinentsShapeGenerator implements RandomizedGeneratorOneInput<Integer, BooleanMap>
 {
 
 	private final Logger logger = LoggerFactory.getLogger(getClass());
@@ -31,9 +31,9 @@ public class ContinentsShapeGenerator implements RandomizedGenerator<Integer, Bo
 	@Getter @Setter private int downscalingFactor = 1;
 
 	// REFERENCES
-	private final RandomizedGenerator<Integer, List<Polygon2D>> basePolygonGenerator;
-	private final RandomizedGenerator<List<Polygon2D>, List<Polygon2D>> polygonDeformer;
-	private final RandomizedGenerator<BooleanMap, BooleanMap> noiseDeformer;
+	private final RandomizedGeneratorOneInput<Integer, List<Polygon2D>> basePolygonGenerator;
+	private final RandomizedGeneratorOneInput<List<Polygon2D>, List<Polygon2D>> polygonDeformer;
+	private final RandomizedGeneratorOneInput<BooleanMap, BooleanMap> noiseDeformer;
 
 	private final BooleanMapScale scaleBackUp = new BooleanMapScale(POLYGON_MAP_DOWNSCALING_FACTOR);
 
