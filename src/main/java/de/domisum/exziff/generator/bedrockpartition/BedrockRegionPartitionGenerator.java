@@ -6,6 +6,8 @@ import de.domisum.exziff.map.ShortMap;
 import de.domisum.lib.auxilium.data.container.math.Vector2D;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.HashSet;
 import java.util.Random;
@@ -14,6 +16,9 @@ import java.util.Set;
 @RequiredArgsConstructor
 public class BedrockRegionPartitionGenerator implements RandomizedGeneratorOneInput<BooleanMap, ShortMap>
 {
+
+	private final Logger logger = LoggerFactory.getLogger(getClass());
+
 
 	// REFERENCES
 	private final RandomizedGeneratorOneInput<Integer, Set<Vector2D>> regionCenterPointsGenerator;
@@ -48,8 +53,9 @@ public class BedrockRegionPartitionGenerator implements RandomizedGeneratorOneIn
 
 		private void generateRegionCenterPoints()
 		{
-			Set<Vector2D> points = regionCenterPointsGenerator.generate(random.nextLong(), 300);
+			logger.info("Generating center points...");
 
+			Set<Vector2D> points = regionCenterPointsGenerator.generate(random.nextLong(), 300);
 			short regionIdCounter = 1;
 			for(Vector2D p : points)
 			{
@@ -60,8 +66,9 @@ public class BedrockRegionPartitionGenerator implements RandomizedGeneratorOneIn
 
 		private ShortMap generateClosestPointMap()
 		{
-			ShortMap closestPointMap = new ShortMap(continentShape.getWidth(), continentShape.getHeight());
+			logger.info("Genereating closest point map...");
 
+			ShortMap closestPointMap = new ShortMap(continentShape.getWidth(), continentShape.getHeight());
 			for(int x = 0; x < closestPointMap.getWidth(); x++)
 				for(int y = 0; y < closestPointMap.getHeight(); y++)
 				{
