@@ -38,6 +38,9 @@ public class ShortMapToImageConverter implements Converter<ShortMap, BufferedIma
 
 	private Color getColorForValue(short value)
 	{
+		if(value == 0)
+			return Color.BLACK;
+
 		int colorsIndex = value%COLORS.size();
 		return COLORS.get(colorsIndex);
 	}
