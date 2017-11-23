@@ -4,9 +4,7 @@ import de.domisum.exziff.generator.RandomizedGenerator;
 import de.domisum.lib.auxilium.data.container.math.Polygon2D;
 import de.domisum.lib.auxilium.data.container.math.Vector2D;
 import de.domisum.lib.auxilium.util.math.RandomUtil;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,10 +18,6 @@ import java.util.Vector;
 @RequiredArgsConstructor
 public class ContinentsBasePolygonGenerator implements RandomizedGenerator<Integer, List<Polygon2D>>
 {
-
-	// SETTINGS
-	@Getter @Setter private int desiredPolygonsBase = 3;
-	@Getter @Setter private int desiredPolygonsMaxDifference = 1;
 
 	// REFERENCES
 	private final ContinentsPolygonValidator polygonValidator;

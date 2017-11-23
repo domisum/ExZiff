@@ -35,9 +35,10 @@ public class ContinentsShapeGenerator extends BooleanMapGenerator
 
 	// REFERENCES
 	private RandomizedGenerator<Integer, List<Polygon2D>> basePolygonGenerator;
-	private ContinentsPolygonDeformer polygonDeformer;
-	private BooleanMapScale scaleBackUp = new BooleanMapScale(this.polygonMapDownscalingFactor);
+	private RandomizedGenerator<List<Polygon2D>, List<Polygon2D>> polygonDeformer;
 	private ContinentsNoiseDeformer noiseDeformer;
+
+	private BooleanMapScale scaleBackUp = new BooleanMapScale(this.polygonMapDownscalingFactor);
 
 
 	// INIT
@@ -49,7 +50,7 @@ public class ContinentsShapeGenerator extends BooleanMapGenerator
 		ContinentsPolygonValidator polygonValidator = new ContinentsPolygonValidator();
 
 		this.basePolygonGenerator = new ContinentsBasePolygonGenerator(polygonValidator);
-		this.polygonDeformer = new ContinentsPolygonDeformer(seed, polygonValidator);
+		this.polygonDeformer = new ContinentsPolygonDeformer(polygonValidator);
 		this.noiseDeformer = new ContinentsNoiseDeformer(seed);
 	}
 
@@ -63,7 +64,7 @@ public class ContinentsShapeGenerator extends BooleanMapGenerator
 		List<Polygon2D> polygons = this.basePolygonGenerator.generate(random.nextLong(), numberOfPolygonsToGenerate);
 
 		this.logger.info("Deform polygon shapes...");
-		polygons = this.polygonDeformer.deformPolygons(polygons);
+		polygons = this.polygonDeformer.generate(random.nextLong(), polygons);
 
 		this.logger.info("Convert polygons to map...");
 		BooleanMapFromPolygons generator = new BooleanMapFromPolygons(
