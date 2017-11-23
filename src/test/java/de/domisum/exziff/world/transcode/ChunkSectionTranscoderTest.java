@@ -43,7 +43,7 @@ public class ChunkSectionTranscoderTest
 		ChunkSectionTranscoder transcoder = new ChunkSectionTranscoder();
 		Random random = new Random(0x7e57);
 
-		for(int test = 0; test < 1000; test++)
+		for(int test = 0; test < 100; test++)
 			assertEncodeDecodeEquals(transcoder, generateRandomChunkSection(random));
 	}
 
