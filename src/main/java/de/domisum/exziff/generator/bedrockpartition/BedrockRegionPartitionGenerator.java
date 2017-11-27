@@ -46,12 +46,14 @@ public class BedrockRegionPartitionGenerator implements RandomizedGeneratorOneIn
 			generateRegionMap();
 			determineUsedRegionIds();
 
-			return null;
+			return new BedrockRegionMap(regionMap);
 		}
 
 
 		private void generateRegionMap()
 		{
+			logger.info("Generating region map...");
+
 			RandomizedGeneratorOneInput<BooleanMap, ShortMap> nearestPointPartitionGenerator = new NearestPointPartitionGenerator(
 					new UniformlyDistributedPointsGenerator());
 			regionMap = nearestPointPartitionGenerator.generate(random.nextLong(), continentShape);
@@ -59,6 +61,8 @@ public class BedrockRegionPartitionGenerator implements RandomizedGeneratorOneIn
 
 		private void determineUsedRegionIds()
 		{
+			logger.info("Determining used regionIds...");
+
 			Set<Short> usedRegionIdsNoDuplicates = new HashSet<>();
 			for(int y = 0; y < regionMap.getHeight(); y++)
 				for(int x = 0; x < regionMap.getWidth(); x++)
@@ -67,6 +71,8 @@ public class BedrockRegionPartitionGenerator implements RandomizedGeneratorOneIn
 
 			usedRegionIds = new ArrayList<>(usedRegionIdsNoDuplicates);
 			usedRegionIds.sort(Short::compareTo);
+
+			logger.info("Found: {}", usedRegionIds);
 		}
 
 	}
