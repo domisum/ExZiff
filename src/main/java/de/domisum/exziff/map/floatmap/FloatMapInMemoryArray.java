@@ -10,7 +10,7 @@ public class FloatMapInMemoryArray implements FloatMap
 
 
 	// INIT
-	public FloatMapInMemoryArray(float[][] floats)
+	private FloatMapInMemoryArray(float[][] floats)
 	{
 		if(floats.length < 1 || floats[0].length < 1)
 			throw new IllegalArgumentException("The map has to have a size of at least 1 in each direction");
