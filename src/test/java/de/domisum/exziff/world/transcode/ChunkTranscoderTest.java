@@ -2,8 +2,8 @@ package de.domisum.exziff.world.transcode;
 
 import de.domisum.exziff.world.Chunk;
 import de.domisum.exziff.world.ChunkSection;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import java.util.Random;
 
@@ -51,8 +51,8 @@ public class ChunkTranscoderTest
 	// VALIDATORS
 	public static void assertEqualsChunk(Chunk chunk1, Chunk chunk2)
 	{
-		Assert.assertEquals("cX not equal", chunk1.getCX(), chunk2.getCX());
-		Assert.assertEquals("cZ not equal", chunk1.getCZ(), chunk2.getCZ());
+		Assertions.assertEquals(chunk1.getCX(), chunk2.getCX(), "cX not equal");
+		Assertions.assertEquals(chunk1.getCZ(), chunk2.getCZ(), "cZ not equal");
 
 		for(int section = 0; section < Chunk.NUMBER_OF_SECTIONS; section++)
 		{

@@ -3,8 +3,8 @@ package de.domisum.exziff.world.transcode;
 import de.domisum.exziff.world.Chunk;
 import de.domisum.exziff.world.ChunkCluster;
 import de.domisum.exziff.world.ChunkSection;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import java.util.Random;
 
@@ -46,15 +46,15 @@ public class ChunkClusterTranscoderTest
 		assertEqualsChunkCluster(chunkCluster, decoded);
 
 		byte[] encodedAgain = transcoder.encode(decoded);
-		Assert.assertArrayEquals("encodedAgain not equal to first encoded", encoded, encodedAgain);
+		Assertions.assertArrayEquals(encoded, encodedAgain, "encodedAgain not equal to first encoded");
 	}
 
 
 	// VALIDATORS
 	private static void assertEqualsChunkCluster(ChunkCluster chunkCluster1, ChunkCluster chunkCluster2)
 	{
-		Assert.assertEquals("clX not equal", chunkCluster1.getClX(), chunkCluster2.getClX());
-		Assert.assertEquals("clZ not equal", chunkCluster1.getClZ(), chunkCluster2.getClZ());
+		Assertions.assertEquals(chunkCluster1.getClX(), chunkCluster2.getClX(), "clX not equal");
+		Assertions.assertEquals(chunkCluster1.getClZ(), chunkCluster2.getClZ(), "clZ not equal");
 
 		for(int chunkIndex = 0; chunkIndex < Chunk.NUMBER_OF_SECTIONS; chunkIndex++)
 		{

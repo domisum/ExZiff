@@ -1,8 +1,8 @@
 package de.domisum.exziff.map.transformer.bool;
 
 import de.domisum.exziff.map.BooleanMap;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import java.util.Random;
 
@@ -49,12 +49,12 @@ public class BooleanMapInvertTest
 	// ASSERT
 	private static void assertInverted(BooleanMap base, BooleanMap inverted)
 	{
-		Assert.assertEquals("width not equal", base.getWidth(), inverted.getWidth());
-		Assert.assertEquals("height not equal", base.getHeight(), inverted.getHeight());
+		Assertions.assertEquals(base.getWidth(), inverted.getWidth(), "width not equal");
+		Assertions.assertEquals(base.getHeight(), inverted.getHeight(), "height not equal");
 
 		for(int x = 0; x < base.getWidth(); x++)
 			for(int y = 0; y < base.getHeight(); y++)
-				Assert.assertEquals("not inverted at x"+x+" y"+y, base.get(x, y), !inverted.get(x, y));
+				Assertions.assertEquals(base.get(x, y), !inverted.get(x, y), "not inverted at x"+x+" y"+y);
 	}
 
 }

@@ -1,7 +1,7 @@
 package de.domisum.exziff.world.transcode;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import java.util.Random;
 
@@ -32,7 +32,7 @@ public class TranscoderTest
 
 		Transcoder.encodeInt(bytes, startingPosition, number);
 		int decoded = Transcoder.decodeInt(bytes, startingPosition);
-		Assert.assertEquals(number, decoded);
+		Assertions.assertEquals(number, decoded);
 	}
 
 }

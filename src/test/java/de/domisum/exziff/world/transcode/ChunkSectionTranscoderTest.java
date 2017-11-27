@@ -2,8 +2,8 @@ package de.domisum.exziff.world.transcode;
 
 import de.domisum.exziff.world.Chunk;
 import de.domisum.exziff.world.ChunkSection;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import java.util.Random;
 
@@ -62,11 +62,13 @@ public class ChunkSectionTranscoderTest
 			for(int icsZ = 0; icsZ < Chunk.WIDTH; icsZ++)
 				for(int icsX = 0; icsX < Chunk.WIDTH; icsX++)
 				{
-					Assert.assertEquals("Difference in chunk section materialId at x"+icsX+" y"+icsY+" z"+icsZ,
-							chunkSection1.getMaterialId(icsX, icsY, icsZ), chunkSection2.getMaterialId(icsX, icsY, icsZ));
+					Assertions.assertEquals(chunkSection1.getMaterialId(icsX, icsY, icsZ),
+							chunkSection2.getMaterialId(icsX, icsY, icsZ),
+							"Difference in chunk section materialId at x"+icsX+" y"+icsY+" z"+icsZ);
 
-					Assert.assertEquals("Difference in chunk section materialSubId at x"+icsX+" y"+icsY+" z"+icsZ,
-							chunkSection1.getMaterialSubId(icsX, icsY, icsZ), chunkSection2.getMaterialSubId(icsX, icsY, icsZ));
+					Assertions.assertEquals(chunkSection1.getMaterialSubId(icsX, icsY, icsZ),
+							chunkSection2.getMaterialSubId(icsX, icsY, icsZ),
+							"Difference in chunk section materialSubId at x"+icsX+" y"+icsY+" z"+icsZ);
 				}
 	}
 
