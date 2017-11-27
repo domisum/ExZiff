@@ -1,5 +1,6 @@
-package de.domisum.exziff.bedrockregion;
+package de.domisum.exziff.bedrockregion.regions;
 
+import de.domisum.exziff.bedrockregion.BedrockRegionType;
 import de.domisum.layeredopensimplexnoise.LayeredOpenSimplexNoise;
 import de.domisum.layeredopensimplexnoise.NoiseLayer;
 import de.domisum.layeredopensimplexnoise.NoiseLayers;

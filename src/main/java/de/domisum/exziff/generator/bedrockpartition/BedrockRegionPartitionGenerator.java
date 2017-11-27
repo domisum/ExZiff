@@ -1,31 +1,28 @@
 package de.domisum.exziff.generator.bedrockpartition;
 
+import de.domisum.exziff.bedrockregion.BedrockRegionMap;
 import de.domisum.exziff.generator.RandomizedGeneratorOneInput;
 import de.domisum.exziff.map.BooleanMap;
 import de.domisum.exziff.map.ShortMap;
-import de.domisum.lib.auxilium.data.container.math.Vector2D;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
 @RequiredArgsConstructor
-public class BedrockRegionPartitionGenerator implements RandomizedGeneratorOneInput<BooleanMap, ShortMap>
+public class BedrockRegionPartitionGenerator implements RandomizedGeneratorOneInput<BooleanMap, BedrockRegionMap>
 {
 
 	private final Logger logger = LoggerFactory.getLogger(getClass());
 
 
-	// REFERENCES
-	private final RandomizedGeneratorOneInput<Integer, Set<Vector2D>> regionCenterPointsGenerator;
-
-
 	// GENERATE
-	@Override public ShortMap generate(long seed, BooleanMap continentShape)
+	@Override public BedrockRegionMap generate(long seed, BooleanMap continentShape)
 	{
 		return new GenerateMethodObject(new Random(seed), continentShape).generate();
 	}
@@ -39,80 +36,38 @@ public class BedrockRegionPartitionGenerator implements RandomizedGeneratorOneIn
 		private final BooleanMap continentShape;
 
 		// TEMP
-		private Set<RegionCenterPoint> regionCenterPoints = new HashSet<>();
+		private ShortMap regionMap;
+		private List<Short> usedRegionIds;
 
 
 		// GENERATE
-		public ShortMap generate()
+		public BedrockRegionMap generate()
 		{
-			generateRegionCenterPoints();
+			generateRegionMap();
+			determineUsedRegionIds();
 
-			ShortMap closestPointMap = generateClosestPointMap();
-			return closestPointMap;
+			return null;
 		}
 
-		private void generateRegionCenterPoints()
-		{
-			logger.info("Generating center points...");
 
-			Set<Vector2D> points = regionCenterPointsGenerator.generate(random.nextLong(), 300);
-			short regionIdCounter = 1;
-			for(Vector2D p : points)
-			{
-				regionCenterPoints.add(new RegionCenterPoint(regionIdCounter, p));
-				regionIdCounter++;
-			}
+		private void generateRegionMap()
+		{
+			RandomizedGeneratorOneInput<BooleanMap, ShortMap> nearestPointPartitionGenerator = new NearestPointPartitionGenerator(
+					new UniformlyDistributedPointsGenerator());
+			regionMap = nearestPointPartitionGenerator.generate(random.nextLong(), continentShape);
 		}
 
-		private ShortMap generateClosestPointMap()
+		private void determineUsedRegionIds()
 		{
-			logger.info("Genereating closest point map...");
+			Set<Short> usedRegionIdsNoDuplicates = new HashSet<>();
+			for(int y = 0; y < regionMap.getHeight(); y++)
+				for(int x = 0; x < regionMap.getWidth(); x++)
+					if(regionMap.get(x, y) != 0) // OCEAN
+						usedRegionIdsNoDuplicates.add(regionMap.get(x, y));
 
-			ShortMap closestPointMap = new ShortMap(continentShape.getWidth(), continentShape.getHeight());
-			for(int x = 0; x < closestPointMap.getWidth(); x++)
-				for(int y = 0; y < closestPointMap.getHeight(); y++)
-				{
-					if(!continentShape.get(x, y))
-						continue;
-
-					double rX = x/(double) closestPointMap.getWidth();
-					double rY = y/(double) closestPointMap.getHeight();
-					RegionCenterPoint closestRegionCenterPoint = getClosestRegionCenterPoint(rX, rY);
-
-					closestPointMap.set(x, y, closestRegionCenterPoint.regionId);
-				}
-
-			return closestPointMap;
+			usedRegionIds = new ArrayList<>(usedRegionIdsNoDuplicates);
+			usedRegionIds.sort(Short::compareTo);
 		}
-
-		private RegionCenterPoint getClosestRegionCenterPoint(double rX, double rY)
-		{
-			Vector2D fromPoint = new Vector2D(rX, rY);
-
-			RegionCenterPoint closetRegionCenterPoint = null;
-			double closestRegionCenterPointDistanceSquared = Double.MAX_VALUE;
-			for(RegionCenterPoint rcp : regionCenterPoints)
-			{
-				double distance = fromPoint.distanceToSquared(rcp.point);
-				if(distance < closestRegionCenterPointDistanceSquared)
-				{
-					closetRegionCenterPoint = rcp;
-					closestRegionCenterPointDistanceSquared = distance;
-				}
-			}
-
-			return closetRegionCenterPoint;
-		}
-
-	}
-
-
-	@AllArgsConstructor
-	private static class RegionCenterPoint
-	{
-
-		public final short regionId;
-		public final Vector2D point;
 
 	}
 

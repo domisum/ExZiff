@@ -1,5 +1,6 @@
-package de.domisum.exziff.bedrockregion;
+package de.domisum.exziff.bedrockregion.regions;
 
+import de.domisum.exziff.bedrockregion.BedrockRegionType;
 import de.domisum.exziff.map.FloatMap;
 import de.domisum.lib.auxilium.data.container.bound.IntBounds2D;
 import lombok.Getter;

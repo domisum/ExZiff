@@ -1,4 +1,6 @@
-package de.domisum.exziff.bedrockregion;
+package de.domisum.exziff.bedrockregion.regions;
+
+import de.domisum.exziff.bedrockregion.BedrockRegionType;
 
 public class OceanFloor extends BedrockRegion
 {
