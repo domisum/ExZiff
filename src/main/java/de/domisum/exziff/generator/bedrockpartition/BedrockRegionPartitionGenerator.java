@@ -46,7 +46,7 @@ public class BedrockRegionPartitionGenerator implements RandomizedGeneratorOneIn
 			generateRegionMap();
 			determineUsedRegionIds();
 
-			return new BedrockRegionMap(regionMap);
+			return new BedrockRegionMap(regionMap, null);
 		}
 
 

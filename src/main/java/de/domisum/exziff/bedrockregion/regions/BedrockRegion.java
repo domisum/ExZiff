@@ -2,9 +2,7 @@ package de.domisum.exziff.bedrockregion.regions;
 
 import de.domisum.exziff.bedrockregion.BedrockRegionType;
 import de.domisum.exziff.map.FloatMap;
-import de.domisum.lib.auxilium.data.container.bound.IntBounds2D;
 import lombok.Getter;
-import lombok.Setter;
 
 import java.util.Random;
 
@@ -14,25 +12,21 @@ public abstract class BedrockRegion
 	// properties
 	@Getter protected final BedrockRegionType type;
 	@Getter protected final int id;
-	protected final long seed;
 
-	@Setter protected FloatMap influenceMap;
-	@Setter protected IntBounds2D bounds;
+	@Getter protected FloatMap influenceMap;
 
-	protected final Random seedRandom;
+	protected final Random random;
 
 
 	// INIT
-	protected BedrockRegion(BedrockRegionType type, int id, long seed)
+	protected BedrockRegion(BedrockRegionType type, int id, long seed, FloatMap influenceMap)
 	{
 		this.type = type;
 		this.id = id;
-		this.seed = seed;
 
-		// improving randomness by salting
-		this.seedRandom = new Random(seed*id*29349349394L);
-		this.seedRandom.nextLong();
-		this.seedRandom.nextLong();
+		this.influenceMap = influenceMap;
+
+		this.random = new Random(seed);
 	}
 
 
