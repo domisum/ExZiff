@@ -2,14 +2,14 @@ package de.domisum.exziff.map.floatmap;
 
 import de.domisum.exziff.map.FloatMap;
 
-public class FloatMapDefault implements FloatMap
+public class FloatMapInMemoryArray implements FloatMap
 {
 
 	private final float[][] floats;
 
 
 	// INIT
-	public FloatMapDefault(float[][] floats)
+	public FloatMapInMemoryArray(float[][] floats)
 	{
 		if(floats.length < 1 || floats[0].length < 1)
 			throw new IllegalArgumentException("The map has to have a size of at least 1 in each direction");
@@ -17,7 +17,7 @@ public class FloatMapDefault implements FloatMap
 		this.floats = floats;
 	}
 
-	public FloatMapDefault(int width, int height)
+	public FloatMapInMemoryArray(int width, int height)
 	{
 		this.floats = new float[height][width];
 	}
