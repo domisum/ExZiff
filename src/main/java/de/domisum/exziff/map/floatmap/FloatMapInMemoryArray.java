@@ -1,6 +1,7 @@
 package de.domisum.exziff.map.floatmap;
 
 import de.domisum.exziff.map.FloatMap;
+import org.apache.commons.lang3.Validate;
 
 public class FloatMapInMemoryArray implements FloatMap
 {
@@ -19,7 +20,7 @@ public class FloatMapInMemoryArray implements FloatMap
 
 	public FloatMapInMemoryArray(int width, int height)
 	{
-		this.floats = new float[height][width];
+		this(new float[height][width]);
 	}
 
 
@@ -36,6 +37,9 @@ public class FloatMapInMemoryArray implements FloatMap
 
 	@Override public float get(int x, int y)
 	{
+		Validate.inclusiveBetween(0, getWidth()-1, x, "x was "+x+", should be in [0;"+(getWidth()-1)+"]");
+		Validate.inclusiveBetween(0, getHeight()-1, y, "y was "+y+", should be in [0;"+(getHeight()-1)+"]");
+
 		return this.floats[y][x];
 	}
 
@@ -43,6 +47,9 @@ public class FloatMapInMemoryArray implements FloatMap
 	// SETTERS
 	@Override public void set(int x, int y, float value)
 	{
+		Validate.inclusiveBetween(0, getWidth()-1, x, "x was "+x+", should be in [0;"+(getWidth()-1)+"]");
+		Validate.inclusiveBetween(0, getHeight()-1, y, "y was "+y+", should be in [0;"+(getHeight()-1)+"]");
+
 		this.floats[y][x] = value;
 	}
 
