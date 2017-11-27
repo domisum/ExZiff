@@ -12,7 +12,7 @@ public class FloatMapLocalized implements FloatMap
 {
 
 	// CONSTANTS
-	private static final int EXPAND_DISTANCE = 10;
+	private static final int EXPAND_BUFFER_DISTANCE = 10;
 
 	//
 	@Getter private final int width;
@@ -71,43 +71,43 @@ public class FloatMapLocalized implements FloatMap
 		int inRegionY = y-regionPosition.y;
 
 		if(inRegionX < 0)
-			expandRegionLeft(-inRegionX+EXPAND_DISTANCE);
+			expandRegionLeft(-inRegionX+EXPAND_BUFFER_DISTANCE);
 		else if(inRegionX >= region.getWidth())
-			expandRegionRight((inRegionX-region.getWidth()+1)+EXPAND_DISTANCE);
+			expandRegionRight((inRegionX-region.getWidth()+1)+EXPAND_BUFFER_DISTANCE);
 
 		if(inRegionY < 0)
-			expandRegionUp(-inRegionY+EXPAND_DISTANCE);
+			expandRegionUp(-inRegionY+EXPAND_BUFFER_DISTANCE);
 		else if(inRegionY >= region.getHeight())
-			expandRegionDown((inRegionY-region.getHeight()+1)+EXPAND_DISTANCE);
+			expandRegionDown((inRegionY-region.getHeight()+1)+EXPAND_BUFFER_DISTANCE);
 	}
 
 
-	private void expandRegionLeft(int length)
+	private void expandRegionLeft(int distance)
 	{
-		int actualExpandDistance = Math.min(length, regionPosition.x);
+		int actualExpandDistance = Math.min(distance, regionPosition.x);
 
 		regionPosition = regionPosition.add(-actualExpandDistance, 0);
 		copyRegion(actualExpandDistance, 0, (c)->c.add(actualExpandDistance, 0));
 	}
 
-	private void expandRegionRight(int length)
+	private void expandRegionRight(int distance)
 	{
-		int actualExpandDistance = Math.min(length, width-(region.getWidth()+regionPosition.x));
+		int actualExpandDistance = Math.min(distance, width-(region.getWidth()+regionPosition.x));
 
 		copyRegion(actualExpandDistance, 0, (c)->c);
 	}
 
-	private void expandRegionUp(int length)
+	private void expandRegionUp(int distance)
 	{
-		int actualExpandDistance = Math.min(length, regionPosition.y);
+		int actualExpandDistance = Math.min(distance, regionPosition.y);
 
 		regionPosition = regionPosition.add(0, -actualExpandDistance);
 		copyRegion(0, actualExpandDistance, (c)->c.add(0, actualExpandDistance));
 	}
 
-	private void expandRegionDown(int length)
+	private void expandRegionDown(int distance)
 	{
-		int actualExpandDistance = Math.min(length, height-(region.getHeight()+regionPosition.y));
+		int actualExpandDistance = Math.min(distance, height-(region.getHeight()+regionPosition.y));
 
 		copyRegion(0, actualExpandDistance, (c)->c);
 	}
