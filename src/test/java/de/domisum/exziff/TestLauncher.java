@@ -7,7 +7,6 @@ import de.domisum.exziff.generator.bedrockpartition.BedrockRegionPartitionGenera
 import de.domisum.exziff.map.BooleanMap;
 import de.domisum.exziff.map.converter.ShortMapToImageConverter;
 import de.domisum.exziff.map.generator.bool.BooleanMapFromImageGenerator;
-import de.domisum.exziff.map.transformer.bool.BooleanMapScale;
 import de.domisum.lib.auxilium.data.container.AlwaysUnequalDuo;
 import de.domisum.lib.auxilium.data.container.Duo;
 import de.domisum.lib.auxilium.util.FileUtil;
@@ -40,7 +39,7 @@ public class TestLauncher
 		BooleanMapFromImageGenerator fromImageGenerator = new BooleanMapFromImageGenerator(0.5);
 		BooleanMap continentShape = fromImageGenerator
 				.generate(FileUtil.readImage(new File("C:\\Users\\domisum\\testChamber\\exziff\\res\\continentShape.png")));
-		continentShape = new BooleanMapScale(0.5).transform(continentShape);
+		// continentShape = new BooleanMapScale(0.5).transform(continentShape);
 		logger.info("Image loading done");
 
 

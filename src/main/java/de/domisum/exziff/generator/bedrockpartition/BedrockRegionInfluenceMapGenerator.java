@@ -3,6 +3,7 @@ package de.domisum.exziff.generator.bedrockpartition;
 import de.domisum.exziff.generator.RandomizedGeneratorOneInput;
 import de.domisum.exziff.map.FloatMap;
 import de.domisum.exziff.map.ShortMap;
+import de.domisum.exziff.map.floatmap.FloatMapInMemoryArray;
 import de.domisum.exziff.map.floatmap.FloatMapLocalized;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -41,6 +42,9 @@ public class BedrockRegionInfluenceMapGenerator implements RandomizedGeneratorOn
 
 		public Map<Short, FloatMap> generate()
 		{
+			// ocean
+			influenceMaps.put((short) 0, new FloatMapInMemoryArray(regionMap.getWidth(), regionMap.getHeight()));
+
 			for(int y = 0; y < regionMap.getHeight(); y++)
 			{
 				for(int x = 0; x < regionMap.getWidth(); x++)
