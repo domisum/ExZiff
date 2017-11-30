@@ -12,6 +12,7 @@ import de.domisum.exziff.map.converter.BooleanMapToImageConverter;
 import de.domisum.exziff.map.converter.ShortMapToImageConverter;
 import de.domisum.exziff.map.transformer.bool.BooleanMapScale;
 import de.domisum.exziff.map.transformer.bool.BooleanMapSmooth;
+import de.domisum.exziff.world.Material;
 import de.domisum.exziff.world.World;
 import de.domisum.exziff.world.chunkclustersource.ChunkClusterSourceFromDisk;
 import de.domisum.lib.auxilium.data.container.AlwaysUnequalDuo;
@@ -156,6 +157,9 @@ public class WorldGenerator
 		BlockStack mergedBlockStack = blockStackMerger.merge();
 
 		buildBlockStackAt(mergedBlockStack, x, z);
+
+		for(int y = mergedBlockStack.getMaximumY()+1; y < 45; y++)
+			world.setMaterial(x, y, z, Material.WATER);
 	}
 
 	private void buildBlockStackAt(BlockStack blockStack, int x, int z)
