@@ -7,14 +7,11 @@ import lombok.RequiredArgsConstructor;
 public class BlockStackSimple implements BlockStack
 {
 
-	// CONSTANTS
-	private static final Material DEFAULT_MATERIAL = Material.AIR;
-
 	// INPUT
 	private final Material[] materials;
 
 	// TEMP
-	private Integer _maxHeight = null;
+	private Integer _maxY = null;
 
 
 	// GETTERS
@@ -26,21 +23,21 @@ public class BlockStackSimple implements BlockStack
 		return materials[y];
 	}
 
-	@Override public int getMaxHeight()
+	@Override public int getMaximumY()
 	{
-		if(_maxHeight == null)
-			determineMaxHeight();
+		if(_maxY == null)
+			determineMaxY();
 
-		return _maxHeight;
+		return _maxY;
 	}
 
-	private void determineMaxHeight()
+	private void determineMaxY()
 	{
 		for(int y = materials.length-1; y >= 0; y--)
 			if(getMaterialAt(y) != Material.AIR)
-				_maxHeight = y+1;
+				_maxY = y+1;
 
-		_maxHeight = -1;
+		_maxY = -1;
 	}
 
 }

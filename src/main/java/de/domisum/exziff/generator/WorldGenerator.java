@@ -160,7 +160,7 @@ public class WorldGenerator
 
 	private void buildBlockStackAt(BlockStack blockStack, int x, int z)
 	{
-		for(int y = 0; y <= blockStack.getMaxHeight(); y++)
+		for(int y = 0; y <= blockStack.getMaximumY(); y++)
 			world.setMaterial(x, y, z, blockStack.getMaterialAt(y));
 	}
 

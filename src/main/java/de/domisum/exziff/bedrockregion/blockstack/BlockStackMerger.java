@@ -45,7 +45,7 @@ public class BlockStackMerger
 		materials.add(Material.AIR);
 
 		for(ValuedBlockStack vbs : valuedBlockStacks)
-			for(int y = 0; y <= vbs.blockStack.getMaxHeight(); y++)
+			for(int y = 0; y <= vbs.blockStack.getMaximumY(); y++)
 			{
 				Material material = vbs.blockStack.getMaterialAt(y);
 				if(!materials.contains(material))
@@ -56,8 +56,8 @@ public class BlockStackMerger
 	private void determineMaxHeight()
 	{
 		for(ValuedBlockStack vbs : valuedBlockStacks)
-			if(vbs.blockStack.getMaxHeight() > maxHeight)
-				maxHeight = vbs.blockStack.getMaxHeight();
+			if(vbs.blockStack.getMaximumY() > maxHeight)
+				maxHeight = vbs.blockStack.getMaximumY();
 	}
 
 
