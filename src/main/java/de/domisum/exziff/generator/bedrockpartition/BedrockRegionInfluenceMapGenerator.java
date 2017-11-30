@@ -30,7 +30,7 @@ public class BedrockRegionInfluenceMapGenerator implements RandomizedGeneratorOn
 	{
 
 		// CONSTANTS
-		private static final int INFLUENCE_RADIUS = 10;
+		private static final int INFLUENCE_RADIUS = 15;
 
 		// INPUT
 		private final ShortMap regionMap;
