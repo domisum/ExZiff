@@ -12,7 +12,7 @@ public class FloatMapLocalized implements FloatMap
 {
 
 	// CONSTANTS
-	private static final int EXPAND_BUFFER_DISTANCE = 10;
+	private static final int EXPAND_BUFFER_DISTANCE = 50;
 
 	//
 	@Getter private final int width;
