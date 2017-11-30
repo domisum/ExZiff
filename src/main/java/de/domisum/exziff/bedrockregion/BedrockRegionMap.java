@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 
 @RequiredArgsConstructor
@@ -18,6 +19,11 @@ public class BedrockRegionMap
 
 
 	// GETTERS
+	public Collection<BedrockRegion> getBedrockRegions()
+	{
+		return new HashSet<>(bedrockRegions);
+	}
+
 	public Map<BedrockRegion, Float> getInfluencesAt(int x, int y)
 	{
 		Map<BedrockRegion, Float> influencesAt = new HashMap<>();

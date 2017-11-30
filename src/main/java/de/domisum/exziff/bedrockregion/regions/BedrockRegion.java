@@ -3,10 +3,12 @@ package de.domisum.exziff.bedrockregion.regions;
 import de.domisum.exziff.bedrockregion.BedrockRegionType;
 import de.domisum.exziff.bedrockregion.blockstack.BlockStack;
 import de.domisum.exziff.map.FloatMap;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
 import java.util.Random;
 
+@EqualsAndHashCode(of = {"type", "id"})
 public abstract class BedrockRegion
 {
 

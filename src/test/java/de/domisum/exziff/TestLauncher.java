@@ -3,6 +3,7 @@ package de.domisum.exziff;
 import de.domisum.exziff.bedrockregion.BedrockRegionMap;
 import de.domisum.exziff.bedrockregion.BedrockRegionType;
 import de.domisum.exziff.bedrockregion.regions.BedrockRegion;
+import de.domisum.exziff.generator.WorldGenerator;
 import de.domisum.exziff.generator.bedrockpartition.BedrockRegionPartitionGenerator;
 import de.domisum.exziff.map.BooleanMap;
 import de.domisum.exziff.map.converter.ShortMapToImageConverter;
@@ -30,7 +31,7 @@ public class TestLauncher
 
 	public static void main(String[] args)
 	{
-		new TestLauncher().test();
+		new WorldGenerator(4096, 3881, new File("C:\\Users\\domisum\\testChamber\\exziff\\testWorld")).generate();
 	}
 
 	private void test()
@@ -64,7 +65,7 @@ public class TestLauncher
 		logger.info("Done");
 	}
 
-	private static BufferedImage generateInfluenceMapImage(BedrockRegionMap bedrockRegionMap)
+	public static BufferedImage generateInfluenceMapImage(BedrockRegionMap bedrockRegionMap)
 	{
 		int[][] pixels = new int[bedrockRegionMap.getRegionIdMap().getHeight()][bedrockRegionMap.getRegionIdMap().getWidth()];
 

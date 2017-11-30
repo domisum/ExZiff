@@ -29,6 +29,9 @@ public class BlockStackMerger
 	// MERGE
 	public BlockStack merge()
 	{
+		if(valuedBlockStacks.size() == 1)
+			return valuedBlockStacks.get(0).blockStack;
+
 		determineMaterials();
 		determineMaxHeight();
 
@@ -107,7 +110,7 @@ public class BlockStackMerger
 
 	// VALUED BLOCK STACK
 	@RequiredArgsConstructor
-	private class ValuedBlockStack
+	public static class ValuedBlockStack
 	{
 
 		private final BlockStack blockStack;
