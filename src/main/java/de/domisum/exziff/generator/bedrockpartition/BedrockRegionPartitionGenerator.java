@@ -1,16 +1,22 @@
 package de.domisum.exziff.generator.bedrockpartition;
 
 import de.domisum.exziff.bedrockregion.BedrockRegionMap;
+import de.domisum.exziff.bedrockregion.BedrockRegionType;
+import de.domisum.exziff.bedrockregion.regions.BedrockRegion;
 import de.domisum.exziff.generator.RandomizedGeneratorOneInput;
 import de.domisum.exziff.map.BooleanMap;
+import de.domisum.exziff.map.FloatMap;
 import de.domisum.exziff.map.ShortMap;
+import de.domisum.lib.auxilium.util.math.RandomUtil;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 
@@ -38,15 +44,20 @@ public class BedrockRegionPartitionGenerator implements RandomizedGeneratorOneIn
 		// TEMP
 		private ShortMap regionMap;
 		private List<Short> usedRegionIds;
+		private Map<Short, FloatMap> regionInfluenceMaps;
+		private Set<BedrockRegion> bedrockRegions = new HashSet<>();
 
 
 		// GENERATE
 		public BedrockRegionMap generate()
 		{
 			generateRegionMap();
-			determineUsedRegionIds();
 
-			return new BedrockRegionMap(regionMap, null);
+			determineUsedRegionIds();
+			determineRegionInfluence();
+			generateRegions();
+
+			return new BedrockRegionMap(regionMap, bedrockRegions);
 		}
 
 
@@ -73,6 +84,41 @@ public class BedrockRegionPartitionGenerator implements RandomizedGeneratorOneIn
 			usedRegionIds.sort(Short::compareTo);
 
 			logger.info("Found: {}", usedRegionIds);
+		}
+
+		private void determineRegionInfluence()
+		{
+			BedrockRegionInfluenceMapGenerator bedrockRegionInfluenceMapGenerator = new BedrockRegionInfluenceMapGenerator();
+			regionInfluenceMaps = bedrockRegionInfluenceMapGenerator.generate(random.nextLong(), regionMap);
+		}
+
+		private void generateRegions()
+		{
+			generateOceanRegion();
+			generateNonOceanRegions();
+		}
+
+		private void generateOceanRegion()
+		{
+			BedrockRegion ocean = BedrockRegionType.OCEAN_FLOOR
+					.getInstance(0, random.nextLong(), regionInfluenceMaps.get((short) 0));
+			bedrockRegions.add(ocean);
+		}
+
+		private void generateNonOceanRegions()
+		{
+			Set<BedrockRegionType> types = new HashSet<>(Arrays.asList(BedrockRegionType.values()));
+			types.remove(BedrockRegionType.OCEAN_FLOOR);
+
+			Set<Short> nonOceanRegions = new HashSet<>(usedRegionIds);
+			nonOceanRegions.remove((short) 0);
+			for(short s : nonOceanRegions)
+			{
+				BedrockRegionType randomType = RandomUtil.getElement(types, random);
+
+				BedrockRegion bedrockRegion = randomType.getInstance(s, random.nextLong(), regionInfluenceMaps.get(s));
+				bedrockRegions.add(bedrockRegion);
+			}
 		}
 
 	}
