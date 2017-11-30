@@ -96,19 +96,27 @@ public class BedrockRegionInfluenceMapGenerator implements RandomizedGeneratorOn
 		{
 			short regionAt = regionMap.get(x, y);
 
-			if(regionMap.get(x+1, y) != regionAt)
+			if(isNeighborDifferent(x+1, y, regionAt))
 				return true;
 
-			if(regionMap.get(x-1, y) != regionAt)
+			if(isNeighborDifferent(x-1, y, regionAt))
 				return true;
 
-			if(regionMap.get(x, y+1) != regionAt)
+			if(isNeighborDifferent(x, y+1, regionAt))
 				return true;
 
-			if(regionMap.get(x, y-1) != regionAt)
+			if(isNeighborDifferent(x, y-1, regionAt))
 				return true;
 
 			return false;
+		}
+
+		private boolean isNeighborDifferent(int nX, int nY, short baseRegion)
+		{
+			if(!isInBounds(nX, nY))
+				return false;
+
+			return regionMap.get(nX, nY) != baseRegion;
 		}
 
 		private boolean isInBounds(int x, int y)
@@ -116,7 +124,7 @@ public class BedrockRegionInfluenceMapGenerator implements RandomizedGeneratorOn
 			if(x < 0 || x >= regionMap.getWidth())
 				return false;
 
-			if(y < 0 || y > regionMap.getHeight())
+			if(y < 0 || y >= regionMap.getHeight())
 				return false;
 
 			return true;
