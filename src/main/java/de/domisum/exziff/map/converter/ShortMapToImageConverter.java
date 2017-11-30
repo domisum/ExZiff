@@ -30,7 +30,7 @@ public class ShortMapToImageConverter implements Converter<ShortMap, BufferedIma
 			{
 				Color color = getColorForValue(input.get(x, y));
 
-				pixels[y][x] = color.getRGB(); // TODO is this too performance heavy?
+				pixels[y][x] = color.getRGB();
 			}
 
 		return ImageUtil.getImageFromPixels(pixels);
