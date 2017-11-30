@@ -17,7 +17,7 @@ public class BlockStackMergerTest
 
 		assertBlockStackEquals(new BlockStackUniform(Material.STONE, 10),
 				merge(new BlockStackMerger.ValuedBlockStack(new BlockStackUniform(Material.STONE, 10), 1),
-				new BlockStackMerger.ValuedBlockStack(new BlockStackUniform(Material.AIR, 10), 0.5)));
+						new BlockStackMerger.ValuedBlockStack(new BlockStackUniform(Material.AIR, 10), 0.1)));
 	}
 
 
