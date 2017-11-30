@@ -54,10 +54,10 @@ public class BedrockRegionInfluenceMapGenerator implements RandomizedGeneratorOn
 
 		private void processInfluenceAt(int x, int y)
 		{
+			setInfluenceAt(x, y, regionMap.get(x, y), 1.0f);
+
 			if(doesBlockHaveOtherRegionNeighbors(x, y))
 				spreadInfluenceFrom(x, y);
-			else
-				setInfluenceAt(x, y, regionMap.get(x, y), 1.0f);
 		}
 
 		private void spreadInfluenceFrom(int x, int y)
@@ -87,7 +87,8 @@ public class BedrockRegionInfluenceMapGenerator implements RandomizedGeneratorOn
 				influenceMaps.put(region, new FloatMapLocalized(regionMap.getWidth(), regionMap.getHeight()));
 			FloatMap influenceMap = influenceMaps.get(region);
 
-			influenceMap.set(x, y, influence);
+			if(influenceMap.get(x, y) < influence)
+				influenceMap.set(x, y, influence);
 		}
 
 

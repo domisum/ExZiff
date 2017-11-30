@@ -7,6 +7,9 @@ import de.domisum.exziff.generator.bedrockpartition.BedrockRegionPartitionGenera
 import de.domisum.exziff.map.BooleanMap;
 import de.domisum.exziff.map.converter.ShortMapToImageConverter;
 import de.domisum.exziff.map.generator.bool.BooleanMapFromImageGenerator;
+import de.domisum.exziff.map.transformer.bool.BooleanMapScale;
+import de.domisum.lib.auxilium.data.container.AlwaysUnequalDuo;
+import de.domisum.lib.auxilium.data.container.Duo;
 import de.domisum.lib.auxilium.util.FileUtil;
 import de.domisum.lib.auxilium.util.ImageUtil;
 import org.slf4j.Logger;
@@ -15,9 +18,10 @@ import org.slf4j.LoggerFactory;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Random;
+import java.util.Set;
 
 public class TestLauncher
 {
@@ -36,6 +40,7 @@ public class TestLauncher
 		BooleanMapFromImageGenerator fromImageGenerator = new BooleanMapFromImageGenerator(0.5);
 		BooleanMap continentShape = fromImageGenerator
 				.generate(FileUtil.readImage(new File("C:\\Users\\domisum\\testChamber\\exziff\\res\\continentShape.png")));
+		continentShape = new BooleanMapScale(0.5).transform(continentShape);
 		logger.info("Image loading done");
 
 
@@ -43,6 +48,9 @@ public class TestLauncher
 		BedrockRegionPartitionGenerator bedrockRegionPartitionGenerator = new BedrockRegionPartitionGenerator();
 		BedrockRegionMap bedrockRegionMap = bedrockRegionPartitionGenerator.generate(random.nextLong(), continentShape);
 
+
+		System.out.println(bedrockRegionMap.getInfluencesAt(751, 1557));
+		System.out.println(bedrockRegionMap.getInfluencesAt(762, 1536));
 
 		this.logger.info("Starting export");
 		ShortMapToImageConverter shortMapToImageConverter = new ShortMapToImageConverter();
@@ -62,12 +70,16 @@ public class TestLauncher
 		int[][] pixels = new int[bedrockRegionMap.getRegionIdMap().getHeight()][bedrockRegionMap.getRegionIdMap().getWidth()];
 
 		for(int y = 0; y < bedrockRegionMap.getRegionIdMap().getHeight(); y++)
+		{
 			for(int x = 0; x < bedrockRegionMap.getRegionIdMap().getWidth(); x++)
 			{
 				Color color = getColorAt(bedrockRegionMap, x, y);
 
 				pixels[y][x] = color.getRGB();
 			}
+
+			System.out.println("y: "+y);
+		}
 
 		return ImageUtil.getImageFromPixels(pixels);
 	}
@@ -76,9 +88,9 @@ public class TestLauncher
 	{
 		Map<BedrockRegion, Float> influencesAt = bedrockRegionMap.getInfluencesAt(x, y);
 
-		Map<Color, Float> colorsAndStrength = new HashMap<>();
+		Set<Duo<Color, Float>> colorsAndStrength = new HashSet<>();
 		for(Map.Entry<BedrockRegion, Float> entry : influencesAt.entrySet())
-			colorsAndStrength.put(getColorForRegion(entry.getKey().getType()), entry.getValue());
+			colorsAndStrength.add(new AlwaysUnequalDuo<>(getColorForRegion(entry.getKey().getType()), entry.getValue()));
 
 		return mix(colorsAndStrength);
 	}
@@ -100,7 +112,7 @@ public class TestLauncher
 		return Color.BLACK;
 	}
 
-	private static Color mix(Map<Color, Float> colorsAndStrength)
+	private static Color mix(Set<Duo<Color, Float>> colorsAndStrength)
 	{
 		double red = 0;
 		double green = 0;
@@ -108,13 +120,13 @@ public class TestLauncher
 
 		double strengthSum = 0;
 
-		for(Map.Entry<Color, Float> entry : colorsAndStrength.entrySet())
+		for(Duo<Color, Float> entry : colorsAndStrength)
 		{
-			red += entry.getKey().getRed()*entry.getValue();
-			green += entry.getKey().getGreen()*entry.getValue();
-			blue += entry.getKey().getBlue()*entry.getValue();
+			red += entry.a.getRed()*entry.b;
+			green += entry.a.getGreen()*entry.b;
+			blue += entry.a.getBlue()*entry.b;
 
-			strengthSum += entry.getValue();
+			strengthSum += entry.b;
 		}
 
 		return new Color((int) (red/strengthSum), (int) (green/strengthSum), (int) (blue/strengthSum));
