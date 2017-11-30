@@ -58,6 +58,9 @@ public class BlockStackMerger
 		for(ValuedBlockStack vbs : valuedBlockStacks)
 			if(vbs.blockStack.getMaximumY() > maxHeight)
 				maxHeight = vbs.blockStack.getMaximumY();
+
+		System.out.println("mater"+valuedBlockStacks.size());
+		System.out.println(maxHeight);
 	}
 
 
@@ -85,7 +88,10 @@ public class BlockStackMerger
 	{
 		Material[] blockStackMaterials = new Material[maxHeight+1];
 		for(int y = 0; y <= maxHeight; y++)
+		{
 			blockStackMaterials[y] = getMergedMaterialAtHeight(y);
+			System.out.println("y: "+y+" "+blockStackMaterials[y]);
+		}
 
 		mergedBlockStack = BlockStack.fromMaterialArray(blockStackMaterials);
 	}
@@ -103,6 +109,9 @@ public class BlockStackMerger
 				highestValue = value;
 			}
 		}
+
+		if(highestValueMaterial == null)
+			throw new IllegalStateException("Can't have no material");
 
 		return highestValueMaterial;
 	}

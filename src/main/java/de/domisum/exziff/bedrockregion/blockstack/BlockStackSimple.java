@@ -35,7 +35,10 @@ public class BlockStackSimple implements BlockStack
 	{
 		for(int y = materials.length-1; y >= 0; y--)
 			if(getMaterialAt(y) != Material.AIR)
-				_maxY = y+1;
+			{
+				_maxY = y;
+				return;
+			}
 
 		_maxY = -1;
 	}
