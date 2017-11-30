@@ -1,6 +1,7 @@
 package de.domisum.exziff.bedrockregion.regions;
 
 import de.domisum.exziff.bedrockregion.BedrockRegionType;
+import de.domisum.exziff.bedrockregion.blockstack.BlockStack;
 import de.domisum.exziff.map.FloatMap;
 
 public class Flatlands extends BedrockRegion
@@ -19,9 +20,9 @@ public class Flatlands extends BedrockRegion
 
 	}
 
-	@Override public int getHeightAt(int x, int z)
+	@Override public BlockStack getBlockStackAt(int x, int z)
 	{
-		return 0;
+		return null;
 	}
 
 }

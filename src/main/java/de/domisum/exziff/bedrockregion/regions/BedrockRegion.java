@@ -1,6 +1,7 @@
 package de.domisum.exziff.bedrockregion.regions;
 
 import de.domisum.exziff.bedrockregion.BedrockRegionType;
+import de.domisum.exziff.bedrockregion.blockstack.BlockStack;
 import de.domisum.exziff.map.FloatMap;
 import lombok.Getter;
 
@@ -33,6 +34,6 @@ public abstract class BedrockRegion
 	// GENERATION
 	public abstract void generate();
 
-	public abstract int getHeightAt(int x, int z);
+	public abstract BlockStack getBlockStackAt(int x, int z);
 
 }
