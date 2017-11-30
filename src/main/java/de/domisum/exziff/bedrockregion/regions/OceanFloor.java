@@ -3,6 +3,7 @@ package de.domisum.exziff.bedrockregion.regions;
 import de.domisum.exziff.bedrockregion.BedrockRegionType;
 import de.domisum.exziff.bedrockregion.blockstack.BlockStack;
 import de.domisum.exziff.map.FloatMap;
+import de.domisum.exziff.world.Material;
 
 public class OceanFloor extends BedrockRegion
 {
@@ -22,7 +23,7 @@ public class OceanFloor extends BedrockRegion
 
 	@Override public BlockStack getBlockStackAt(int x, int z)
 	{
-		return null;
+		return BlockStack.fromMaterialAndMaxY(Material.STONE, 40);
 	}
 
 }
