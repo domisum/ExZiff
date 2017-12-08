@@ -143,7 +143,6 @@ public class WorldGenerator
 			for(int x = 0; x < bedrockRegionMap.getRegionIdMap().getWidth(); x++)
 				buildBedrockAt(x, z);
 
-
 			System.out.println("buildBedrock: "+z);
 		}
 	}
