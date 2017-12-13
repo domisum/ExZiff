@@ -23,7 +23,7 @@ public class OceanFloor extends BedrockRegion
 
 	@Override public BlockStack getBlockStackAt(int x, int z)
 	{
-		return BlockStack.fromMaterialAndMaxY(Material.STONE, 40);
+		return BlockStack.fromMaterialAndMaxY(Material.STONE, 30);
 	}
 
 }

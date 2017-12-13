@@ -203,7 +203,7 @@ public class WorldGenerator
 				pixels[y][x] = color.getRGB();
 			}
 
-			System.out.println("y: "+y);
+			// System.out.println("y: "+y);
 		}
 
 		return ImageUtil.getImageFromPixels(pixels);

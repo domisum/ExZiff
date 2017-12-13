@@ -31,7 +31,10 @@ public class TestLauncher
 
 	public static void main(String[] args)
 	{
-		new WorldGenerator(4096, 3881, new File("C:\\Users\\domisum\\testChamber\\exziff\\testWorld")).generate();
+		File dir = new File("C:\\Users\\domisum\\testChamber\\exziff\\testWorld");
+		FileUtil.deleteDirectory(dir);
+
+		new WorldGenerator(4096, 3881, dir).generate();
 	}
 
 	private void test()
