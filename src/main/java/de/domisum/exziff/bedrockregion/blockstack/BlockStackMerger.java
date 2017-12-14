@@ -20,7 +20,8 @@ public class BlockStackMerger
 	private Set<Material> materials = new HashSet<>();
 	private int maxHeight = -1;
 
-	private Map<Material, double[]> materialValuesAtHeight = new HashMap<>();
+	private Map<ValuedBlockStack, Map<Material, int[]>> toMaterialsDistancesAtHeight = new HashMap<>();
+	private Map<Material, double[]> materialRepulsionAtHeight = new HashMap<>();
 
 	// OUTPUT
 	private BlockStack mergedBlockStack;
@@ -35,7 +36,7 @@ public class BlockStackMerger
 		determineMaterials();
 		determineMaxHeight();
 
-		determineMaterialValuesAtHeight();
+		determineMaterialRepulsionAtHeight();
 		determineMergedBlockStack();
 		return mergedBlockStack;
 	}
@@ -61,25 +62,77 @@ public class BlockStackMerger
 	}
 
 
-	private void determineMaterialValuesAtHeight()
+	private void determineMaterialRepulsionAtHeight()
+	{
+		determineMaterialDistances();
+
+		for(ValuedBlockStack vbs : valuedBlockStacks)
+			for(Material m : materials)
+				for(int y = 0; y <= maxHeight; y++)
+				{
+					double toMaterialDistance = toMaterialsDistancesAtHeight.get(vbs).get(m)[y];
+					double repulsion = toMaterialDistance*vbs.value;
+
+					addMaterialRepulsionAtHeight(m, y, repulsion);
+				}
+	}
+
+	private void determineMaterialDistances()
 	{
 		for(ValuedBlockStack vbs : valuedBlockStacks)
-			for(int y = 0; y <= maxHeight; y++)
+		{
+			Map<Material, int[]> toMaterialsDistancesAtHeight = new HashMap<>();
+			this.toMaterialsDistancesAtHeight.put(vbs, toMaterialsDistancesAtHeight);
+
+			for(Material m : materials)
 			{
-				// TODO improve this
-				Material material = vbs.blockStack.getMaterialAt(y);
-				addMaterialValueAtHeight(material, y, vbs.value);
+				int[] toMaterialDistancesAtHeight = determineDistancesAtHeight(vbs.blockStack, m);
+				toMaterialsDistancesAtHeight.put(m, toMaterialDistancesAtHeight);
 			}
+		}
 	}
 
-	private void addMaterialValueAtHeight(Material material, int y, double value)
+	private int[] determineDistancesAtHeight(BlockStack blockStack, Material material)
 	{
-		if(!materialValuesAtHeight.containsKey(material))
-			materialValuesAtHeight.put(material, new double[maxHeight+1]);
+		int startDistance = 50;
 
-		double[] valuesAtHeight = materialValuesAtHeight.get(material);
+
+		int[] distancesAtHeight = new int[maxHeight+1];
+
+		int distance = startDistance;
+		for(int y = 0; y <= maxHeight; y++)
+		{
+			if(blockStack.getMaterialAt(y) == material)
+				distance = 0;
+
+			distancesAtHeight[y] = distance;
+			distance++;
+		}
+
+		distance = startDistance;
+		for(int y = maxHeight; y >= 0; y--)
+		{
+			if(blockStack.getMaterialAt(y) == material)
+				distance = 0;
+
+			if(distancesAtHeight[y] > distance)
+				distancesAtHeight[y] = distance;
+			distance++;
+		}
+
+		return distancesAtHeight;
+	}
+
+
+	private void addMaterialRepulsionAtHeight(Material material, int y, double value)
+	{
+		if(!materialRepulsionAtHeight.containsKey(material))
+			materialRepulsionAtHeight.put(material, new double[maxHeight+1]);
+
+		double[] valuesAtHeight = materialRepulsionAtHeight.get(material);
 		valuesAtHeight[y] = valuesAtHeight[y]+value;
 	}
+
 
 	private void determineMergedBlockStack()
 	{
@@ -92,22 +145,22 @@ public class BlockStackMerger
 
 	private Material getMergedMaterialAtHeight(int y)
 	{
-		Material highestValueMaterial = null;
-		double highestValue = -1;
-		for(Map.Entry<Material, double[]> entry : materialValuesAtHeight.entrySet())
+		Material lowestRepulsionMaterial = null;
+		double lowestRepulsion = Double.MAX_VALUE;
+		for(Map.Entry<Material, double[]> entry : materialRepulsionAtHeight.entrySet())
 		{
 			double value = entry.getValue()[y];
-			if(value > highestValue)
+			if(value < lowestRepulsion)
 			{
-				highestValueMaterial = entry.getKey();
-				highestValue = value;
+				lowestRepulsionMaterial = entry.getKey();
+				lowestRepulsion = value;
 			}
 		}
 
-		if(highestValueMaterial == null)
+		if(lowestRepulsionMaterial == null)
 			throw new IllegalStateException("Can't have no material");
 
-		return highestValueMaterial;
+		return lowestRepulsionMaterial;
 	}
 
 
