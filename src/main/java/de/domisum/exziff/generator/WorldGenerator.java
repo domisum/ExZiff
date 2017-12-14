@@ -109,18 +109,18 @@ public class WorldGenerator
 
 	private void generateContinentShape()
 	{
-		int scalingFactor = 4;
+		int scalingFactor = 2;
 
 		ContinentsShapeGenerator generator = new ContinentsShapeGenerator();
 		generator.setDownscalingFactor(scalingFactor);
-
 		this.continentShape = generator.generate(random.nextLong(), size);
 
-		this.logger.info("Scaling continents shape to full size...");
+		this.logger.info("Scaling continents shape to full size (x{})...", scalingFactor);
 		BooleanMapScale scale = new BooleanMapScale(scalingFactor);
 		this.continentShape = scale.transform(this.continentShape);
+
 		this.logger.info("Smoothing upscaled shape...");
-		BooleanMapSmooth smooth = new BooleanMapSmooth(2, 0.3, 0.7);
+		BooleanMapSmooth smooth = new BooleanMapSmooth(3, 0.45, 0.55);
 		this.continentShape = smooth.transform(this.continentShape);
 	}
 

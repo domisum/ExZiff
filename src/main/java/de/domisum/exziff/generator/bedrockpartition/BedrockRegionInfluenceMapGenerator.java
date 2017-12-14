@@ -30,7 +30,7 @@ public class BedrockRegionInfluenceMapGenerator implements RandomizedGeneratorOn
 	{
 
 		// CONSTANTS
-		private static final int INFLUENCE_RADIUS = 25;
+		private static final int INFLUENCE_RADIUS = 20;
 
 		// INPUT
 		private final ShortMap regionMap;
@@ -68,6 +68,8 @@ public class BedrockRegionInfluenceMapGenerator implements RandomizedGeneratorOn
 		{
 			if(!influenceMaps.containsKey(region))
 				influenceMaps.put(region, new FloatMapLocalized(regionMap.getWidth(), regionMap.getHeight()));
+
+
 			FloatMap influenceMap = influenceMaps.get(region);
 
 			if(influenceMap.get(x, y) < influence)
@@ -91,9 +93,10 @@ public class BedrockRegionInfluenceMapGenerator implements RandomizedGeneratorOn
 
 			double distanceFromCenter = Math.sqrt(deltaX*deltaX+deltaY*deltaY);
 			double influenceStrength = 1-(distanceFromCenter/INFLUENCE_RADIUS);
-
 			if(influenceStrength <= 0)
 				return;
+
+			influenceStrength = Math.pow(influenceStrength, 1.5); // stronger falloff towards the edges
 
 			setRegionInfluenceAt(nX, nY, regionMap.get(baseX, baseY), (float) influenceStrength);
 		}
