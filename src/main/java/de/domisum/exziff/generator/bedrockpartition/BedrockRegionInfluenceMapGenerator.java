@@ -30,7 +30,7 @@ public class BedrockRegionInfluenceMapGenerator implements RandomizedGeneratorOn
 	{
 
 		// CONSTANTS
-		private static final int INFLUENCE_RADIUS = 15;
+		private static final int INFLUENCE_RADIUS = 25;
 
 		// INPUT
 		private final ShortMap regionMap;
@@ -58,34 +58,13 @@ public class BedrockRegionInfluenceMapGenerator implements RandomizedGeneratorOn
 
 		private void processInfluenceAt(int x, int y)
 		{
-			setInfluenceAt(x, y, regionMap.get(x, y), 1.0f);
+			setRegionInfluenceAt(x, y, regionMap.get(x, y), 1.0f);
 
-			if(doesBlockHaveOtherRegionNeighbors(x, y))
-				spreadInfluenceFrom(x, y);
+			if(isBlockOnRegionBorder(x, y))
+				spreadRegionInfluenceFrom(x, y);
 		}
 
-		private void spreadInfluenceFrom(int x, int y)
-		{
-			for(int dY = -INFLUENCE_RADIUS; dY <= INFLUENCE_RADIUS; dY++)
-				for(int dX = -INFLUENCE_RADIUS; dX <= INFLUENCE_RADIUS; dX++)
-				{
-					int nX = x+dX;
-					int nY = y+dY;
-
-					if(isOutOfBounds(nX, nY))
-						continue;
-
-					double distanceFromCenter = Math.sqrt(dX*dX+dY*dY);
-					double influenceStrength = 1-(distanceFromCenter/INFLUENCE_RADIUS);
-
-					if(influenceStrength <= 0)
-						continue;
-
-					setInfluenceAt(nX, nY, regionMap.get(x, y), (float) influenceStrength);
-				}
-		}
-
-		private void setInfluenceAt(int x, int y, short region, float influence)
+		private void setRegionInfluenceAt(int x, int y, short region, float influence)
 		{
 			if(!influenceMaps.containsKey(region))
 				influenceMaps.put(region, new FloatMapLocalized(regionMap.getWidth(), regionMap.getHeight()));
@@ -95,28 +74,52 @@ public class BedrockRegionInfluenceMapGenerator implements RandomizedGeneratorOn
 				influenceMap.set(x, y, influence);
 		}
 
+		private void spreadRegionInfluenceFrom(int x, int y)
+		{
+			for(int dY = -INFLUENCE_RADIUS; dY <= INFLUENCE_RADIUS; dY++)
+				for(int dX = -INFLUENCE_RADIUS; dX <= INFLUENCE_RADIUS; dX++)
+					setRegionSpreadInfluence(x, y, dX, dY);
+		}
+
+		private void setRegionSpreadInfluence(int baseX, int baseY, int deltaX, int deltaY)
+		{
+			int nX = baseX+deltaX;
+			int nY = baseY+deltaY;
+
+			if(isOutOfBounds(nX, nY))
+				return;
+
+			double distanceFromCenter = Math.sqrt(deltaX*deltaX+deltaY*deltaY);
+			double influenceStrength = 1-(distanceFromCenter/INFLUENCE_RADIUS);
+
+			if(influenceStrength <= 0)
+				return;
+
+			setRegionInfluenceAt(nX, nY, regionMap.get(baseX, baseY), (float) influenceStrength);
+		}
+
 
 		// UTIL
-		private boolean doesBlockHaveOtherRegionNeighbors(int x, int y)
+		private boolean isBlockOnRegionBorder(int x, int y)
 		{
 			short regionAt = regionMap.get(x, y);
 
-			if(isNeighborDifferent(x+1, y, regionAt))
+			if(hasBlockDifferentRegion(x+1, y, regionAt))
 				return true;
 
-			if(isNeighborDifferent(x-1, y, regionAt))
+			if(hasBlockDifferentRegion(x-1, y, regionAt))
 				return true;
 
-			if(isNeighborDifferent(x, y+1, regionAt))
+			if(hasBlockDifferentRegion(x, y+1, regionAt))
 				return true;
 
-			if(isNeighborDifferent(x, y-1, regionAt))
+			if(hasBlockDifferentRegion(x, y-1, regionAt))
 				return true;
 
 			return false;
 		}
 
-		private boolean isNeighborDifferent(int nX, int nY, short baseRegion)
+		private boolean hasBlockDifferentRegion(int nX, int nY, short baseRegion)
 		{
 			if(isOutOfBounds(nX, nY))
 				return false;
