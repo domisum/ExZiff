@@ -72,7 +72,7 @@ public class BedrockRegionInfluenceMapGenerator implements RandomizedGeneratorOn
 					int nX = x+dX;
 					int nY = y+dY;
 
-					if(!isInBounds(nX, nY))
+					if(isOutOfBounds(nX, nY))
 						continue;
 
 					double distanceFromCenter = Math.sqrt(dX*dX+dY*dY);
@@ -118,21 +118,21 @@ public class BedrockRegionInfluenceMapGenerator implements RandomizedGeneratorOn
 
 		private boolean isNeighborDifferent(int nX, int nY, short baseRegion)
 		{
-			if(!isInBounds(nX, nY))
+			if(isOutOfBounds(nX, nY))
 				return false;
 
 			return regionMap.get(nX, nY) != baseRegion;
 		}
 
-		private boolean isInBounds(int x, int y)
+		private boolean isOutOfBounds(int x, int y)
 		{
 			if(x < 0 || x >= regionMap.getWidth())
-				return false;
+				return true;
 
 			if(y < 0 || y >= regionMap.getHeight())
-				return false;
+				return true;
 
-			return true;
+			return false;
 		}
 
 	}
