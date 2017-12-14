@@ -34,7 +34,6 @@ public class BooleanMapScale implements Transformer<BooleanMap>
 		for(int x = 0; x < nWidth; x++)
 			for(int y = 0; y < nHeight; y++)
 			{
-				// TODO this technique may skip pixels when upscaling and therefore may be inaccurate
 				int inputX = (int) Math.floor(x/this.scalingFactor);
 				int inputY = (int) Math.floor(y/this.scalingFactor);
 
