@@ -149,11 +149,12 @@ public class WorldGenerator
 
 	private void buildBedrockAt(int x, int z)
 	{
-		List<BlockStackMerger.ValuedBlockStack> valuedBlockStacks = new ArrayList<>();
+		List<BlockStackMerger.WeightedBlockStack> weightedBlockStacks = new ArrayList<>();
 		for(Map.Entry<BedrockRegion, Float> entry : bedrockRegionMap.getInfluencesAt(x, z).entrySet())
-			valuedBlockStacks.add(new BlockStackMerger.ValuedBlockStack(entry.getKey().getBlockStackAt(x, z), entry.getValue()));
+			weightedBlockStacks
+					.add(new BlockStackMerger.WeightedBlockStack(entry.getKey().getBlockStackAt(x, z), entry.getValue()));
 
-		BlockStackMerger blockStackMerger = new BlockStackMerger(valuedBlockStacks);
+		BlockStackMerger blockStackMerger = new BlockStackMerger(weightedBlockStacks);
 		BlockStack mergedBlockStack = blockStackMerger.merge();
 
 		buildBlockStackAt(mergedBlockStack, x, z);
@@ -190,7 +191,7 @@ public class WorldGenerator
 	}
 
 
-	public static BufferedImage generateInfluenceMapImage(BedrockRegionMap bedrockRegionMap)
+	private static BufferedImage generateInfluenceMapImage(BedrockRegionMap bedrockRegionMap)
 	{
 		int[][] pixels = new int[bedrockRegionMap.getRegionIdMap().getHeight()][bedrockRegionMap.getRegionIdMap().getWidth()];
 

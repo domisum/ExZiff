@@ -13,22 +13,22 @@ public class BlockStackMergerTest
 	@Test public void bothAreSameMerge()
 	{
 		assertBlockStackEquals(new BlockStackUniform(Material.STONE, 10),
-				merge(new BlockStackMerger.ValuedBlockStack(new BlockStackUniform(Material.STONE, 10), 1)));
+				merge(new BlockStackMerger.WeightedBlockStack(new BlockStackUniform(Material.STONE, 10), 1)));
 
 		assertBlockStackEquals(new BlockStackUniform(Material.STONE, 10),
-				merge(new BlockStackMerger.ValuedBlockStack(new BlockStackUniform(Material.STONE, 10), 1),
-						new BlockStackMerger.ValuedBlockStack(new BlockStackUniform(Material.AIR, 10), 0.1)));
+				merge(new BlockStackMerger.WeightedBlockStack(new BlockStackUniform(Material.STONE, 10), 1),
+						new BlockStackMerger.WeightedBlockStack(new BlockStackUniform(Material.AIR, 10), 0.1)));
 	}
 
 
-	private static BlockStack merge(BlockStackMerger.ValuedBlockStack... valuedBlockStacks)
+	private static BlockStack merge(BlockStackMerger.WeightedBlockStack... weightedBlockStacks)
 	{
-		return merge(Arrays.asList(valuedBlockStacks));
+		return merge(Arrays.asList(weightedBlockStacks));
 	}
 
-	private static BlockStack merge(List<BlockStackMerger.ValuedBlockStack> valuedBlockStacks)
+	private static BlockStack merge(List<BlockStackMerger.WeightedBlockStack> weightedBlockStacks)
 	{
-		BlockStackMerger blockStackMerger = new BlockStackMerger(valuedBlockStacks);
+		BlockStackMerger blockStackMerger = new BlockStackMerger(weightedBlockStacks);
 		return blockStackMerger.merge();
 	}
 
