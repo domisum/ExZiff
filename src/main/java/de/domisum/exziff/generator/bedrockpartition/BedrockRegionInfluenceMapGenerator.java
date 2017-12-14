@@ -5,6 +5,7 @@ import de.domisum.exziff.map.FloatMap;
 import de.domisum.exziff.map.ShortMap;
 import de.domisum.exziff.map.floatmap.FloatMapInMemoryArray;
 import de.domisum.exziff.map.floatmap.FloatMapLocalized;
+import de.domisum.lib.auxilium.util.math.MathUtil;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -96,7 +97,7 @@ public class BedrockRegionInfluenceMapGenerator implements RandomizedGeneratorOn
 			if(influenceStrength <= 0)
 				return;
 
-			influenceStrength = Math.pow(influenceStrength, 1.5); // stronger falloff towards the edges
+			influenceStrength = MathUtil.smoothStep(influenceStrength); // stronger falloff towards the edges
 
 			setRegionInfluenceAt(nX, nY, regionMap.get(baseX, baseY), (float) influenceStrength);
 		}

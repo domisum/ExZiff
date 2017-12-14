@@ -159,8 +159,9 @@ public class WorldGenerator
 
 		buildBlockStackAt(mergedBlockStack, x, z);
 
-		for(int y = mergedBlockStack.getMaximumY()+1; y < 45; y++)
-			world.setMaterial(x, y, z, Material.WATER);
+		if(x%3 == 0 && z%3 == 0)
+			for(int y = mergedBlockStack.getMaximumY()+1; y < 45; y++)
+				world.setMaterial(x, y, z, Material.WATER);
 	}
 
 	private void buildBlockStackAt(BlockStack blockStack, int x, int z)
