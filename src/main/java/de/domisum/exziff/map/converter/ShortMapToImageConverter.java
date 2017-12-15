@@ -1,6 +1,7 @@
 package de.domisum.exziff.map.converter;
 
 import de.domisum.exziff.map.ShortMap;
+import de.domisum.lib.auxilium.contracts.Converter;
 import de.domisum.lib.auxilium.util.ImageUtil;
 
 import java.awt.Color;
