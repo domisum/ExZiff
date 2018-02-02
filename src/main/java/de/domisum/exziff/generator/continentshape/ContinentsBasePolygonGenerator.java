@@ -1,8 +1,8 @@
 package de.domisum.exziff.generator.continentshape;
 
 import de.domisum.exziff.generator.RandomizedGeneratorOneInput;
-import de.domisum.lib.auxilium.data.container.math.Polygon2D;
 import de.domisum.lib.auxilium.data.container.math.Vector2D;
+import de.domisum.lib.auxilium.data.container.math.shape.Polygon2D;
 import de.domisum.lib.auxilium.util.math.RandomUtil;
 import lombok.RequiredArgsConstructor;
 
@@ -103,7 +103,7 @@ public class ContinentsBasePolygonGenerator implements RandomizedGeneratorOneInp
 		private Polygon2D modifyBasePolygonDeform(Polygon2D toModify)
 		{
 			Vector2D center = toModify.getPointCenter();
-			Vector2D point = RandomUtil.getElement(toModify.points, this.random);
+			Vector2D point = RandomUtil.getElement(toModify.getPoints(), this.random);
 
 			Vector2D centerToPoint = point.subtract(center);
 			Vector2D ctpDirection = centerToPoint.normalize();
@@ -114,8 +114,8 @@ public class ContinentsBasePolygonGenerator implements RandomizedGeneratorOneInp
 			Vector2D pointDelta = pointDeltaForward.add(pointDeltaSideward);
 
 			Vector2D newPoint = point.add(pointDelta);
-			List<Vector2D> newPoints = new ArrayList<>(toModify.points);
-			newPoints.replaceAll((p)->Objects.equals(p, point) ? newPoint : p); // replace the old point with the new one
+			List<Vector2D> newPoints = new ArrayList<>(toModify.getPoints());
+			newPoints.replaceAll(p->Objects.equals(p, point) ? newPoint : p); // replace the old point with the new one
 
 			return new Polygon2D(newPoints);
 		}

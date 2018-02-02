@@ -39,7 +39,7 @@ public class ChunkClusterSourceFromDisk implements ChunkClusterSource
 			return null;
 
 		// read from file
-		byte[] chunkClusterData = FileUtil.readFileToByteArray(clusterFile);
+		byte[] chunkClusterData = FileUtil.readRaw(clusterFile);
 		chunkClusterData = CompressionUtil.decompress(chunkClusterData);
 
 		ChunkCluster decodedChunkCluster = this.chunkClusterTranscoder.decode(chunkClusterData);
@@ -59,7 +59,7 @@ public class ChunkClusterSourceFromDisk implements ChunkClusterSource
 		byte[] encodedChunkCluster = this.chunkClusterTranscoder.encode(chunkCluster);
 		encodedChunkCluster = CompressionUtil.compress(encodedChunkCluster, CompressionUtil.Speed.FAST);
 
-		FileUtil.writeByteArrayToFile(clusterFile, encodedChunkCluster);
+		FileUtil.writeRaw(clusterFile, encodedChunkCluster);
 	}
 
 

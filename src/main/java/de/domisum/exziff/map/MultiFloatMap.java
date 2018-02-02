@@ -1,6 +1,6 @@
 package de.domisum.exziff.map;
 
-import de.domisum.lib.auxilium.data.container.Duo;
+import de.domisum.lib.auxilium.data.container.tuple.Pair;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -41,9 +41,9 @@ public class MultiFloatMap
 		return getMapOrError(key).get(x, y);
 	}
 
-	public Set<Duo<Integer, Float>> get(int x, int y)
+	public Set<Pair<Integer, Float>> get(int x, int y)
 	{
-		Set<Duo<Integer, Float>> values = new HashSet<>();
+		Set<Pair<Integer, Float>> values = new HashSet<>();
 
 		for(Map.Entry<Integer, FloatMap> entry : this.maps.entrySet())
 		{
@@ -51,7 +51,7 @@ public class MultiFloatMap
 			if(value == 0)
 				continue;
 
-			values.add(new Duo<>(entry.getKey(), value));
+			values.add(new Pair<>(entry.getKey(), value));
 		}
 
 		return values;

@@ -1,8 +1,8 @@
 package de.domisum.exziff.generator.continentshape;
 
 import de.domisum.lib.auxilium.data.container.math.LineSegment2D;
-import de.domisum.lib.auxilium.data.container.math.Polygon2D;
 import de.domisum.lib.auxilium.data.container.math.Vector2D;
+import de.domisum.lib.auxilium.data.container.math.shape.Polygon2D;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -18,8 +18,14 @@ public class ContinentsPolygonValidator
 {
 
 	// CONSTANTS
-	private static final Polygon2D OUTSIDE_EDGE_POLYGON = new Polygon2D(new Vector2D(0, 0), new Vector2D(1, 0),
-			new Vector2D(1, 1), new Vector2D(0, 1), new Vector2D(0, 0), new Vector2D(-1, 2), new Vector2D(2, 2),
+	private static final Polygon2D OUTSIDE_EDGE_POLYGON = new Polygon2D(
+			new Vector2D(0, 0),
+			new Vector2D(1, 0),
+			new Vector2D(1, 1),
+			new Vector2D(0, 1),
+			new Vector2D(0, 0),
+			new Vector2D(-1, 2),
+			new Vector2D(2, 2),
 			new Vector2D(2, -1));
 
 	// SETTINGS
@@ -119,7 +125,7 @@ public class ContinentsPolygonValidator
 
 		private boolean isPolygonTooCloseToSelf()
 		{
-			int size = toValidate.points.size();
+			int size = toValidate.getPoints().size();
 
 			for(int li1 = 0; li1 < size; li1++)
 				for(int li2 = 0; li2 < size; li2++)

@@ -2,8 +2,8 @@ package de.domisum.exziff.generator.continentshape;
 
 import de.domisum.exziff.generator.RandomizedGeneratorOneInput;
 import de.domisum.lib.auxilium.data.container.math.LineSegment2D;
-import de.domisum.lib.auxilium.data.container.math.Polygon2D;
 import de.domisum.lib.auxilium.data.container.math.Vector2D;
+import de.domisum.lib.auxilium.data.container.math.shape.Polygon2D;
 import de.domisum.lib.auxilium.util.math.RandomUtil;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -91,19 +91,20 @@ public class ContinentsPolygonDeformer implements RandomizedGeneratorOneInput<Li
 
 			double offsetDistance =
 					RandomUtil.getFromRange(-maxInwardsOffsetMultiplier, maxOutwardsOffsetMultiplier, this.random)*polygonSide
-							.getLineSegment().getLength();
+							.getLineSegment()
+							.getLength();
 			Vector2D newPoint = offsetPoint.add(orthogonalOutward.multiply(offsetDistance));
 
 
 			// build new polygon
 			List<Vector2D> newPolygonPoints = new ArrayList<>();
 			for(int i = 0; i <= polygonSide.sideIndex; i++) // points before new point
-				newPolygonPoints.add(polygonSide.polygon.points.get(i));
+				newPolygonPoints.add(polygonSide.polygon.getPoints().get(i));
 
 			newPolygonPoints.add(newPoint); // new point itself
 
-			for(int i = polygonSide.sideIndex+1; i < polygonSide.polygon.points.size(); i++) // points after new point
-				newPolygonPoints.add(polygonSide.polygon.points.get(i));
+			for(int i = polygonSide.sideIndex+1; i < polygonSide.polygon.getPoints().size(); i++) // points after new point
+				newPolygonPoints.add(polygonSide.polygon.getPoints().get(i));
 
 			Polygon2D newPolygon = new Polygon2D(newPolygonPoints);
 

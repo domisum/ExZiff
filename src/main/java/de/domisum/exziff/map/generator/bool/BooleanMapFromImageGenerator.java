@@ -1,7 +1,7 @@
 package de.domisum.exziff.map.generator.bool;
 
 import de.domisum.exziff.map.BooleanMap;
-import de.domisum.exziff.map.generator.Generator;
+import de.domisum.lib.auxilium.contracts.generator.Generator;
 import de.domisum.lib.auxilium.util.ImageUtil;
 
 import java.awt.image.BufferedImage;
@@ -34,8 +34,8 @@ public class BooleanMapFromImageGenerator implements Generator<BufferedImage, Bo
 			{
 				int color = colorPixels[y][x];
 				int blue = color&0xff;
-				int green = (color>>8)&0xff;
-				int red = (color>>16)&0xff;
+				int green = (color >> 8)&0xff;
+				int red = (color >> 16)&0xff;
 
 				double sum = blue+green+red;
 				double proportion = sum/(256*3);

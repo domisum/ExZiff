@@ -4,7 +4,7 @@ import de.domisum.exziff.generator.RandomizedGeneratorOneInput;
 import de.domisum.exziff.map.BooleanMap;
 import de.domisum.exziff.map.generator.bool.BooleanMapFromPolygons;
 import de.domisum.exziff.map.transformer.bool.BooleanMapScale;
-import de.domisum.lib.auxilium.data.container.math.Polygon2D;
+import de.domisum.lib.auxilium.data.container.math.shape.Polygon2D;
 import de.domisum.lib.auxilium.util.math.RandomUtil;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

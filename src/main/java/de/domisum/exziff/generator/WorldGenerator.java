@@ -1,5 +1,6 @@
 package de.domisum.exziff.generator;
 
+import de.domisum.exziff.AlwaysUnequalPair;
 import de.domisum.exziff.bedrockregion.BedrockRegionMap;
 import de.domisum.exziff.bedrockregion.BedrockRegionType;
 import de.domisum.exziff.bedrockregion.blockstack.BlockStack;
@@ -15,8 +16,7 @@ import de.domisum.exziff.map.transformer.bool.BooleanMapSmooth;
 import de.domisum.exziff.world.Material;
 import de.domisum.exziff.world.World;
 import de.domisum.exziff.world.chunkclustersource.ChunkClusterSourceFromDisk;
-import de.domisum.lib.auxilium.data.container.AlwaysUnequalDuo;
-import de.domisum.lib.auxilium.data.container.Duo;
+import de.domisum.lib.auxilium.data.container.tuple.Pair;
 import de.domisum.lib.auxilium.util.FileUtil;
 import de.domisum.lib.auxilium.util.ImageUtil;
 import de.domisum.lib.auxilium.util.java.ThreadUtil;
@@ -86,7 +86,7 @@ public class WorldGenerator
 		generateBedrockRegionPartitioning();
 		this.logger.info("Generating bedrock region partitioning done");
 		testExportRegion();
-		ThreadUtil.runAsync(this::testExportBedrockRegionPartitioning, "async task");
+		ThreadUtil.createAndStartThread(this::testExportBedrockRegionPartitioning, "async task");
 
 
 		this.logger.info("Generating bedrock regions...");
@@ -151,8 +151,8 @@ public class WorldGenerator
 	{
 		List<BlockStackMerger.WeightedBlockStack> weightedBlockStacks = new ArrayList<>();
 		for(Map.Entry<BedrockRegion, Float> entry : bedrockRegionMap.getInfluencesAt(x, z).entrySet())
-			weightedBlockStacks
-					.add(new BlockStackMerger.WeightedBlockStack(entry.getKey().getBlockStackAt(x, z), entry.getValue()));
+			weightedBlockStacks.add(new BlockStackMerger.WeightedBlockStack(entry.getKey().getBlockStackAt(x, z),
+					entry.getValue()));
 
 		BlockStackMerger blockStackMerger = new BlockStackMerger(weightedBlockStacks);
 		BlockStack mergedBlockStack = blockStackMerger.merge();
@@ -215,9 +215,9 @@ public class WorldGenerator
 	{
 		Map<BedrockRegion, Float> influencesAt = bedrockRegionMap.getInfluencesAt(x, y);
 
-		Set<Duo<Color, Float>> colorsAndStrength = new HashSet<>();
+		Set<Pair<Color, Float>> colorsAndStrength = new HashSet<>();
 		for(Map.Entry<BedrockRegion, Float> entry : influencesAt.entrySet())
-			colorsAndStrength.add(new AlwaysUnequalDuo<>(getColorForRegion(entry.getKey().getType()), entry.getValue()));
+			colorsAndStrength.add(new AlwaysUnequalPair<>(getColorForRegion(entry.getKey().getType()), entry.getValue()));
 
 		return mix(colorsAndStrength);
 	}
@@ -239,7 +239,7 @@ public class WorldGenerator
 		return Color.BLACK;
 	}
 
-	private static Color mix(Set<Duo<Color, Float>> colorsAndStrength)
+	private static Color mix(Set<Pair<Color, Float>> colorsAndStrength)
 	{
 		double red = 0;
 		double green = 0;
@@ -247,13 +247,13 @@ public class WorldGenerator
 
 		double strengthSum = 0;
 
-		for(Duo<Color, Float> entry : colorsAndStrength)
+		for(Pair<Color, Float> entry : colorsAndStrength)
 		{
-			red += entry.a.getRed()*entry.b;
-			green += entry.a.getGreen()*entry.b;
-			blue += entry.a.getBlue()*entry.b;
+			red += entry.getA().getRed()*entry.getB();
+			green += entry.getA().getGreen()*entry.getB();
+			blue += entry.getA().getBlue()*entry.getB();
 
-			strengthSum += entry.b;
+			strengthSum += entry.getB();
 		}
 
 		return new Color((int) (red/strengthSum), (int) (green/strengthSum), (int) (blue/strengthSum));
