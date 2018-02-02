@@ -8,8 +8,7 @@ import de.domisum.exziff.generator.bedrockpartition.BedrockRegionPartitionGenera
 import de.domisum.exziff.map.BooleanMap;
 import de.domisum.exziff.map.converter.ShortMapToImageConverter;
 import de.domisum.exziff.map.generator.bool.BooleanMapFromImageGenerator;
-import de.domisum.lib.auxilium.data.container.AlwaysUnequalDuo;
-import de.domisum.lib.auxilium.data.container.Duo;
+import de.domisum.lib.auxilium.data.container.tuple.Pair;
 import de.domisum.lib.auxilium.util.FileUtil;
 import de.domisum.lib.auxilium.util.ImageUtil;
 import org.slf4j.Logger;
@@ -41,8 +40,8 @@ public class TestLauncher
 	{
 		logger.info("Starting image loading");
 		BooleanMapFromImageGenerator fromImageGenerator = new BooleanMapFromImageGenerator(0.5);
-		BooleanMap continentShape = fromImageGenerator
-				.generate(FileUtil.readImage(new File("C:\\Users\\domisum\\testChamber\\exziff\\res\\continentShape.png")));
+		BooleanMap continentShape = fromImageGenerator.generate(FileUtil.readImage(new File(
+				"C:\\Users\\domisum\\testChamber\\exziff\\res\\continentShape.png")));
 		// continentShape = new BooleanMapScale(0.5).transform(continentShape);
 		logger.info("Image loading done");
 
@@ -91,9 +90,9 @@ public class TestLauncher
 	{
 		Map<BedrockRegion, Float> influencesAt = bedrockRegionMap.getInfluencesAt(x, y);
 
-		Set<Duo<Color, Float>> colorsAndStrength = new HashSet<>();
+		Set<Pair<Color, Float>> colorsAndStrength = new HashSet<>();
 		for(Map.Entry<BedrockRegion, Float> entry : influencesAt.entrySet())
-			colorsAndStrength.add(new AlwaysUnequalDuo<>(getColorForRegion(entry.getKey().getType()), entry.getValue()));
+			colorsAndStrength.add(new AlwaysUnequalPair<>(getColorForRegion(entry.getKey().getType()), entry.getValue()));
 
 		return mix(colorsAndStrength);
 	}
@@ -115,7 +114,7 @@ public class TestLauncher
 		return Color.BLACK;
 	}
 
-	private static Color mix(Set<Duo<Color, Float>> colorsAndStrength)
+	private static Color mix(Set<Pair<Color, Float>> colorsAndStrength)
 	{
 		double red = 0;
 		double green = 0;
@@ -123,13 +122,13 @@ public class TestLauncher
 
 		double strengthSum = 0;
 
-		for(Duo<Color, Float> entry : colorsAndStrength)
+		for(Pair<Color, Float> entry : colorsAndStrength)
 		{
-			red += entry.a.getRed()*entry.b;
-			green += entry.a.getGreen()*entry.b;
-			blue += entry.a.getBlue()*entry.b;
+			red += entry.getA().getRed()*entry.getB();
+			green += entry.getA().getGreen()*entry.getB();
+			blue += entry.getA().getBlue()*entry.getB();
 
-			strengthSum += entry.b;
+			strengthSum += entry.getB();
 		}
 
 		return new Color((int) (red/strengthSum), (int) (green/strengthSum), (int) (blue/strengthSum));
