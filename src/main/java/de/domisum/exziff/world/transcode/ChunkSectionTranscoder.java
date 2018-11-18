@@ -23,16 +23,28 @@ public class ChunkSectionTranscoder implements Transcoder<ChunkSection>
 	private static final byte TYPE_HETEROGENOUS = 1;
 
 
-	// TRANSCODING
-	@Override public byte[] encode(ChunkSection chunkSection)
+	// ENCODE
+	@Override
+	public byte[] encode(ChunkSection chunkSection)
 	{
 		chunkSection.optimize();
 
-		// homogenous
 		if(chunkSection.isHomogenous())
-			return new byte[] {TYPE_HOMOGENOUS, chunkSection.getMaterialId(0, 0, 0), chunkSection.getMaterialSubId(0, 0, 0)};
+			return encodeHomogenous(chunkSection);
+		else
+			return encodeHeterogenous(chunkSection);
+	}
 
-		// heterogenous
+	private byte[] encodeHomogenous(ChunkSection chunkSection)
+	{
+		byte homogenousMaterialId = chunkSection.getMaterialId(0, 0, 0);
+		byte homogenousMaterialSubId = chunkSection.getMaterialSubId(0, 0, 0);
+
+		return new byte[] {TYPE_HOMOGENOUS, homogenousMaterialId, homogenousMaterialSubId};
+	}
+
+	private byte[] encodeHeterogenous(ChunkSection chunkSection)
+	{
 		byte[] blockData = chunkSection.getBlockData();
 
 		byte[] chunkSectionData = new byte[1+blockData.length];
@@ -42,18 +54,33 @@ public class ChunkSectionTranscoder implements Transcoder<ChunkSection>
 		return chunkSectionData;
 	}
 
-	@Override public ChunkSection decode(byte[] toDecode)
+
+	// DECODE
+	@Override
+	public ChunkSection decode(byte[] toDecode)
 	{
-		// homogenous
-		if(toDecode[0] == TYPE_HOMOGENOUS)
-			return new ChunkSection(toDecode[1], toDecode[2]);
+		byte type = toDecode[0];
+		if(type == TYPE_HOMOGENOUS)
+			return decodeHomogenous(toDecode);
+		else
+			return decodeHeterogenous(toDecode);
+	}
 
-		// heterogenous
+	private ChunkSection decodeHomogenous(byte[] toDecode)
+	{
+		byte homogenousMaterialId = toDecode[1];
+		byte homogenousMaterialSubId = toDecode[2];
+
+		return new ChunkSection(homogenousMaterialId, homogenousMaterialSubId);
+	}
+
+	private ChunkSection decodeHeterogenous(byte[] toDecode)
+	{
 		byte[] blockData = new byte[toDecode.length-1];
-		System.arraycopy(toDecode, 1, blockData, 0, blockData.length);
-		ChunkSection chunkSection = new ChunkSection(blockData);
+		int blockDataStart = 1;
+		System.arraycopy(toDecode, blockDataStart, blockData, 0, blockData.length);
 
-		return chunkSection;
+		return new ChunkSection(blockData);
 	}
 
 }
