@@ -17,10 +17,8 @@ public class ChunkSection
 	public static final int NUMBER_OF_BLOCKS = Chunk.WIDTH*Chunk.WIDTH*HEIGHT;
 
 	// DATA
-	@Getter
-	private boolean homogenous;
-	private byte homogenousMaterialId;
-	private byte homogenousMaterialSubId;
+	private byte homogenousMaterialId = -1;
+	private byte homogenousMaterialSubId = -1;
 	@Getter
 	private byte[] blockData;
 
@@ -28,8 +26,6 @@ public class ChunkSection
 	// INIT
 	public ChunkSection(byte homogenousMaterialId, byte homogenousMaterialSubId)
 	{
-		this.homogenous = true;
-
 		this.homogenousMaterialId = homogenousMaterialId;
 		this.homogenousMaterialSubId = homogenousMaterialSubId;
 	}
@@ -38,19 +34,17 @@ public class ChunkSection
 	{
 		Validate.isTrue(blockData.length == (NUMBER_OF_BLOCKS*2), "The length of blockData has to be "+NUMBER_OF_BLOCKS);
 
-		this.homogenous = false;
 		this.blockData = blockData.clone();
 	}
 
-	private void initBlockData()
+	private void makeHeterogenous()
 	{
-		this.homogenous = false;
 		this.blockData = new byte[NUMBER_OF_BLOCKS*2];
+		for(int i = 0; i < this.blockData.length; i++)
+			this.blockData[i] = ((i%2) == 0) ? this.homogenousMaterialId : this.homogenousMaterialSubId;
 
-		// check if the homogenousMaterial is 0, otherwise fill the array with the information
-		if((this.homogenousMaterialId != 0) || (this.homogenousMaterialSubId != 0))
-			for(int i = 0; i < this.blockData.length; i++)
-				this.blockData[i] = ((i%2) == 0) ? this.homogenousMaterialId : this.homogenousMaterialSubId;
+		this.homogenousMaterialId = -1;
+		this.homogenousMaterialSubId = -1;
 	}
 
 
@@ -74,12 +68,18 @@ public class ChunkSection
 	}
 
 
+	public boolean isHomogenous()
+	{
+		return this.homogenousMaterialId != -1;
+	}
+
+
 	// SETTERS
 	public void setMaterialIdAndSubId(int sX, int sY, int sZ, byte materialId, byte materialSubId)
 	{
 		if(isHomogenous())
 			if((this.homogenousMaterialId != materialId) || (this.homogenousMaterialSubId != materialSubId))
-				initBlockData();
+				makeHeterogenous();
 			else // the section is already homogenous with the material that should be set, so don't change anything
 				return;
 
@@ -105,7 +105,7 @@ public class ChunkSection
 
 	private void tryMakeHomogenous()
 	{
-		if(this.homogenous)
+		if(isHomogenous())
 			return;
 
 		if(!couldBeHomogenous())
@@ -113,8 +113,6 @@ public class ChunkSection
 
 		this.homogenousMaterialId = getMaterialId(0, 0, 0);
 		this.homogenousMaterialSubId = getMaterialSubId(0, 0, 0);
-
-		this.homogenous = true;
 		this.blockData = null;
 	}
 
