@@ -39,7 +39,7 @@ public class Chunk
 		Validate.isTrue(chunkSections.length == NUMBER_OF_SECTIONS, "The number of chunk sections has to be "+NUMBER_OF_SECTIONS);
 		Validate.noNullElements(chunkSections, "chunkSections can't contain null elements");
 
-		this.chunkSections = chunkSections;
+		this.chunkSections = chunkSections.clone();
 	}
 
 	public Chunk(int cX, int cZ)

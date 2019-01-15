@@ -10,7 +10,7 @@ public class ChunkClusterTranscoder implements Transcoder<ChunkCluster>
 	Format:
 
 	The first 4 bytes contain the Chunk's cX as an integer.
-	The second 4 bytes contain the Chunk's cY as an integer.
+	The following 4 bytes contain the Chunk's cY as an integer.
 
 	The following (Chunk.NUMBER_OF_SECTIONS*4) bytes are occupied with Chunk.NUMBER_OF_SECTIONS integers,
 	which hold the length of their respective ChunkSection in the byte array.
