@@ -1,4 +1,4 @@
-package de.domisum.exziff.world;
+package de.domisum.exziff.oldworld;
 
 import lombok.Getter;
 import org.apache.commons.lang3.Validate;

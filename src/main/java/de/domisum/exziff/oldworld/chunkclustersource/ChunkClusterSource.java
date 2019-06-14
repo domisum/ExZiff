@@ -1,6 +1,6 @@
-package de.domisum.exziff.world.chunkclustersource;
+package de.domisum.exziff.oldworld.chunkclustersource;
 
-import de.domisum.exziff.world.ChunkCluster;
+import de.domisum.exziff.oldworld.ChunkCluster;
 
 public interface ChunkClusterSource
 {

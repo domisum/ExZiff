@@ -26,7 +26,7 @@ public class BooleanMapFromImageGenerator implements Generator<BufferedImage, Bo
 	// GENERATION
 	@Override public BooleanMap generate(BufferedImage image)
 	{
-		int[][] colorPixels = ImageUtil.getPixels(image);
+		int[][] colorPixels = null;//ImageUtil.getPixels(image);
 
 		boolean[][] pixels = new boolean[image.getHeight()][image.getWidth()];
 		for(int y = 0; y < image.getHeight(); y++)

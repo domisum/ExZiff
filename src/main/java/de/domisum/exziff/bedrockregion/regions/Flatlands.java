@@ -3,7 +3,7 @@ package de.domisum.exziff.bedrockregion.regions;
 import de.domisum.exziff.bedrockregion.BedrockRegionType;
 import de.domisum.exziff.bedrockregion.blockstack.BlockStack;
 import de.domisum.exziff.map.FloatMap;
-import de.domisum.exziff.world.Material;
+import de.domisum.exziff.oldworld.Material;
 import de.domisum.layeredopensimplexnoise.LayeredOpenSimplexNoise;
 import de.domisum.layeredopensimplexnoise.NoiseLayer;
 import de.domisum.layeredopensimplexnoise.NoiseLayers;

@@ -1,6 +1,6 @@
-package de.domisum.exziff.world;
+package de.domisum.exziff.oldworld;
 
-import de.domisum.exziff.world.chunkclustersource.ChunkClusterSource;
+import de.domisum.exziff.oldworld.chunkclustersource.ChunkClusterSource;
 import lombok.Getter;
 import lombok.Setter;
 

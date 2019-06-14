@@ -1,4 +1,4 @@
-package de.domisum.exziff.world.transcode;
+package de.domisum.exziff.oldworld.transcode;
 
 public interface Transcoder<T>
 {

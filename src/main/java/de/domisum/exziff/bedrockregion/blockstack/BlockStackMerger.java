@@ -1,6 +1,6 @@
 package de.domisum.exziff.bedrockregion.blockstack;
 
-import de.domisum.exziff.world.Material;
+import de.domisum.exziff.oldworld.Material;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;

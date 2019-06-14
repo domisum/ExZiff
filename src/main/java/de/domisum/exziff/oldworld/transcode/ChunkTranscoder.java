@@ -1,7 +1,7 @@
-package de.domisum.exziff.world.transcode;
+package de.domisum.exziff.oldworld.transcode;
 
-import de.domisum.exziff.world.Chunk;
-import de.domisum.exziff.world.ChunkSection;
+import de.domisum.exziff.oldworld.Chunk;
+import de.domisum.exziff.oldworld.ChunkSection;
 
 public class ChunkTranscoder implements Transcoder<Chunk>
 {

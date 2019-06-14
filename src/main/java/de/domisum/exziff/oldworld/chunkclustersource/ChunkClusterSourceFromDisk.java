@@ -1,7 +1,7 @@
-package de.domisum.exziff.world.chunkclustersource;
+package de.domisum.exziff.oldworld.chunkclustersource;
 
-import de.domisum.exziff.world.ChunkCluster;
-import de.domisum.exziff.world.transcode.ChunkClusterTranscoder;
+import de.domisum.exziff.oldworld.ChunkCluster;
+import de.domisum.exziff.oldworld.transcode.ChunkClusterTranscoder;
 import de.domisum.lib.auxilium.util.CompressionUtil;
 import de.domisum.lib.auxilium.util.FileUtil;
 import lombok.Getter;

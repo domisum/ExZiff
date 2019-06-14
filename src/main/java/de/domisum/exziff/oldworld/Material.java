@@ -1,4 +1,4 @@
-package de.domisum.exziff.world;
+package de.domisum.exziff.oldworld;
 
 public enum Material
 {

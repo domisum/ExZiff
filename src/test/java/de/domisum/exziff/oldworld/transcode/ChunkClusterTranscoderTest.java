@@ -1,8 +1,8 @@
-package de.domisum.exziff.world.transcode;
+package de.domisum.exziff.oldworld.transcode;
 
-import de.domisum.exziff.world.Chunk;
-import de.domisum.exziff.world.ChunkCluster;
-import de.domisum.exziff.world.ChunkSection;
+import de.domisum.exziff.oldworld.Chunk;
+import de.domisum.exziff.oldworld.ChunkCluster;
+import de.domisum.exziff.oldworld.ChunkSection;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
