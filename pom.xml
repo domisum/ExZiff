@@ -16,12 +16,6 @@
 		<!-- MY LIBRARIES -->
 		<dependency>
 			<groupId>de.domisum</groupId>
-			<artifactId>LayeredOpenSimplexNoise</artifactId>
-			<version>1.0.0-SNAPSHOT</version>
-		</dependency>
-
-		<dependency>
-			<groupId>de.domisum</groupId>
 			<artifactId>AuxiliumLib</artifactId>
 			<version>1.0.0-SNAPSHOT</version>
 		</dependency>

@@ -3,11 +3,13 @@ package de.domisum.exziff.world.block;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.ToString;
 
 import java.util.HashSet;
 import java.util.Set;
 
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
+@ToString
 public final class Block
 {
 
@@ -74,6 +76,7 @@ public final class Block
 		throw new IllegalArgumentException("block does not have attribute of type "+type);
 	}
 
+
 	// UTIL
 	@RequiredArgsConstructor
 	private static class BlockAttribute<T>
@@ -83,6 +86,13 @@ public final class Block
 		private final Class<T> type;
 		@Getter
 		private final T value;
+
+
+		@Override
+		public String toString()
+		{
+			return type.getSimpleName()+"="+value;
+		}
 
 	}
 

@@ -1,0 +1,5 @@
+tiny: 3 - 8
+small: 9 - 11
+regular: 12 - 20
+big: 21 - 40
+giant: 41 - 100

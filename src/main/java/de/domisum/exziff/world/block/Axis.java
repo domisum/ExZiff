@@ -1,6 +1,6 @@
 package de.domisum.exziff.world.block;
 
-public enum OptionalAxis
+public enum Axis
 {
 
 	X,

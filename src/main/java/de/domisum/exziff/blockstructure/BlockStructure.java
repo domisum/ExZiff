@@ -1,14 +1,11 @@
 package de.domisum.exziff.blockstructure;
 
 import de.domisum.exziff.world.block.Block;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.ToString;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 
 public class BlockStructure
 {
@@ -17,34 +14,26 @@ public class BlockStructure
 
 
 	// GETTERS
+	public Optional<Block> getBlock(BlockCoordinate blockCoordinate)
+	{
+		return Optional.ofNullable(blocks.get(blockCoordinate));
+	}
+
 	public Optional<Block> getBlock(int x, int y, int z)
 	{
-		return Optional.ofNullable(blocks.get(new BlockCoordinate(x, y, z)));
+		return getBlock(new BlockCoordinate(x, y, z));
 	}
+
+	public Set<BlockCoordinate> getBlockCoordinates()
+	{
+		return blocks.keySet();
+	}
+
 
 	// SETTERS
 	public void setBlock(int x, int y, int z, Block block)
 	{
 		blocks.put(new BlockCoordinate(x, y, z), block);
-	}
-
-
-	// UTIL
-	@RequiredArgsConstructor
-	@EqualsAndHashCode
-	@ToString
-	private static class BlockCoordinate
-	{
-
-		@Getter
-		private final int x;
-
-		@Getter
-		private final int y;
-
-		@Getter
-		private final int z;
-
 	}
 
 }
