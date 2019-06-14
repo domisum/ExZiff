@@ -10,6 +10,8 @@ import java.util.Set;
 public enum Material
 {
 
+	AIR(),
+
 	STONE(),
 	GRANITE(),
 	GRANITE_POLISHED(),
