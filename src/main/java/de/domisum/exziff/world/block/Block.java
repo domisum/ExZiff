@@ -1,6 +1,7 @@
 package de.domisum.exziff.world.block;
 
 import lombok.AccessLevel;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
@@ -10,6 +11,7 @@ import java.util.Set;
 
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 @ToString
+@EqualsAndHashCode
 public final class Block
 {
 
@@ -27,12 +29,13 @@ public final class Block
 		private Set<BlockAttribute<?>> attributes;
 
 
-		public <T> BlockBuilder set(Class<T> type, T value)
+		public <T> BlockBuilder set(T value)
 		{
 			if(attributes == null)
 				attributes = new HashSet<>();
 
-			BlockAttribute<T> blockAttribute = new BlockAttribute<>(type, value);
+			// noinspection unchecked
+			BlockAttribute<T> blockAttribute = new BlockAttribute<>((Class<T>) value.getClass(), value);
 			attributes.add(blockAttribute);
 
 			return this;
@@ -79,6 +82,7 @@ public final class Block
 
 	// UTIL
 	@RequiredArgsConstructor
+	@EqualsAndHashCode
 	private static class BlockAttribute<T>
 	{
 

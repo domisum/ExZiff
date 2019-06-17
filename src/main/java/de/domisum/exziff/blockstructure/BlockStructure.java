@@ -4,7 +4,7 @@ import de.domisum.exziff.world.block.Block;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
+import java.util.Map.Entry;
 import java.util.Set;
 
 public class BlockStructure
@@ -14,12 +14,12 @@ public class BlockStructure
 
 
 	// GETTERS
-	public Optional<Block> getBlock(BlockCoordinate blockCoordinate)
+	public Block getBlock(BlockCoordinate blockCoordinate)
 	{
-		return Optional.ofNullable(blocks.get(blockCoordinate));
+		return blocks.get(blockCoordinate);
 	}
 
-	public Optional<Block> getBlock(int x, int y, int z)
+	public Block getBlock(int x, int y, int z)
 	{
 		return getBlock(new BlockCoordinate(x, y, z));
 	}
@@ -33,7 +33,38 @@ public class BlockStructure
 	// SETTERS
 	public void setBlock(int x, int y, int z, Block block)
 	{
-		blocks.put(new BlockCoordinate(x, y, z), block);
+		BlockCoordinate blockCoordinate = new BlockCoordinate(x, y, z);
+		setBlock(blockCoordinate, block);
+	}
+
+	public void setBlock(BlockCoordinate blockCoordinate, Block block)
+	{
+		blocks.put(blockCoordinate, block);
+	}
+
+	public void setBlockIfNotSetAlready(int x, int y, int z, Block block)
+	{
+		setBlockIfNotSetAlready(new BlockCoordinate(x, y, z), block);
+	}
+
+	public void setBlockIfNotSetAlready(BlockCoordinate blockCoordinate, Block block)
+	{
+		if(!blocks.containsKey(blockCoordinate))
+			setBlock(blockCoordinate, block);
+	}
+
+
+	public void set(BlockStructure other)
+	{
+		for(Entry<BlockCoordinate, Block> entry : other.blocks.entrySet())
+			setBlock(entry.getKey(), entry.getValue());
+	}
+
+	public void setIfNotSetAlready(BlockStructure other)
+	{
+		for(Entry<BlockCoordinate, Block> entry : other.blocks.entrySet())
+			if(!blocks.containsKey(entry.getKey()))
+				setBlock(entry.getKey(), entry.getValue());
 	}
 
 }
