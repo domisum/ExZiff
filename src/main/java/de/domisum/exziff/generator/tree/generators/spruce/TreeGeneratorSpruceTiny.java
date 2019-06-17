@@ -53,7 +53,7 @@ public class TreeGeneratorSpruceTiny implements TreeGenerator
 		// GENERATE
 		public BlockStructure generate()
 		{
-			double initialRadius = 0.5;
+			double initialRadius = 0.4;
 
 			double currentRadius = initialRadius;
 			TreeBranch mainBranch = new TreeBranch();
@@ -82,7 +82,7 @@ public class TreeGeneratorSpruceTiny implements TreeGenerator
 		{
 			Set<TreeBranch> treeBranches = new HashSet<>();
 
-			for(double deg = 0; deg <= 360; deg += RandomUtil.getFromRange(40, 60))
+			for(double deg = 0; deg <= 360; deg += RandomUtil.getFromRange(30, 40))
 				treeBranches.add(generateBranchAtHeightAndAngle(y, mainBranchRadius, deg));
 
 			return treeBranches;
@@ -100,7 +100,7 @@ public class TreeGeneratorSpruceTiny implements TreeGenerator
 
 			Vector3D currentPosition = branchStartPosition;
 			TreeBranch branch = new TreeBranch();
-			double currentRadius = (mainBranchRadius/3)+0.06;
+			double currentRadius = (mainBranchRadius/3)+0.07;
 			while(currentRadius > 0.1)
 			{
 				BlockSource blockSource = (currentRadius < 0.18) ? LEAVES_SOURCE : LOG_SOURCE;
