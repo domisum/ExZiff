@@ -2,6 +2,7 @@ package de.domisum.exziff.generator.tree.generators.spruce;
 
 import de.domisum.exziff.blocksource.BlockSource;
 import de.domisum.exziff.blocksource.sources.BlockSourceConstant;
+import de.domisum.exziff.blocksource.sources.BlockSourceRandomized.BlockSourceRandomizedBuilder;
 import de.domisum.exziff.blockstructure.BlockStructure;
 import de.domisum.exziff.generator.tree.TreeGenerator;
 import de.domisum.exziff.generator.tree.TreeGeneratorContext;
@@ -32,7 +33,7 @@ public class TreeGeneratorSpruceTiny implements TreeGenerator
 		private static final BlockSource LOG_SOURCE = new BlockSourceConstant(new BlockBuilder(Material.LOG_SPRUCE)
 				.set(Axis.Y)
 				.build());
-		private static final BlockSource LEAVES_SOURCE = new BlockSourceConstant(new BlockBuilder(Material.LEAVES_SPRUCE).build());
+		private final BlockSource leavesSource;
 
 		// INPUT
 		private final TreeGeneratorContext treeGeneratorContext;
@@ -47,6 +48,11 @@ public class TreeGeneratorSpruceTiny implements TreeGenerator
 		{
 			this.treeGeneratorContext = treeGeneratorContext;
 			random = new Random(seed);
+
+			leavesSource = new BlockSourceRandomizedBuilder(random.nextLong())
+					.putBlock(new BlockBuilder(Material.LEAVES_SPRUCE).build(), 0.6)
+					.putBlock(null, 0.4)
+					.build();
 		}
 
 
@@ -58,9 +64,9 @@ public class TreeGeneratorSpruceTiny implements TreeGenerator
 			double currentRadius = initialRadius;
 			TreeBranch mainBranch = new TreeBranch();
 			Set<TreeBranch> minorBranches = new HashSet<>();
-			for(double h = 0.5; currentRadius > 0.1; h++)
+			for(double h = 0.5; currentRadius > 0.11; h++)
 			{
-				BlockSource blockSource = (currentRadius < 0.18) ? LEAVES_SOURCE : LOG_SOURCE;
+				BlockSource blockSource = (currentRadius < 0.18) ? leavesSource : LOG_SOURCE;
 				Vector3D position = new Vector3D(0.5, h, 0.5);
 
 				mainBranch.addNode(position, currentRadius, blockSource);
@@ -103,7 +109,7 @@ public class TreeGeneratorSpruceTiny implements TreeGenerator
 			double currentRadius = (mainBranchRadius/3)+0.07;
 			while(currentRadius > 0.1)
 			{
-				BlockSource blockSource = (currentRadius < 0.18) ? LEAVES_SOURCE : LOG_SOURCE;
+				BlockSource blockSource = (currentRadius < 0.18) ? leavesSource : LOG_SOURCE;
 				branch.addNode(currentPosition, currentRadius, blockSource);
 
 				currentPosition = currentPosition.add(branchDirection);
