@@ -9,7 +9,7 @@ public class World
 {
 
 	// CONSTANTS
-	private static final int CHUNK_CLUSTER_RADIUS = 64+4;
+	private static final int CHUNK_CLUSTER_RADIUS = 256+16;
 
 	// DATA
 	private final ChunkClusterField clusterField = new ChunkClusterField(CHUNK_CLUSTER_RADIUS);
@@ -26,6 +26,7 @@ public class World
 	 * 128 ChunkClusters ^= 4 GiB
 	 * 256 ChunkClusters ^= 8 GiB
 	 * 512 ChunkClusters ^= 16 GiB
+	 * 1024 ChunkClusters ^= 32 GiB
 	 */
 	@Getter
 	@Setter
@@ -105,7 +106,7 @@ public class World
 
 		ChunkCluster chunkCluster = chunkClusterStorage.loadChunkCluster(clX, clZ);
 
-		// chunk cluster not saved to disk, create new chunk cluster
+		// chunk cluster was not saved on disk, create new chunk cluster
 		if(chunkCluster == null)
 			chunkCluster = new ChunkCluster(clX, clZ);
 
