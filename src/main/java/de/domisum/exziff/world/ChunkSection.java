@@ -85,8 +85,12 @@ public class ChunkSection
 	public void setBlock(int sX, int sY, int sZ, Block block)
 	{
 		setMaterial(sX, sY, sZ, block.getMaterial());
+
+		BlockCoordinate blockCoordinate = new BlockCoordinate(sX, sY, sZ);
 		if(block.getNumberOfAttributes() > 0)
-			blocksWithAttributes.put(new BlockCoordinate(sX, sY, sZ), block);
+			blocksWithAttributes.put(blockCoordinate, block);
+		else
+			blocksWithAttributes.remove(blockCoordinate);
 	}
 
 	private void setMaterial(int sX, int sY, int sZ, Material material)

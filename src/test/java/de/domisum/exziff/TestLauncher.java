@@ -1,16 +1,15 @@
 package de.domisum.exziff;
 
-import de.domisum.exziff.blockstructure.BlockCoordinate;
+import de.domisum.exziff.world.World;
 import de.domisum.exziff.world.block.Axis;
 import de.domisum.exziff.world.block.Block;
 import de.domisum.exziff.world.block.Block.BlockBuilder;
 import de.domisum.exziff.world.block.Material;
-import de.domisum.lib.auxilium.util.SerializationUtil;
+import de.domisum.exziff.world.chunkclusterstorage.ChunkClusterStorageFromDisk;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.io.File;
 
 public class TestLauncher
 {
@@ -20,10 +19,20 @@ public class TestLauncher
 
 	public static void main(String[] args)
 	{
-		Map<BlockCoordinate, Block> blockMap = new HashMap<>();
-		blockMap.put(new BlockCoordinate(3, 7, 3), new BlockBuilder(Material.LOG_SPRUCE).set(Axis.Y).build());
+		World world = new World(new ChunkClusterStorageFromDisk(new File("C:\\Users\\domisum\\testChamber\\exziff\\worlds\\test"),
+				true
+		));
 
-		byte[] bytes = SerializationUtil.serialize(blockMap);
+		Block spruceLog = new BlockBuilder(Material.LOG_SPRUCE).set(Axis.X).build();
+		Block acaciaLeaves = new BlockBuilder(Material.LEAVES_ACACIA).build();
+
+		world.setBlock(0, 0, 0, spruceLog);
+		world.setBlock(2, 3, 0, spruceLog);
+		world.setBlock(0, 0, 0, acaciaLeaves);
+
+		System.out.println(world.getBlock(0, 0, 0));
+
+		world.save();
 	}
 
 }
