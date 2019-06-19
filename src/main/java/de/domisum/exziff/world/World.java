@@ -20,11 +20,12 @@ public class World
 
 	// SETTINGS
 	/**
-	 * A ChunkCluster takes up at most 32MiB of memory.
+	 * A ChunkCluster takes up at least 32MiB of memory.
 	 * <p>
-	 * So:
-	 * 128 ChunkClusters ^= max 4GiB
-	 * 256 ChunkClusters ^= max 8GiB
+	 * Assuming no BlockAttributes:
+	 * 128 ChunkClusters ^= 4 GiB
+	 * 256 ChunkClusters ^= 8 GiB
+	 * 512 ChunkClusters ^= 16 GiB
 	 */
 	@Getter
 	@Setter
