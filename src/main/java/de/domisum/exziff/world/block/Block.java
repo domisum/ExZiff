@@ -31,11 +31,16 @@ public final class Block
 
 		public <T extends BlockAttributeType> BlockBuilder set(T value)
 		{
+			// noinspection unchecked
+			Class<T> type = (Class<T>) value.getClass();
+
+			if(!material.blockAttributes.contains(type))
+				throw new IllegalArgumentException("material "+material+" does not have attribute "+type.getSimpleName());
+
 			if(attributes == null)
 				attributes = new HashSet<>();
 
-			// noinspection unchecked
-			BlockAttribute<T> blockAttribute = new BlockAttribute<>((Class<T>) value.getClass(), value);
+			BlockAttribute<T> blockAttribute = new BlockAttribute<>(type, value);
 			attributes.add(blockAttribute);
 
 			return this;
