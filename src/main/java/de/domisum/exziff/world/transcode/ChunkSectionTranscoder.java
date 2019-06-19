@@ -24,11 +24,11 @@ public class ChunkSectionTranscoder implements Transcoder<ChunkSection>
 	Encoding type is determined by byte 0.
 
 	If the encoding type is TYPE_HOMOGENOUS:
-	- byte 1: materialId of the whole ChunkSection
-	- byte 2: materialSubId of the whole ChunkSection
+	- byte 1&2 (short): materialId of the whole ChunkSection
 
 	If the encoding type is TYPE_HETEROGENOUS:
-	- byte 1 to last byte: the blockData of the ChunkSelection
+	- byte 1 to byte ChunkCluster.NUMBER_OF_BLOCKS*2 (shorts): the materialIds of the chunk
+	- byte (ChunkCluster.NUMBER_OF_BLOCKS*2)+1 to end: serialized Map<BlockCoordinate, Block>
 	 */
 
 	// CONSTANTS
