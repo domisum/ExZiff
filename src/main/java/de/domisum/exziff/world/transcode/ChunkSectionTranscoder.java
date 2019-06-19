@@ -68,12 +68,23 @@ public class ChunkSectionTranscoder implements Transcoder<ChunkSection>
 
 	private byte[] encodeHeterogenous(ChunkSection chunkSection)
 	{
-		byte[] blocksWithAttributesSerialized = SerializationUtil.serializeAsJsonString(chunkSection.getBlocksWithAttributes(),
-				blocksWithAttributesGson
-		);
+		byte[] blocksWithAttributesSerialized = serializeBlocksWithAttributes(chunkSection);
 
 		byte[] encoded = new byte[1+(ChunkSection.NUMBER_OF_BLOCKS*2)+blocksWithAttributesSerialized.length];
 		encoded[0] = TYPE_HETEROGENOUS;
+		encodeMaterials(chunkSection, encoded);
+		encodeBlocksWithAttributes(blocksWithAttributesSerialized, encoded);
+
+		return encoded;
+	}
+
+	private byte[] serializeBlocksWithAttributes(ChunkSection chunkSection)
+	{
+		return SerializationUtil.serializeAsJsonString(chunkSection.getBlocksWithAttributes(), blocksWithAttributesGson);
+	}
+
+	private void encodeMaterials(ChunkSection chunkSection, byte[] encoded)
+	{
 		for(int x = 0; x < Chunk.WIDTH; x++)
 			for(int y = 0; y < ChunkSection.HEIGHT; y++)
 				for(int z = 0; z < Chunk.WIDTH; z++)
@@ -85,14 +96,17 @@ public class ChunkSectionTranscoder implements Transcoder<ChunkSection>
 					int startingPosition = 1+(ChunkSection.getBlockInSectionIndex(x, y, z)*2);
 					Transcoder.encodeShort(encoded, startingPosition, materialId);
 				}
-		System.arraycopy(blocksWithAttributesSerialized,
+	}
+
+	private void encodeBlocksWithAttributes(byte[] blocksWithAttributesSerialized, byte[] encoded)
+	{
+		System.arraycopy(
+				blocksWithAttributesSerialized,
 				0,
 				encoded,
 				1+(ChunkSection.NUMBER_OF_BLOCKS*2),
 				blocksWithAttributesSerialized.length
 		);
-
-		return encoded;
 	}
 
 
@@ -121,6 +135,14 @@ public class ChunkSectionTranscoder implements Transcoder<ChunkSection>
 	{
 		ChunkSection chunkSection = new ChunkSection();
 
+		decodeBlocksWithoutAttributes(toDecode, chunkSection);
+		decodeBlocksWithAttributes(toDecode, chunkSection);
+
+		return chunkSection;
+	}
+
+	private void decodeBlocksWithoutAttributes(byte[] toDecode, ChunkSection chunkSection)
+	{
 		for(int x = 0; x < Chunk.WIDTH; x++)
 			for(int y = 0; y < ChunkSection.HEIGHT; y++)
 				for(int z = 0; z < Chunk.WIDTH; z++)
@@ -134,24 +156,27 @@ public class ChunkSectionTranscoder implements Transcoder<ChunkSection>
 
 					chunkSection.setBlock(x, y, z, new BlockBuilder(material).build());
 				}
+	}
 
+	private void decodeBlocksWithAttributes(byte[] toDecode, ChunkSection chunkSection)
+	{
 		int blocksWithAttributesSerializedLength = toDecode.length-(1+(ChunkSection.NUMBER_OF_BLOCKS*2));
 		byte[] blocksWithAttributesSerialized = new byte[blocksWithAttributesSerializedLength];
-		System.arraycopy(toDecode,
+		System.arraycopy(
+				toDecode,
 				1+(ChunkSection.NUMBER_OF_BLOCKS*2),
 				blocksWithAttributesSerialized,
 				0,
 				blocksWithAttributesSerializedLength
 		);
 		// noinspection EmptyClass
-		Map<BlockCoordinate, Block> map = SerializationUtil.deserializeFromJsonString(blocksWithAttributesSerialized,
+		Map<BlockCoordinate, Block> map = SerializationUtil.deserializeFromJsonString(
+				blocksWithAttributesSerialized,
 				new TypeToken<Map<BlockCoordinate, Block>>() {}.getType(),
 				blocksWithAttributesGson
 		);
 		for(Entry<BlockCoordinate, Block> entry : map.entrySet())
 			chunkSection.setBlock(entry.getKey().getX(), entry.getKey().getY(), entry.getKey().getZ(), entry.getValue());
-
-		return chunkSection;
 	}
 
 }
