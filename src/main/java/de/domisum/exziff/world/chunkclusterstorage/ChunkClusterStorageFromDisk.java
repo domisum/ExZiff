@@ -13,8 +13,10 @@ public class ChunkClusterStorageFromDisk implements ChunkClusterStorage
 {
 
 	// SETTINGS
-	@Getter private final boolean savingEnabled;
-	@Getter private final File chunkClusterDirectory;
+	@Getter
+	private final boolean savingEnabled;
+	@Getter
+	private final File chunkClusterDirectory;
 
 	// REFERENCES
 	private final ChunkClusterTranscoder chunkClusterTranscoder = new ChunkClusterTranscoder();
@@ -32,7 +34,8 @@ public class ChunkClusterStorageFromDisk implements ChunkClusterStorage
 
 
 	// LOADING
-	@Override public ChunkCluster loadChunkCluster(int clX, int clZ)
+	@Override
+	public ChunkCluster loadChunkCluster(int clX, int clZ)
 	{
 		File clusterFile = new File(chunkClusterDirectory, getChunkClusterFileName(clX, clZ));
 
@@ -49,14 +52,13 @@ public class ChunkClusterStorageFromDisk implements ChunkClusterStorage
 
 
 	// SAVING
-	@Override public void saveChunkCluster(ChunkCluster chunkCluster)
+	@Override
+	public void saveChunkCluster(ChunkCluster chunkCluster)
 	{
 		if(!savingEnabled)
 			return;
 
-		File clusterFile = new File(
-				chunkClusterDirectory,
-				getChunkClusterFileName(chunkCluster.getClX(), chunkCluster.getClZ()));
+		File clusterFile = new File(chunkClusterDirectory, getChunkClusterFileName(chunkCluster.getClX(), chunkCluster.getClZ()));
 
 		byte[] encodedChunkCluster = chunkClusterTranscoder.encode(chunkCluster);
 		encodedChunkCluster = CompressionUtil.compress(encodedChunkCluster, Speed.FAST);
