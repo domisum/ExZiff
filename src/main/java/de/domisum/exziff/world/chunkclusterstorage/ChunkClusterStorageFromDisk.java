@@ -13,7 +13,7 @@ public class ChunkClusterStorageFromDisk implements ChunkClusterStorage
 {
 
 	// SETTINGS
-	@Getter private final boolean saveClusters;
+	@Getter private final boolean savingEnabled;
 	@Getter private final File chunkClusterDirectory;
 
 	// REFERENCES
@@ -21,10 +21,10 @@ public class ChunkClusterStorageFromDisk implements ChunkClusterStorage
 
 
 	// INIT
-	public ChunkClusterStorageFromDisk(File chunkClusterDirectory, boolean saveClusters)
+	public ChunkClusterStorageFromDisk(File chunkClusterDirectory, boolean savingEnabled)
 	{
 		this.chunkClusterDirectory = chunkClusterDirectory;
-		this.saveClusters = saveClusters;
+		this.savingEnabled = savingEnabled;
 
 		if(!chunkClusterDirectory.exists())
 			chunkClusterDirectory.mkdirs();
@@ -51,7 +51,7 @@ public class ChunkClusterStorageFromDisk implements ChunkClusterStorage
 	// SAVING
 	@Override public void saveChunkCluster(ChunkCluster chunkCluster)
 	{
-		if(!saveClusters)
+		if(!savingEnabled)
 			return;
 
 		File clusterFile = new File(
