@@ -1,6 +1,7 @@
 package de.domisum.exziff.world;
 
-import de.domisum.exziff.world.chunkclustersource.ChunkClusterSource;
+import de.domisum.exziff.world.block.Block;
+import de.domisum.exziff.world.chunkclusterstorage.ChunkClusterStorage;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -11,10 +12,11 @@ public class World
 	private static final int CHUNK_CLUSTER_RADIUS = 64+4;
 
 	// DATA
-	private ChunkClusterField clusterField = new ChunkClusterField(CHUNK_CLUSTER_RADIUS);
+	private final ChunkClusterField clusterField = new ChunkClusterField(CHUNK_CLUSTER_RADIUS);
 
 	// REFERENCES
-	@Setter private ChunkClusterSource chunkClusterSource;
+	@Setter
+	private ChunkClusterStorage chunkClusterStorage;
 
 	// SETTINGS
 	/**
@@ -24,64 +26,43 @@ public class World
 	 * 128 ChunkClusters ^= max 4GiB
 	 * 256 ChunkClusters ^= max 8GiB
 	 */
-	@Getter @Setter private int maximumLoadedChunkClusters = 128;
+	@Getter
+	@Setter
+	private int maximumLoadedChunkClusters = 128;
 
 
 	// INIT
-	public World(ChunkClusterSource chunkClusterSource)
+	public World(ChunkClusterStorage chunkClusterStorage)
 	{
-		this.chunkClusterSource = chunkClusterSource;
+		this.chunkClusterStorage = chunkClusterStorage;
 	}
 
 
 	// GETTERS
-	public int getMaterialId(int x, int y, int z)
+	public Block getBlock(int x, int y, int z)
 	{
-		if(y < 0 || y >= Chunk.HEIGHT)
-			return Material.AIR.id;
+		if((y < 0) || (y >= Chunk.HEIGHT))
+			throw new IllegalArgumentException("supplied y value is out of bounds: "+y);
 
 		Chunk chunk = getChunkAt(x, z);
 		int icX = getInChunkXOrZ(x);
 		int icZ = getInChunkXOrZ(z);
 
-		return getUnsignedByteValue(chunk.getMaterialId(icX, y, icZ));
-	}
-
-	public int getMaterialSubId(int x, int y, int z)
-	{
-		if(y < 0 || y >= Chunk.HEIGHT)
-			return Material.AIR.subId;
-
-		Chunk chunk = getChunkAt(x, z);
-		int icX = getInChunkXOrZ(x);
-		int icZ = getInChunkXOrZ(z);
-
-		return getUnsignedByteValue(chunk.getMaterialSubId(icX, y, icZ));
-	}
-
-	private int getUnsignedByteValue(byte input)
-	{
-		// TODO improve method signatures to make this unnecessary/hide it further down
-		return input&0xFF;
+		return chunk.getBlock(icX, y, icZ);
 	}
 
 
 	// SETTERS
-	public void setMaterialIdAndSubId(int x, int y, int z, byte materialId, byte materialSubId)
+	public void setBlock(int x, int y, int z, Block block)
 	{
-		if(y < 0 || y >= Chunk.HEIGHT)
-			return;
+		if((y < 0) || (y >= Chunk.HEIGHT))
+			throw new IllegalArgumentException("supplied y value is out of bounds: "+y);
 
 		Chunk chunk = getChunkAt(x, z);
 		int icX = getInChunkXOrZ(x);
 		int icZ = getInChunkXOrZ(z);
 
-		chunk.setMaterialIdAndSubId(icX, y, icZ, materialId, materialSubId);
-	}
-
-	public void setMaterial(int x, int y, int z, Material material)
-	{
-		setMaterialIdAndSubId(x, y, z, (byte) material.id, (byte) material.subId);
+		chunk.setBlock(icX, y, icZ, block);
 	}
 
 
@@ -104,7 +85,7 @@ public class World
 
 	private ChunkCluster getChunkCluster(int clX, int clZ)
 	{
-		ChunkCluster chunkCluster = this.clusterField.getCluster(clX, clZ);
+		ChunkCluster chunkCluster = clusterField.getCluster(clX, clZ);
 
 		// chunk cluster not loaded, loading it
 		if(chunkCluster == null)
@@ -118,31 +99,31 @@ public class World
 	private ChunkCluster loadChunkCluster(int clX, int clZ)
 	{
 		// if number of currently loaded chunk clusters is too high, unload
-		while(this.clusterField.getClusterList().size() >= this.maximumLoadedChunkClusters)
+		while(clusterField.getClusterList().size() >= maximumLoadedChunkClusters)
 			unloadLongestUnusedChunkCluster();
 
-		ChunkCluster chunkCluster = this.chunkClusterSource.loadChunkCluster(clX, clZ);
+		ChunkCluster chunkCluster = chunkClusterStorage.loadChunkCluster(clX, clZ);
 
 		// chunk cluster not saved to disk, create new chunk cluster
 		if(chunkCluster == null)
 			chunkCluster = new ChunkCluster(clX, clZ);
 
-		this.clusterField.addCluster(chunkCluster);
+		clusterField.addCluster(chunkCluster);
 		return chunkCluster;
 	}
 
 	private void unloadLongestUnusedChunkCluster()
 	{
-		ChunkCluster longestUnusedChunkCluster = this.clusterField.getLongestUnusedChunkCluster();
+		ChunkCluster longestUnusedChunkCluster = clusterField.getLongestUnusedChunkCluster();
 
-		this.chunkClusterSource.saveChunkCluster(longestUnusedChunkCluster);
-		this.clusterField.removeCluster(longestUnusedChunkCluster);
+		chunkClusterStorage.saveChunkCluster(longestUnusedChunkCluster);
+		clusterField.removeCluster(longestUnusedChunkCluster);
 	}
 
 	public void save()
 	{
-		for(ChunkCluster cluster : this.clusterField.getClusterList())
-			this.chunkClusterSource.saveChunkCluster(cluster);
+		for(ChunkCluster cluster : clusterField.getClusterList())
+			chunkClusterStorage.saveChunkCluster(cluster);
 	}
 
 
@@ -170,7 +151,7 @@ public class World
 	private static int getContainerXorZ(int elementXorZ, int containerWidth)
 	{
 		if(elementXorZ < 0)
-			return (elementXorZ+1)/containerWidth-1;
+			return ((elementXorZ+1)/containerWidth)-1;
 
 		return elementXorZ/containerWidth;
 	}

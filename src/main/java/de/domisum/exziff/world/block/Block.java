@@ -29,7 +29,7 @@ public final class Block
 		private Set<BlockAttribute<?>> attributes;
 
 
-		public <T> BlockBuilder set(T value)
+		public <T extends BlockAttributeType> BlockBuilder set(T value)
 		{
 			if(attributes == null)
 				attributes = new HashSet<>();
@@ -69,7 +69,7 @@ public final class Block
 
 
 	// GETTERS
-	public <T> T getAttribute(Class<T> type)
+	public <T extends BlockAttributeType> T getAttribute(Class<T> type)
 	{
 		for(BlockAttribute<?> attribute : attributes)
 			if(attribute.getType() == type)
@@ -79,11 +79,19 @@ public final class Block
 		throw new IllegalArgumentException("block does not have attribute of type "+type);
 	}
 
+	public int getNumberOfAttributes()
+	{
+		if(attributes == null)
+			return 0;
+
+		return attributes.size();
+	}
+
 
 	// UTIL
 	@RequiredArgsConstructor
 	@EqualsAndHashCode
-	private static class BlockAttribute<T>
+	public static class BlockAttribute<T>
 	{
 
 		@Getter

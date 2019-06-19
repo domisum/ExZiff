@@ -1,14 +1,15 @@
-package de.domisum.exziff.world.chunkclustersource;
+package de.domisum.exziff.world.chunkclusterstorage;
 
 import de.domisum.exziff.world.ChunkCluster;
 import de.domisum.exziff.world.transcode.ChunkClusterTranscoder;
 import de.domisum.lib.auxilium.util.CompressionUtil;
+import de.domisum.lib.auxilium.util.CompressionUtil.Speed;
 import de.domisum.lib.auxilium.util.FileUtil;
 import lombok.Getter;
 
 import java.io.File;
 
-public class ChunkClusterSourceFromDisk implements ChunkClusterSource
+public class ChunkClusterStorageFromDisk implements ChunkClusterStorage
 {
 
 	// SETTINGS
@@ -16,11 +17,11 @@ public class ChunkClusterSourceFromDisk implements ChunkClusterSource
 	@Getter private final File chunkClusterDirectory;
 
 	// REFERENCES
-	private ChunkClusterTranscoder chunkClusterTranscoder = new ChunkClusterTranscoder();
+	private final ChunkClusterTranscoder chunkClusterTranscoder = new ChunkClusterTranscoder();
 
 
 	// INIT
-	public ChunkClusterSourceFromDisk(File chunkClusterDirectory, boolean saveClusters)
+	public ChunkClusterStorageFromDisk(File chunkClusterDirectory, boolean saveClusters)
 	{
 		this.chunkClusterDirectory = chunkClusterDirectory;
 		this.saveClusters = saveClusters;
@@ -33,7 +34,7 @@ public class ChunkClusterSourceFromDisk implements ChunkClusterSource
 	// LOADING
 	@Override public ChunkCluster loadChunkCluster(int clX, int clZ)
 	{
-		File clusterFile = new File(this.chunkClusterDirectory, getChunkClusterFileName(clX, clZ));
+		File clusterFile = new File(chunkClusterDirectory, getChunkClusterFileName(clX, clZ));
 
 		if(!clusterFile.exists()) // if the file does not exist, it could not be loaded
 			return null;
@@ -42,7 +43,7 @@ public class ChunkClusterSourceFromDisk implements ChunkClusterSource
 		byte[] chunkClusterData = FileUtil.readRaw(clusterFile);
 		chunkClusterData = CompressionUtil.decompress(chunkClusterData);
 
-		ChunkCluster decodedChunkCluster = this.chunkClusterTranscoder.decode(chunkClusterData);
+		ChunkCluster decodedChunkCluster = chunkClusterTranscoder.decode(chunkClusterData);
 		return decodedChunkCluster;
 	}
 
@@ -50,14 +51,15 @@ public class ChunkClusterSourceFromDisk implements ChunkClusterSource
 	// SAVING
 	@Override public void saveChunkCluster(ChunkCluster chunkCluster)
 	{
-		if(!this.saveClusters)
+		if(!saveClusters)
 			return;
 
-		File clusterFile = new File(this.chunkClusterDirectory,
+		File clusterFile = new File(
+				chunkClusterDirectory,
 				getChunkClusterFileName(chunkCluster.getClX(), chunkCluster.getClZ()));
 
-		byte[] encodedChunkCluster = this.chunkClusterTranscoder.encode(chunkCluster);
-		encodedChunkCluster = CompressionUtil.compress(encodedChunkCluster, CompressionUtil.Speed.FAST);
+		byte[] encodedChunkCluster = chunkClusterTranscoder.encode(chunkCluster);
+		encodedChunkCluster = CompressionUtil.compress(encodedChunkCluster, Speed.FAST);
 
 		FileUtil.writeRaw(clusterFile, encodedChunkCluster);
 	}

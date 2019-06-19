@@ -23,11 +23,12 @@ public class ChunkClusterTranscoder implements Transcoder<ChunkCluster>
 	private static final int BYTES_BEFORE_CHUNK_DATA = (2+ChunkCluster.NUMBER_OF_CHUNKS)*4;
 
 	// REFERENCES
-	private ChunkTranscoder chunkTranscoder = new ChunkTranscoder();
+	private final ChunkTranscoder chunkTranscoder = new ChunkTranscoder();
 
 
 	// TRANSCODING
-	@Override public byte[] encode(ChunkCluster toEncode)
+	@Override
+	public byte[] encode(ChunkCluster toEncode)
 	{
 		byte[][] encodedChunks = new byte[ChunkCluster.NUMBER_OF_CHUNKS][];
 		int encodedChunksCombinedLength = 0;
@@ -62,7 +63,8 @@ public class ChunkClusterTranscoder implements Transcoder<ChunkCluster>
 		return encodedChunkCluster;
 	}
 
-	@Override public ChunkCluster decode(byte[] toDecode)
+	@Override
+	public ChunkCluster decode(byte[] toDecode)
 	{
 		int clX = Transcoder.decodeInt(toDecode, 0);
 		int clZ = Transcoder.decodeInt(toDecode, 4);

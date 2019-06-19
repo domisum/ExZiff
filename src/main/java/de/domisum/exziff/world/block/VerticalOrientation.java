@@ -1,6 +1,6 @@
 package de.domisum.exziff.world.block;
 
-public enum VerticalOrientation
+public enum VerticalOrientation implements BlockAttributeType
 {
 
 	TOWARD_POSITIVE_X,

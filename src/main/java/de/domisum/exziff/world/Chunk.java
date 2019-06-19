@@ -1,5 +1,6 @@
 package de.domisum.exziff.world;
 
+import de.domisum.exziff.world.block.Block;
 import lombok.Getter;
 import org.apache.commons.lang3.Validate;
 
@@ -25,9 +26,12 @@ public class Chunk
 	public static final int NUMBER_OF_SECTIONS = 16;
 
 	// DATA
-	@Getter private final int cX;
-	@Getter private final int cZ;
-	@Getter private ChunkSection[] chunkSections = new ChunkSection[NUMBER_OF_SECTIONS];
+	@Getter
+	private final int cX;
+	@Getter
+	private final int cZ;
+	@Getter
+	private ChunkSection[] chunkSections = new ChunkSection[NUMBER_OF_SECTIONS];
 
 
 	// INIT
@@ -48,35 +52,26 @@ public class Chunk
 		this.cZ = cZ;
 
 		for(int i = 0; i < NUMBER_OF_SECTIONS; i++)
-			this.chunkSections[i] = new ChunkSection((byte) 0, (byte) 0);
+			chunkSections[i] = new ChunkSection();
 	}
 
 
 	// GETTERS
-	public byte getMaterialId(int icX, int icY, int icZ)
+	public Block getBlock(int icX, int icY, int icZ)
 	{
 		ChunkSection section = getSection(icY);
 		int inSectionY = icY%ChunkSection.HEIGHT;
 
-		return section.getMaterialId(icX, inSectionY, icZ);
+		return section.getBlock(icX, inSectionY, icZ);
 	}
-
-	public byte getMaterialSubId(int icX, int icY, int icZ)
-	{
-		ChunkSection section = getSection(icY);
-		int inSectionY = icY%ChunkSection.HEIGHT;
-
-		return section.getMaterialSubId(icX, inSectionY, icZ);
-	}
-
 
 	// SETTERS
-	public void setMaterialIdAndSubId(int icX, int icY, int icZ, byte materialId, byte materialSubId)
+	public void setBlock(int icX, int icY, int icZ, Block block)
 	{
 		ChunkSection section = getSection(icY);
 		int inSectionY = icY%ChunkSection.HEIGHT;
 
-		section.setMaterialIdAndSubId(icX, inSectionY, icZ, materialId, materialSubId);
+		section.setBlock(icX, inSectionY, icZ, block);
 	}
 
 
@@ -85,7 +80,7 @@ public class Chunk
 	{
 		int sectionId = icY/ChunkSection.HEIGHT;
 
-		ChunkSection section = this.chunkSections[sectionId];
+		ChunkSection section = chunkSections[sectionId];
 		return section;
 	}
 

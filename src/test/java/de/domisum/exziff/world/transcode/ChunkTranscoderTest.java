@@ -2,6 +2,7 @@ package de.domisum.exziff.world.transcode;
 
 import de.domisum.exziff.world.Chunk;
 import de.domisum.exziff.world.ChunkSection;
+import de.domisum.exziff.world.block.Material;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -10,27 +11,29 @@ import java.util.Random;
 public class ChunkTranscoderTest
 {
 
-	@Test public void testEncodeDecodePredefinedHomogenous()
+	@Test
+	public void testEncodeDecodePredefinedHomogenous()
 	{
 		ChunkTranscoder transcoder = new ChunkTranscoder();
 
-		ChunkSection chunkSectionHomogenous1 = new ChunkSection((byte) 0, (byte) 0);
-		ChunkSection chunkSectionHomogenous2 = new ChunkSection((byte) 17, (byte) 0);
+		ChunkSection chunkSectionHomogenous1 = new ChunkSection(Material.AIR);
+		ChunkSection chunkSectionHomogenous2 = new ChunkSection(Material.LEAVES_SPRUCE);
 
 		ChunkSection[] chunkSections = new ChunkSection[Chunk.NUMBER_OF_SECTIONS];
 		for(int i = 0; i < chunkSections.length; i++)
 			chunkSections[i] = chunkSectionHomogenous1;
 		assertEncodeDecodeEquals(transcoder, new Chunk(3, 8, chunkSections));
 
-		chunkSections = new ChunkSection[Chunk.NUMBER_OF_SECTIONS];
-		for(int i = 0; i < chunkSections.length; i++)
-			chunkSections[i] = i%2 == 0 ? chunkSectionHomogenous1 : chunkSectionHomogenous2;
-		assertEncodeDecodeEquals(transcoder, new Chunk(-7, 0, chunkSections));
+		ChunkSection[] sections = new ChunkSection[Chunk.NUMBER_OF_SECTIONS];
+		for(int i = 0; i < sections.length; i++)
+			sections[i] = ((i%2) == 0) ? chunkSectionHomogenous1 : chunkSectionHomogenous2;
+		assertEncodeDecodeEquals(transcoder, new Chunk(-7, 0, sections));
 
 		assertEncodeDecodeEquals(transcoder, new Chunk(7, 7));
 	}
 
-	@Test public void testEncodeDecodeRandomized()
+	@Test
+	public void testEncodeDecodeRandomized()
 	{
 		ChunkTranscoder transcoder = new ChunkTranscoder();
 		Random random = new Random(0xdab);
@@ -68,7 +71,7 @@ public class ChunkTranscoderTest
 	{
 		ChunkSection[] chunkSections = new ChunkSection[Chunk.NUMBER_OF_SECTIONS];
 		for(int i = 0; i < Chunk.NUMBER_OF_SECTIONS; i++)
-			chunkSections[i] = ChunkSectionTranscoderTest.generateRandomChunkSection(random);
+			chunkSections[i] = ChunkSectionTranscoderTest.generateRandomChunkSectionNoAttributes(random);
 
 		return new Chunk(random.nextInt(), random.nextInt(), chunkSections);
 	}

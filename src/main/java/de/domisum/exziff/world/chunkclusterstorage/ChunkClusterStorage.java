@@ -1,8 +1,8 @@
-package de.domisum.exziff.world.chunkclustersource;
+package de.domisum.exziff.world.chunkclusterstorage;
 
 import de.domisum.exziff.world.ChunkCluster;
 
-public interface ChunkClusterSource
+public interface ChunkClusterStorage
 {
 
 	ChunkCluster loadChunkCluster(int clX, int clZ);

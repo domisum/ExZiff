@@ -1,6 +1,6 @@
 package de.domisum.exziff.world.block;
 
-public enum Axis
+public enum Axis implements BlockAttributeType
 {
 
 	X,

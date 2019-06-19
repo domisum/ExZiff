@@ -3,6 +3,7 @@ package de.domisum.exziff.world.transcode;
 import de.domisum.exziff.world.Chunk;
 import de.domisum.exziff.world.ChunkCluster;
 import de.domisum.exziff.world.ChunkSection;
+import de.domisum.exziff.world.block.Material;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -15,7 +16,7 @@ public class ChunkClusterTranscoderTest
 	{
 		ChunkClusterTranscoder transcoder = new ChunkClusterTranscoder();
 
-		ChunkSection chunkSectionHomogenous1 = new ChunkSection((byte) 0, (byte) 0);
+		ChunkSection chunkSectionHomogenous1 = new ChunkSection(Material.AIR);
 
 		ChunkSection[] chunkSections = new ChunkSection[Chunk.NUMBER_OF_SECTIONS];
 		for(int i = 0; i < chunkSections.length; i++)

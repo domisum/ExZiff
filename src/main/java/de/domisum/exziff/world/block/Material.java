@@ -56,4 +56,9 @@ public enum Material
 		this(new HashSet<>(Arrays.asList(classes)));
 	}
 
+	public static Material ofId(int ordinal)
+	{
+		return values()[ordinal];
+	}
+
 }

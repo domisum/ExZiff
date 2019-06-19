@@ -13,7 +13,7 @@ public class ChunkCluster
 	// DATA
 	@Getter private final int clX;
 	@Getter private final int clZ;
-	@Getter private Chunk[] chunks;
+	@Getter private final Chunk[] chunks;
 
 
 	// INIT
@@ -24,7 +24,7 @@ public class ChunkCluster
 
 		Validate.isTrue(chunks.length == NUMBER_OF_CHUNKS, "The number of chunks has to be "+NUMBER_OF_CHUNKS);
 		Validate.noNullElements(chunks);
-		this.chunks = chunks;
+		this.chunks = chunks.clone();
 	}
 
 	public ChunkCluster(int clX, int clZ)
@@ -32,12 +32,12 @@ public class ChunkCluster
 		this.clX = clX;
 		this.clZ = clZ;
 
-		this.chunks = new Chunk[NUMBER_OF_CHUNKS];
+		chunks = new Chunk[NUMBER_OF_CHUNKS];
 		for(int iclZ = 0; iclZ < WIDTH; iclZ++)
 			for(int iclX = 0; iclX < WIDTH; iclX++)
 			{
-				Chunk chunk = new Chunk(clX*WIDTH+iclX, clZ*WIDTH+iclZ);
-				this.chunks[getChunkInClusterIndex(iclX, iclZ)] = chunk;
+				Chunk chunk = new Chunk((clX*WIDTH)+iclX, (clZ*WIDTH)+iclZ);
+				chunks[getChunkInClusterIndex(iclX, iclZ)] = chunk;
 			}
 	}
 
@@ -45,7 +45,7 @@ public class ChunkCluster
 	// OBJECT
 	@Override public String toString()
 	{
-		return "ChunkCluster{"+"clX="+this.clX+", clZ="+this.clZ+'}';
+		return "ChunkCluster{"+"clX="+clX+", clZ="+clZ+'}';
 	}
 
 
@@ -54,7 +54,7 @@ public class ChunkCluster
 	{
 		int chunkInClusterIndex = getChunkInClusterIndex(iclX, iclZ);
 
-		Chunk chunk = this.chunks[chunkInClusterIndex];
+		Chunk chunk = chunks[chunkInClusterIndex];
 		return chunk;
 	}
 
@@ -62,7 +62,7 @@ public class ChunkCluster
 	// INTERNAL
 	private int getChunkInClusterIndex(int iclX, int iclZ)
 	{
-		return (iclX)+(iclZ*WIDTH);
+		return iclX+(iclZ*WIDTH);
 	}
 
 }
