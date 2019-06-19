@@ -68,7 +68,7 @@ public class World
 
 
 	// CHUNK AND CLUSTER
-	public Chunk getChunkAt(int x, int z)
+	private Chunk getChunkAt(int x, int z)
 	{
 		int cX = getChunkXorZ(x);
 		int cZ = getChunkXorZ(z);
