@@ -3,6 +3,8 @@ package de.domisum.exziff.generator.continentshape;
 import de.domisum.lib.auxilium.data.container.math.LineSegment2D;
 import de.domisum.lib.auxilium.data.container.math.Vector2D;
 import de.domisum.lib.auxilium.data.container.math.shape.Polygon2D;
+import de.domisum.lib.auxilium.data.container.math.shape.Polygon2D.PolygonCorner;
+import de.domisum.lib.auxilium.data.container.math.shape.Polygon2D.PolygonCornerOrientation;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -64,8 +66,8 @@ public class ContinentsPolygonValidator
 	private class IsPolygonValidMethodObject
 	{
 
-		private Polygon2D toValidate;
-		private Set<Polygon2D> otherPolygons;
+		private final Polygon2D toValidate;
+		private final Set<Polygon2D> otherPolygons;
 
 
 		public boolean isPolygonValid()
@@ -123,9 +125,9 @@ public class ContinentsPolygonValidator
 		private boolean doesPolygonHaveTooPointyAngles()
 		{
 			// initialize with last linesegment, since it is first.before
-			for(Polygon2D.PolygonCorner pc : toValidate.getCorners())
+			for(PolygonCorner pc : toValidate.getCorners())
 			{
-				double minAngleDeg = pc.orientation == Polygon2D.PolygonCornerOrientation.CONVEX ?
+				double minAngleDeg = (pc.orientation == PolygonCornerOrientation.CONVEX) ?
 						minConvexCornerAngleDeg :
 						minConcaveCornerAngleDeg;
 

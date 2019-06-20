@@ -33,9 +33,7 @@ public class TestLauncher
 	{
 		Random random = new Random(0xaf);
 
-		for(int i = 0; i < 100; i++)
-
-		poisson(random);
+		generateContinentShapeUsingPoygonGenerator(random.nextLong());
 	}
 
 	private static void poisson(Random random)
@@ -64,10 +62,10 @@ public class TestLauncher
 		FileUtil.writeImage(new File("C:\\Users\\domisum\\testChamber\\exziff\\yeet\\"+UUID.randomUUID()+".png"), image);
 	}
 
-	private static void generateContinentShapeUsingPoygonGenerator()
+	private static void generateContinentShapeUsingPoygonGenerator(long seed)
 	{
 		ContinentsShapeGenerator continentsShapeGenerator = new ContinentsShapeGenerator();
-		BooleanMap continentShape = continentsShapeGenerator.generate(381, 4096);
+		BooleanMap continentShape = continentsShapeGenerator.generate(seed, 4096);
 
 		System.out.println("converting to image");
 		BooleanMapToImageConverter booleanMapToImageConverter = new BooleanMapToImageConverter();
