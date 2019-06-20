@@ -11,9 +11,12 @@ public class ChunkCluster
 	public static final int NUMBER_OF_CHUNKS = WIDTH*WIDTH;
 
 	// DATA
-	@Getter private final int clX;
-	@Getter private final int clZ;
-	@Getter private final Chunk[] chunks;
+	@Getter
+	private final int clX;
+	@Getter
+	private final int clZ;
+	@Getter
+	private final Chunk[] chunks;
 
 
 	// INIT
@@ -43,7 +46,8 @@ public class ChunkCluster
 
 
 	// OBJECT
-	@Override public String toString()
+	@Override
+	public String toString()
 	{
 		return "ChunkCluster{"+"clX="+clX+", clZ="+clZ+'}';
 	}

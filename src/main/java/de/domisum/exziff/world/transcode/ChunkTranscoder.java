@@ -25,7 +25,8 @@ public class ChunkTranscoder implements Transcoder<Chunk>
 
 
 	// TRANSCODING
-	@Override public byte[] encode(Chunk toEncode)
+	@Override
+	public byte[] encode(Chunk toEncode)
 	{
 		byte[][] encodedChunkSections = new byte[Chunk.NUMBER_OF_SECTIONS][];
 		int encodedChunkSectionsCombinedLength = 0;
@@ -59,7 +60,8 @@ public class ChunkTranscoder implements Transcoder<Chunk>
 		return encodedChunk;
 	}
 
-	@Override public Chunk decode(byte[] toDecode)
+	@Override
+	public Chunk decode(byte[] toDecode)
 	{
 		int cX = Transcoder.decodeInt(toDecode, 0);
 		int cZ = Transcoder.decodeInt(toDecode, 4);
