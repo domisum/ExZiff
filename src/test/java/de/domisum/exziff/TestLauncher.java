@@ -6,6 +6,7 @@ import de.domisum.exziff.world.block.Block;
 import de.domisum.exziff.world.block.Block.BlockBuilder;
 import de.domisum.exziff.world.block.Material;
 import de.domisum.exziff.world.chunkclusterstorage.ChunkClusterStorageFromDisk;
+import de.domisum.lib.auxilium.util.time.ProfilerStopWatch;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,13 +25,26 @@ public class TestLauncher
 		));
 
 		Block spruceLog = new BlockBuilder(Material.LOG_SPRUCE).set(Axis.X).build();
-		Block acaciaLeaves = new BlockBuilder(Material.LEAVES_ACACIA).build();
+		Block acaciaLeaves = new BlockBuilder(Material.STONE).build();
 
-		world.setBlock(0, 0, 0, spruceLog);
-		world.setBlock(2, 3, 0, spruceLog);
-		world.setBlock(0, 0, 0, acaciaLeaves);
 
-		System.out.println(world.getBlock(0, 0, 0));
+		for(int xBase = 0; xBase < Math.pow(2, 8); xBase += 16*16)
+		{
+			ProfilerStopWatch profilerStopWatch = new ProfilerStopWatch("xBase: "+xBase);
+			profilerStopWatch.start();
+
+			for(int zBase = 0; zBase < Math.pow(2, 8); zBase += 16*16)
+			{
+				for(int x = 0; x < (16*16); x++)
+					for(int z = 0; z < (16*16); z++)
+						if(((x+z)%2) == 0)
+							world.setBlock(xBase+x, 0, zBase+z, acaciaLeaves);
+
+				System.out.println("xBase: "+xBase+" zBase: "+zBase);
+			}
+
+			System.out.println(profilerStopWatch);
+		}
 
 		world.save();
 	}

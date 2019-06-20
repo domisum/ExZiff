@@ -1,6 +1,8 @@
 package de.domisum.exziff.world;
 
 import de.domisum.exziff.world.block.Block;
+import de.domisum.exziff.world.block.Block.BlockBuilder;
+import de.domisum.exziff.world.block.Material;
 import de.domisum.exziff.world.chunkclusterstorage.ChunkClusterStorage;
 import lombok.Getter;
 import lombok.Setter;
@@ -44,7 +46,7 @@ public class World
 	public Block getBlock(int x, int y, int z)
 	{
 		if((y < 0) || (y >= Chunk.HEIGHT))
-			throw new IllegalArgumentException("supplied y value is out of bounds: "+y);
+			return new BlockBuilder(Material.AIR).build();
 
 		Chunk chunk = getChunkAt(x, z);
 		int icX = getInChunkXOrZ(x);
@@ -58,7 +60,7 @@ public class World
 	public void setBlock(int x, int y, int z, Block block)
 	{
 		if((y < 0) || (y >= Chunk.HEIGHT))
-			throw new IllegalArgumentException("supplied y value is out of bounds: "+y);
+			return;
 
 		Chunk chunk = getChunkAt(x, z);
 		int icX = getInChunkXOrZ(x);
@@ -69,6 +71,11 @@ public class World
 
 
 	// CHUNK AND CLUSTER
+	public int getNumberOfLoadedChunkClusters()
+	{
+		return clusterField.getClusterList().size();
+	}
+
 	private Chunk getChunkAt(int x, int z)
 	{
 		int cX = getChunkXorZ(x);
