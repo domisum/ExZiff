@@ -26,6 +26,9 @@ public enum Material
 	DIRT_COARSE(),
 	DIRT_PODZOL(),
 
+	WATER(),
+	LAVA(),
+
 	LOG_OAK(Axis.class),
 	LOG_SPRUCE(Axis.class),
 	LOG_BIRCH(Axis.class),
