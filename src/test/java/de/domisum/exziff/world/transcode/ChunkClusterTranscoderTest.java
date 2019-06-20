@@ -7,36 +7,36 @@ import de.domisum.exziff.world.block.Material;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import java.util.Arrays;
 import java.util.Random;
 
 public class ChunkClusterTranscoderTest
 {
 
-	@Test public void testEncodeDecodePredefined()
+	@Test
+	public void testEncodeDecodePredefined()
 	{
 		ChunkClusterTranscoder transcoder = new ChunkClusterTranscoder();
 
 		ChunkSection chunkSectionHomogenous1 = new ChunkSection(Material.AIR);
 
 		ChunkSection[] chunkSections = new ChunkSection[Chunk.NUMBER_OF_SECTIONS];
-		for(int i = 0; i < chunkSections.length; i++)
-			chunkSections[i] = chunkSectionHomogenous1;
+		Arrays.fill(chunkSections, chunkSectionHomogenous1);
 		Chunk chunk = new Chunk(3, 8, chunkSections);
 
 		Chunk[] chunks = new Chunk[ChunkCluster.NUMBER_OF_CHUNKS];
-		for(int i = 0; i < chunks.length; i++)
-			chunks[i] = chunk;
+		Arrays.fill(chunks, chunk);
 
 		assertEncodeDecodeEquals(transcoder, new ChunkCluster(0, 5, chunks));
 	}
 
-	@Test public void testEncodeDecodeRandomized()
+	@Test
+	public void testEncodeDecodeRandomized()
 	{
 		ChunkClusterTranscoder transcoder = new ChunkClusterTranscoder();
 		Random random = new Random(0x88776);
 
-		for(int test = 0; test < 3; test++)
-			assertEncodeDecodeEquals(transcoder, generateChunkCluster(random));
+		assertEncodeDecodeEquals(transcoder, generateChunkCluster(random));
 	}
 
 
@@ -71,8 +71,7 @@ public class ChunkClusterTranscoderTest
 	private static ChunkCluster generateChunkCluster(Random random)
 	{
 		Chunk[] chunks = new Chunk[ChunkCluster.NUMBER_OF_CHUNKS];
-		for(int i = 0; i < chunks.length; i++)
-			chunks[i] = ChunkTranscoderTest.generateRandomChunk(random);
+		Arrays.setAll(chunks, i->ChunkTranscoderTest.generateRandomChunk(random));
 
 		return new ChunkCluster(random.nextInt(), random.nextInt(), chunks);
 	}
