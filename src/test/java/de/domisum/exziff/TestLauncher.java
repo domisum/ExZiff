@@ -12,6 +12,7 @@ import de.domisum.exziff.world.block.Material;
 import de.domisum.exziff.world.chunkclusterstorage.ChunkClusterStorageFromDisk;
 import de.domisum.lib.auxilium.data.container.math.Vector2D;
 import de.domisum.lib.auxilium.util.FileUtil;
+import de.domisum.lib.auxilium.util.math.RandomUtil;
 import de.domisum.lib.auxilium.util.time.ProfilerStopWatch;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,6 +21,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.Random;
 import java.util.Set;
+import java.util.UUID;
 
 public class TestLauncher
 {
@@ -29,10 +31,19 @@ public class TestLauncher
 
 	public static void main(String[] args)
 	{
-		Random random = new Random();
+		Random random = new Random(0xaf);
 
+		for(int i = 0; i < 100; i++)
+
+		poisson(random);
+	}
+
+	private static void poisson(Random random)
+	{
 		PoissonDiskPointGenerator poissonDiskPointGenerator = new PoissonDiskPointGenerator();
-		Set<Vector2D> points = poissonDiskPointGenerator.generate(random.nextLong(), 0.1);
+		double minDistance = RandomUtil.getFromRange(0.2, 0.4, random);
+		System.out.println(minDistance);
+		Set<Vector2D> points = poissonDiskPointGenerator.generate(random.nextLong(), minDistance, 0.15);
 
 		int size = 128;
 		BooleanMap booleanMap = new BooleanMap(size, size);
@@ -50,7 +61,7 @@ public class TestLauncher
 		BufferedImage image = booleanMapToImageConverter.convert(booleanMap);
 
 		System.out.println("writing file");
-		FileUtil.writeImage(new File("C:\\Users\\domisum\\testChamber\\exziff\\shape.png"), image);
+		FileUtil.writeImage(new File("C:\\Users\\domisum\\testChamber\\exziff\\yeet\\"+UUID.randomUUID()+".png"), image);
 	}
 
 	private static void generateContinentShapeUsingPoygonGenerator()
