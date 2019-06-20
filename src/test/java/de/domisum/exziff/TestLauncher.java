@@ -1,6 +1,7 @@
 package de.domisum.exziff;
 
 import de.domisum.exziff.generator.continentshape.ContinentsShapeGenerator;
+import de.domisum.exziff.generator.util.PoissonDiskPointGenerator;
 import de.domisum.exziff.map.BooleanMap;
 import de.domisum.exziff.map.converter.BooleanMapToImageConverter;
 import de.domisum.exziff.world.World;
@@ -9,6 +10,7 @@ import de.domisum.exziff.world.block.Block;
 import de.domisum.exziff.world.block.Block.BlockBuilder;
 import de.domisum.exziff.world.block.Material;
 import de.domisum.exziff.world.chunkclusterstorage.ChunkClusterStorageFromDisk;
+import de.domisum.lib.auxilium.data.container.math.Vector2D;
 import de.domisum.lib.auxilium.util.FileUtil;
 import de.domisum.lib.auxilium.util.time.ProfilerStopWatch;
 import org.slf4j.Logger;
@@ -16,6 +18,8 @@ import org.slf4j.LoggerFactory;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.util.Random;
+import java.util.Set;
 
 public class TestLauncher
 {
@@ -25,8 +29,32 @@ public class TestLauncher
 
 	public static void main(String[] args)
 	{
-		//generateSampleWorld();
+		Random random = new Random();
 
+		PoissonDiskPointGenerator poissonDiskPointGenerator = new PoissonDiskPointGenerator();
+		Set<Vector2D> points = poissonDiskPointGenerator.generate(random.nextLong(), 0.1);
+
+		int size = 128;
+		BooleanMap booleanMap = new BooleanMap(size, size);
+		for(Vector2D point : points)
+		{
+			int pX = (int) Math.floor(point.getX()*size);
+			int pY = (int) Math.floor(point.getY()*size);
+
+			booleanMap.set(pX, pY, true);
+		}
+
+
+		System.out.println("converting to image");
+		BooleanMapToImageConverter booleanMapToImageConverter = new BooleanMapToImageConverter();
+		BufferedImage image = booleanMapToImageConverter.convert(booleanMap);
+
+		System.out.println("writing file");
+		FileUtil.writeImage(new File("C:\\Users\\domisum\\testChamber\\exziff\\shape.png"), image);
+	}
+
+	private static void generateContinentShapeUsingPoygonGenerator()
+	{
 		ContinentsShapeGenerator continentsShapeGenerator = new ContinentsShapeGenerator();
 		BooleanMap continentShape = continentsShapeGenerator.generate(381, 4096);
 

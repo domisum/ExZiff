@@ -9,8 +9,8 @@ public class BooleanMapNoiseOffsetter implements Transformer<BooleanMap>
 {
 
 	// SETTINGS
-	private LayeredOpenSimplexNoise noiseX;
-	private LayeredOpenSimplexNoise noiseY;
+	private final LayeredOpenSimplexNoise noiseX;
+	private final LayeredOpenSimplexNoise noiseY;
 
 
 	// INIT
@@ -43,8 +43,8 @@ public class BooleanMapNoiseOffsetter implements Transformer<BooleanMap>
 				if(!input.get(x, y)) // only offset true/white pixels
 					continue;
 
-				double dX = this.noiseX.evaluate(x/scale, y/scale)*scale;
-				double dY = this.noiseY.evaluate(x/scale, y/scale)*scale;
+				double dX = noiseX.evaluate(x/scale, y/scale)*scale;
+				double dY = noiseY.evaluate(x/scale, y/scale)*scale;
 
 				int nX = x+(int) Math.round(dX);
 				int nY = y+(int) Math.round(dY);
