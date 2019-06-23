@@ -1,6 +1,5 @@
 package de.domisum.exziff.generator.continentshape;
 
-import de.domisum.exziff.generator.RandomizedGeneratorOneInput;
 import de.domisum.exziff.map.BooleanMap;
 import de.domisum.exziff.map.transformer.bool.BooleanMapFloodFill;
 import de.domisum.exziff.map.transformer.bool.BooleanMapInvert;
@@ -18,7 +17,7 @@ import java.util.Random;
 /**
  * Deforms the rough continent shapes to look more organic.
  */
-public class ContinentsNoiseDeformer implements RandomizedGeneratorOneInput<BooleanMap, BooleanMap>
+public class ContinentsNoiseDeformer
 {
 
 	// SETTINGS
@@ -28,7 +27,6 @@ public class ContinentsNoiseDeformer implements RandomizedGeneratorOneInput<Bool
 
 
 	// DEFORM
-	@Override
 	public BooleanMap generate(long seed, BooleanMap input)
 	{
 		return new GenerateMethodObject(new Random(seed), input).deform();

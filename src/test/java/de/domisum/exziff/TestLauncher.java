@@ -1,12 +1,11 @@
 package de.domisum.exziff;
 
-import de.domisum.exziff.generator.bedrockpartition.NearestPointPartitionGenerator;
-import de.domisum.exziff.generator.continentshape.ContinentsShapeGenerator;
+import de.domisum.exziff.generator.WorldGenerator;
+import de.domisum.exziff.generator.bedrockregionspartition.BedrockRegionsPartitionGeneratorUsingNearestPoint;
+import de.domisum.exziff.generator.continentshape.ContinentsShapeGeneratorUsingDeformedPolygons;
 import de.domisum.exziff.generator.util.PoissonDiskPointGenerator;
 import de.domisum.exziff.map.BooleanMap;
-import de.domisum.exziff.map.ShortMap;
 import de.domisum.exziff.map.converter.BooleanMapToImageConverter;
-import de.domisum.exziff.map.converter.ShortMapToImageConverter;
 import de.domisum.exziff.world.World;
 import de.domisum.exziff.world.block.Axis;
 import de.domisum.exziff.world.block.Block;
@@ -22,6 +21,9 @@ import org.slf4j.LoggerFactory;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.Random;
 import java.util.Set;
 import java.util.UUID;
@@ -34,10 +36,28 @@ public class TestLauncher
 
 	public static void main(String[] args)
 	{
-		Random random = new Random(0xaf);
+		Random random = new Random(0xaffe);
 
-		generateContinentShapeUsingPoygonGenerator(random.nextLong());
+
+		File generatorProcessesDir = new File("C:\\Users\\domisum\\testChamber\\exziff\\generator");
+		FileUtil.deleteDirectoryContents(generatorProcessesDir);
+		File generatorProcessDir = new File(generatorProcessesDir, getGeneratorProcessName());
+
+		WorldGenerator worldGenerator = new WorldGenerator(
+				new ContinentsShapeGeneratorUsingDeformedPolygons(),
+				new BedrockRegionsPartitionGeneratorUsingNearestPoint()
+		);
+		worldGenerator.generate(generatorProcessDir, random.nextLong());
 	}
+
+	private static String getGeneratorProcessName()
+	{
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'-HH-mm-ss.SSS'Z'").withZone(ZoneId.of("UTC"));
+		String timestamp = formatter.format(Instant.now());
+
+		return timestamp;
+	}
+
 
 	private static void poisson(Random random)
 	{
@@ -63,40 +83,6 @@ public class TestLauncher
 
 		System.out.println("writing file");
 		FileUtil.writeImage(new File("C:\\Users\\domisum\\testChamber\\exziff\\yeet\\"+UUID.randomUUID()+".png"), image);
-	}
-
-	private static void generateContinentShapeUsingPoygonGenerator(long seed)
-	{
-		ContinentsShapeGenerator continentsShapeGenerator = new ContinentsShapeGenerator();
-		BooleanMap continentShape = continentsShapeGenerator.generate(seed, 4096);
-
-		exportContinentShape(continentShape);
-
-
-		NearestPointPartitionGenerator nearestPointPartitionGenerator = new NearestPointPartitionGenerator();
-		ShortMap partitions = nearestPointPartitionGenerator.generate(seed+1, continentShape);
-
-		exportPartitionsMap(partitions);
-	}
-
-	private static void exportPartitionsMap(ShortMap partitions)
-	{
-		System.out.println("converting to image");
-		ShortMapToImageConverter shortMapToImageConverter = new ShortMapToImageConverter();
-		BufferedImage image = shortMapToImageConverter.convert(partitions);
-
-		System.out.println("writing file");
-		FileUtil.writeImage(new File("C:\\Users\\domisum\\testChamber\\exziff\\regions.png"), image);
-	}
-
-	private static void exportContinentShape(BooleanMap continentShape)
-	{
-		System.out.println("converting to image");
-		BooleanMapToImageConverter booleanMapToImageConverter = new BooleanMapToImageConverter();
-		BufferedImage image = booleanMapToImageConverter.convert(continentShape);
-
-		System.out.println("writing file");
-		FileUtil.writeImage(new File("C:\\Users\\domisum\\testChamber\\exziff\\shape.png"), image);
 	}
 
 	private static void generateSampleWorld()

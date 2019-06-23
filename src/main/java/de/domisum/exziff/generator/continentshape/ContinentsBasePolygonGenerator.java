@@ -1,6 +1,5 @@
 package de.domisum.exziff.generator.continentshape;
 
-import de.domisum.exziff.generator.RandomizedGeneratorOneInput;
 import de.domisum.lib.auxilium.data.container.math.Vector2D;
 import de.domisum.lib.auxilium.data.container.math.shape.Polygon2D;
 import de.domisum.lib.auxilium.util.math.RandomUtil;
@@ -15,7 +14,7 @@ import java.util.Random;
  * Generates simple polygons as a starting point for ContinentsShapeGenerator.
  */
 @RequiredArgsConstructor
-public class ContinentsBasePolygonGenerator implements RandomizedGeneratorOneInput<Integer, List<Polygon2D>>
+public class ContinentsBasePolygonGenerator
 {
 
 	// REFERENCES
@@ -23,7 +22,6 @@ public class ContinentsBasePolygonGenerator implements RandomizedGeneratorOneInp
 
 
 	// BASE POLYGONS
-	@Override
 	public List<Polygon2D> generate(long seed, Integer desiredNumberOfPolygons)
 	{
 		return new GenerateMethodObject(new Random(seed), desiredNumberOfPolygons).generate();

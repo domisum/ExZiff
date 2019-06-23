@@ -1,6 +1,6 @@
-package de.domisum.exziff.generator.bedrockpartition;
+package de.domisum.exziff.generator.bedrockregionspartition;
 
-import de.domisum.exziff.generator.RandomizedGeneratorOneInput;
+import de.domisum.exziff.generator.WorldGenerator;
 import de.domisum.exziff.generator.util.PoissonDiskPointGenerator;
 import de.domisum.exziff.map.BooleanMap;
 import de.domisum.exziff.map.ShortMap;
@@ -15,7 +15,7 @@ import java.util.Random;
 import java.util.Set;
 
 @RequiredArgsConstructor
-public class NearestPointPartitionGenerator implements RandomizedGeneratorOneInput<BooleanMap, ShortMap>
+public class BedrockRegionsPartitionGeneratorUsingNearestPoint implements BedrockRegionsPartitionGenerator
 {
 
 	private final Logger logger = LoggerFactory.getLogger(getClass());
@@ -27,9 +27,9 @@ public class NearestPointPartitionGenerator implements RandomizedGeneratorOneInp
 
 	// GENERATE
 	@Override
-	public ShortMap generate(long seed, BooleanMap continentShape)
+	public ShortMap generate(BooleanMap continentShape, long seed)
 	{
-		return new GenerateMethodObject(new Random(seed), continentShape).generate();
+		return new GenerateMethodObject(continentShape, new Random(seed)).generate();
 	}
 
 	@RequiredArgsConstructor
@@ -37,8 +37,8 @@ public class NearestPointPartitionGenerator implements RandomizedGeneratorOneInp
 	{
 
 		// INPUT
-		private final Random random;
 		private final BooleanMap continentShape;
+		private final Random random;
 
 		// TEMP
 		private final Set<RegionCenterPoint> regionCenterPoints = new HashSet<>();
@@ -57,7 +57,7 @@ public class NearestPointPartitionGenerator implements RandomizedGeneratorOneInp
 		{
 			logger.info("Generating center points...");
 
-			Set<Vector2D> points = pointGenerator.generate(random.nextLong(), 0.05, 0.0);
+			Set<Vector2D> points = pointGenerator.generate(random.nextLong(), 1000d/WorldGenerator.WORLD_SIZE, 0.0);
 			short regionIdCounter = 1;
 			for(Vector2D p : points)
 			{

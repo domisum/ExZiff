@@ -1,6 +1,5 @@
 package de.domisum.exziff.generator.util;
 
-import de.domisum.exziff.generator.RandomizedGeneratorTwoInputs;
 import de.domisum.lib.auxilium.data.container.math.Vector2D;
 import de.domisum.lib.auxilium.util.math.RandomUtil;
 
@@ -12,10 +11,9 @@ import java.util.Set;
 /**
  * https://www.cs.ubc.ca/~rbridson/docs/bridson-siggraph07-poissondisk.pdf
  */
-public class PoissonDiskPointGenerator implements RandomizedGeneratorTwoInputs<Double, Double, Set<Vector2D>>
+public class PoissonDiskPointGenerator
 {
 
-	@Override
 	public Set<Vector2D> generate(long seed, Double radius, Double minDistanceToEdge)
 	{
 		Random random = new Random(seed);
