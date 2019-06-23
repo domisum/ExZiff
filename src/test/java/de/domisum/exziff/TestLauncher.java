@@ -1,9 +1,12 @@
 package de.domisum.exziff;
 
+import de.domisum.exziff.generator.bedrockpartition.NearestPointPartitionGenerator;
 import de.domisum.exziff.generator.continentshape.ContinentsShapeGenerator;
 import de.domisum.exziff.generator.util.PoissonDiskPointGenerator;
 import de.domisum.exziff.map.BooleanMap;
+import de.domisum.exziff.map.ShortMap;
 import de.domisum.exziff.map.converter.BooleanMapToImageConverter;
+import de.domisum.exziff.map.converter.ShortMapToImageConverter;
 import de.domisum.exziff.world.World;
 import de.domisum.exziff.world.block.Axis;
 import de.domisum.exziff.world.block.Block;
@@ -67,6 +70,27 @@ public class TestLauncher
 		ContinentsShapeGenerator continentsShapeGenerator = new ContinentsShapeGenerator();
 		BooleanMap continentShape = continentsShapeGenerator.generate(seed, 4096);
 
+		exportContinentShape(continentShape);
+
+
+		NearestPointPartitionGenerator nearestPointPartitionGenerator = new NearestPointPartitionGenerator();
+		ShortMap partitions = nearestPointPartitionGenerator.generate(seed+1, continentShape);
+
+		exportPartitionsMap(partitions);
+	}
+
+	private static void exportPartitionsMap(ShortMap partitions)
+	{
+		System.out.println("converting to image");
+		ShortMapToImageConverter shortMapToImageConverter = new ShortMapToImageConverter();
+		BufferedImage image = shortMapToImageConverter.convert(partitions);
+
+		System.out.println("writing file");
+		FileUtil.writeImage(new File("C:\\Users\\domisum\\testChamber\\exziff\\regions.png"), image);
+	}
+
+	private static void exportContinentShape(BooleanMap continentShape)
+	{
 		System.out.println("converting to image");
 		BooleanMapToImageConverter booleanMapToImageConverter = new BooleanMapToImageConverter();
 		BufferedImage image = booleanMapToImageConverter.convert(continentShape);
