@@ -40,7 +40,7 @@ public class TestLauncher
 
 
 		File generatorProcessesDir = new File("C:\\Users\\domisum\\testChamber\\exziff\\generator");
-		FileUtil.deleteDirectoryContents(generatorProcessesDir);
+		//FileUtil.deleteDirectoryContents(generatorProcessesDir);
 		File generatorProcessDir = new File(generatorProcessesDir, getGeneratorProcessName());
 
 		WorldGenerator worldGenerator = new WorldGenerator(

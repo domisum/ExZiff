@@ -57,7 +57,7 @@ public class BedrockRegionsPartitionGeneratorUsingNearestPoint implements Bedroc
 		{
 			logger.info("Generating center points...");
 
-			Set<Vector2D> points = pointGenerator.generate(random.nextLong(), 1000d/WorldGenerator.WORLD_SIZE, 0.0);
+			Set<Vector2D> points = pointGenerator.generate(random.nextLong(), 600d/WorldGenerator.WORLD_SIZE, 0.0);
 			short regionIdCounter = 1;
 			for(Vector2D p : points)
 			{

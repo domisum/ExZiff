@@ -26,7 +26,7 @@ public class WorldGenerator
 
 
 	// CONSTANTS
-	public static final int WORLD_SIZE = (int) Math.pow(2, 16);
+	public static final int WORLD_SIZE = (int) Math.pow(2, 12);
 
 	// DEPENDENCIES
 	private final ContinentsShapeGenerator continentsShapeGenerator;

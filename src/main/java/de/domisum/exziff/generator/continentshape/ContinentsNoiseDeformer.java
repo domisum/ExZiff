@@ -63,9 +63,9 @@ public class ContinentsNoiseDeformer
 		{
 			// @formatter:off
 			NoiseLayers noiseLayers = new NoiseLayers(
-				new NoiseLayer(0.08, 0.01, -1),
-				new NoiseLayer(0.03, 0.01, -1),
-				new NoiseLayer(0.03*0.35, 0.01*0.4, -1)
+				new NoiseLayer(0.08, 0.03, -1),
+				new NoiseLayer(0.03, 0.02, -1),
+				new NoiseLayer(0.03*0.35, 0.01, -1)
 			);
 			// @formatter:on
 
@@ -95,7 +95,7 @@ public class ContinentsNoiseDeformer
 
 		private void finalCleanup()
 		{
-			for(int i = 0; i < 3; i++)
+			for(int i = 0; i < 1; i++)
 				cleanup(3, 0.32, 0.33);
 		}
 
