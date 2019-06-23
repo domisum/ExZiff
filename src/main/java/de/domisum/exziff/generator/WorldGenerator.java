@@ -62,6 +62,7 @@ public class WorldGenerator
 		{
 			logger.info("Starting world generation with seed '{}'", seed);
 			logger.info("Generating into directory {}", generatorProcessDir);
+			logger.info("World size: {}", WORLD_SIZE);
 
 			BooleanMap continentShape = generateContinentsShape();
 

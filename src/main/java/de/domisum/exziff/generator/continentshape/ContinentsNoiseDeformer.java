@@ -61,11 +61,13 @@ public class ContinentsNoiseDeformer
 
 		private void scatter()
 		{
+			double d = 0.8;
+			double e = 0.7;
 			// @formatter:off
 			NoiseLayers noiseLayers = new NoiseLayers(
-				new NoiseLayer(0.08, 0.03, -1),
-				new NoiseLayer(0.03, 0.02, -1),
-				new NoiseLayer(0.03*0.35, 0.01, -1)
+				new NoiseLayer(0.12*d, 0.03*e, -1),
+				new NoiseLayer(0.045*d, 0.02*e, -1),
+				new NoiseLayer(0.015*d, 0.01*e, -1)
 			);
 			// @formatter:on
 
@@ -95,7 +97,7 @@ public class ContinentsNoiseDeformer
 
 		private void finalCleanup()
 		{
-			for(int i = 0; i < 1; i++)
+			for(int i = 0; i < 3; i++)
 				cleanup(3, 0.32, 0.33);
 		}
 
